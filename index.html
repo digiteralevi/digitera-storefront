@@ -101,11 +101,13 @@
             padding: 0 20px;
             flex: 1;
         }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
+        
+        /* 🌟 FIXED HORIZONTAL GRID LAYOUT */
+        .products-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 30px; 
+            justify-content: center;
         }
 
         .product-card {
@@ -126,12 +128,14 @@
             transform: translateY(-5px);
         }
 
-        .product-thumbnail {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 8px;
-            background-color: #EEE;
+        /* 🖼️ AESTHETIC PLACEHOLDER SETUP */
+        .product-thumbnail { 
+            width: 100%; 
+            height: 200px; 
+            object-fit: cover; 
+            border-radius: 8px; 
+            background: linear-gradient(135deg, #f3edf8 0%, #fdfbf7 100%);
+            display: block;
         }
 
         .product-card h3 {
@@ -143,14 +147,14 @@
             font-size: 14px;
             color: #666;
             flex-grow: 1;
-            height: 40px;
-            overflow: hidden;
+            min-height: 40px;
+            margin-bottom: 10px;
         }
 
         .product-price {
             font-size: 22px;
             font-weight: bold;
-            margin: 15px 0 10px 0;
+            margin: 10px 0;
         }
 
         .add-to-cart-btn {
@@ -293,7 +297,7 @@
             width: 350px;
             height: 100%;
             background-color: var(--card-bg);
-            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            box-shadow: -5px 0 15px rgba(0,0,0,0.05);
             transition: 0.3s right ease;
             padding: 20px;
             z-index: 1000;
@@ -392,7 +396,6 @@
 
     <header>
         <div class="brand-profile">
-            <!-- Pwede mong palitan ang src ng direct link ng iyong logo/profile image -->
             <img src="https://via.placeholder.com/150" alt="Digitera Levi Logo" class="brand-logo">
             <div class="brand-name">
                 <h1>Digitera Levi</h1>
@@ -504,7 +507,6 @@
     </footer>
 
     <script>
-        // Mabilisang utility functions para sa view switches
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     </script>
