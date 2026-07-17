@@ -246,11 +246,11 @@ async function processCheckout() {
     }
 
     try {
-        const response = await fetch('https://digitera-shop-backend.vercel.app/api/cart-checkout', {
+     const response = await fetch('https://digitera-shop-backend.vercel.app/api/cart-checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                redirect_url: 'https://digitera-shop-backend.vercel.app/api/cart-checkout', 
+                redirect_url: 'https://digitera-shop-backend.vercel.app/api/cart-checkout',
                 items: checkedItems.map(item => ({
                     name: item.name,
                     price: item.price,
