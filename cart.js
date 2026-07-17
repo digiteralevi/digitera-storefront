@@ -1,242 +1,235 @@
-// ==========================================
-// CONFIGURATION (PASTILAN NG IYONG MGA SUSI)
-// ==========================================
-const CLOUDINARY_PRESET = "hetpqj8w"; 
-const CLOUDINARY_CLOUD_NAME = "dqo0bc4u"; 
+// CLOUDINARY PERMANENT DIRECT CONFIGURATION
+const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dqo0bc4u/image/upload";
+const CLOUDINARY_PRESET = "hetpqj8w";
 
-// I-paste dito ang iyong Firebase Config mula sa Firebase Console kapag handa na ang database
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID", 
-  appId: "YOUR_APP_ID"
-};
-
-// ==========================================
-// INITIALIZATION & VARIABLES
-// ==========================================
-let shopProducts = [];
 let cart = JSON.parse(localStorage.getItem('digitera_cart')) || [];
-let selectedImagesBase64 = [];
+let products = JSON.parse(localStorage.getItem('digitera_products')) || [];
+let selectedFiles = [];
 
-// 📁 HANDLE IMAGE SELECTION (LOCAL PREVIEW)
+// INITIALIZE SHOP DATA ON LOAD
+document.addEventListener("DOMContentLoaded", () => {
+    renderShopProducts();
+    updateCartUI();
+});
+
+// 🌟 IMAGE SELECTION WITH RENDER TO MAX 10 IMAGES
 function handleImageSelection() {
-    const fileInput = document.getElementById('adminImages');
-    const previewDiv = document.getElementById('uploadPreview');
-    const files = Array.from(fileInput.files).slice(0, 5); // Limit hanggang 5 images
+    const fileInput = document.getElementById("adminImages");
+    const previewContainer = document.getElementById("uploadPreview");
     
-    selectedImagesBase64 = [];
-    previewDiv.innerHTML = "";
-
-    if (files.length === 0) {
-        previewDiv.innerHTML = "No images selected yet (Max 5).";
+    // Suportahan ang hanggang 10 images limit check
+    if (fileInput.files.length > 10) {
+        alert("Maximum na 10 mga larawan lamang ang maaaring i-upload kada produkto.");
+        fileInput.value = "";
         return;
     }
 
-    files.forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            selectedImagesBase64.push(e.target.result);
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.style.width = "50px";
-            img.style.height = "50px";
-            img.style.objectFit = "cover";
-            img.style.borderRadius = "4px";
-            previewDiv.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-    });
-}
-
-// ☁️ UPLOAD TO CLOUDINARY (FREE TIER)
-async function uploadToCloudinary(base64Str) {
-    const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
-    const formData = new FormData();
-    formData.append('file', base64Str);
-    formData.append('upload_preset', CLOUDINARY_PRESET);
-
-    try {
-        const res = await fetch(url, { method: 'POST', body: formData });
-        const data = await res.json();
-        return data.secure_url; // Permanenteng URL link mula sa Cloudinary
-    } catch (err) {
-        console.error("Cloudinary Upload Error:", err);
-        return "";
+    selectedFiles = Array.from(fileInput.files);
+    if (selectedFiles.length > 0) {
+        previewContainer.innerHTML = `Selected ${selectedFiles.length} images ready for Cloudinary upload.`;
+    } else {
+        previewContainer.innerHTML = "No images selected yet (Max 10).";
     }
 }
 
-// ⚙️ SAVE PRODUCT TO CLOUD DATABASE (ADMIN FUNCTION)
+// 🌟 SAVE PRODUCT INCORPORATING CLOUDINARY LOOP AND ACCESS LINKS
 async function saveAdminProduct() {
-    const name = document.getElementById('adminName').value.trim();
-    const price = parseFloat(document.getElementById('adminPrice').value);
-    const shortDesc = document.getElementById('adminShortDesc').value.trim();
-    const salesCopy = document.getElementById('adminSalesCopy').value.trim();
+    const name = document.getElementById("adminName").value;
+    const price = parseFloat(document.getElementById("adminPrice").value);
+    const shortDesc = document.getElementById("adminShortDesc").value;
+    const salesCopy = document.getElementById("adminSalesCopy").value;
+    const accessLink = document.getElementById("adminAccessLink").value; // Kinuha ang Drive/Canva box value
 
-    if (!name || !price || !shortDesc || selectedImagesBase64.length === 0) {
-        alert("Paki-kumpleto ang pangalan, presyo, short description, at mag-upload ng kahit 1 image!");
+    if (!name || isNaN(price) || !shortDesc || !salesCopy || !accessLink) {
+        alert("Paki-kumpleto ang lahat ng text fields kabilang ang Secure Access Link!");
         return;
     }
 
-    alert("Ina-upload ang mga images sa Cloudinary at sine-save ang produkto. Sandali lang...");
+    let uploadedImageUrls = [];
+    
+    // Loop para i-upload ang bawat file nang direkta sa Cloudinary
+    if (selectedFiles.length > 0) {
+        alert(`Uploading ${selectedFiles.length} images to Cloudinary... Please wait.`);
+        for (let file of selectedFiles) {
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("upload_preset", CLOUDINARY_PRESET);
 
-    // Awtomatikong ina-upload ang lahat ng pictures na pinili mo sa device mo
-    const imageUrls = await Promise.all(selectedImagesBase64.map(base64 => uploadToCloudinary(base64)));
-    const validImageUrls = imageUrls.filter(url => url !== "");
+            try {
+                const res = await fetch(CLOUDINARY_URL, { method: "POST", body: formData });
+                const fileData = await res.json();
+                if (fileData.secure_url) {
+                    uploadedImageUrls.push(fileData.secure_url);
+                }
+            } catch (err) {
+                console.error("Cloudinary upload issue:", err);
+            }
+        }
+    }
 
+    // Bagong product model object
     const newProduct = {
-        id: 'prod_' + Date.now(),
+        id: "prod_" + Date.now(),
         name,
         price,
         shortDesc,
         salesCopy,
-        images: validImageUrls
+        accessLink, // Naka-store nang ligtas sa product memory database
+        images: uploadedImageUrls.length > 0 ? uploadedImageUrls : ["https://via.placeholder.com/300"]
     };
 
-    // Imbak sa LocalStorage muna bilang backup bago i-sync sa Firebase Firestore
-    let localProds = JSON.parse(localStorage.getItem('digitera_cloud_products')) || [];
-    localProds.push(newProduct);
-    localStorage.setItem('digitera_cloud_products', JSON.stringify(localProds));
-
-    alert("Success! Published successfully to your Digital Shop.");
+    products.push(newProduct);
+    localStorage.setItem('digitera_products', JSON.stringify(products));
+    
+    alert("Success! Digital product deployed horizontally with custom visuals.");
     closeModal('adminModal');
-    location.reload();
+    
+    // Clear form layout variables
+    document.getElementById("adminName").value = "";
+    document.getElementById("adminPrice").value = "";
+    document.getElementById("adminShortDesc").value = "";
+    document.getElementById("adminSalesCopy").value = "";
+    document.getElementById("adminAccessLink").value = "";
+    selectedFiles = [];
+    document.getElementById("uploadPreview").innerHTML = "No images selected yet (Max 10).";
+
+    renderShopProducts();
 }
 
-// 🛒 DISPLAY PRODUCTS TO STOREFRONT
-function renderStorefront() {
-    const grid = document.getElementById('shopProductsGrid');
-    const savedProds = JSON.parse(localStorage.getItem('digitera_cloud_products')) || [];
-    
-    // Default fallback starter items habang wala ka pang ina-add
-    const defaultProds = [
-        { id: 'fc_01', name: 'FunnelCraft App Kit', price: 499, shortDesc: 'Complete direct storefront sequence.', salesCopy: 'High converting sales copy sample text...', images: ['https://via.placeholder.com/300'] },
-        { id: 'bp_02', name: 'Digital Business Planner', price: 250, shortDesc: 'Fully customizable planners.', salesCopy: 'Aesthetic layout optimization tools...', images: ['https://via.placeholder.com/300'] }
-    ];
-
-    shopProducts = savedProds.length > 0 ? savedProds : defaultProds;
+// RENDER PRODUCTS GRID HORIZONTALLY
+function renderShopProducts() {
+    const grid = document.getElementById("shopProductsGrid");
+    if (!grid) return;
     grid.innerHTML = "";
 
-    shopProducts.forEach(prod => {
-        const card = document.createElement('div');
+    if (products.length === 0) {
+        grid.innerHTML = `<p style="text-align:center; color:#888; width:100%;">No assets active in your store. Use Admin Area to publish.</p>`;
+        return;
+    }
+
+    products.forEach(p => {
+        const card = document.createElement("div");
         card.className = "product-card";
-        card.onclick = () => openProductDetails(prod.id);
+        card.onclick = (e) => {
+            if (!e.target.classList.contains('add-to-cart-btn')) openProductModal(p.id);
+        };
         
         card.innerHTML = `
-            <img src="${prod.images[0]}" class="product-thumbnail" alt="${prod.name}">
-            <h3>${prod.name}</h3>
-            <p class="short-desc">${prod.shortDesc}</p>
-            <div class="product-price">₱${prod.price.toFixed(2)}</div>
-            <button class="add-to-cart-btn" onclick="handleAddToCartClick(event, '${prod.id}')">Add to Cart</button>
+            <img src="${p.images[0]}" class="product-thumbnail" alt="${p.name}">
+            <h3>${p.name}</h3>
+            <p class="short-desc">${p.shortDesc}</p>
+            <div class="product-price">₱${p.price.toFixed(2)}</div>
+            <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">Add to Cart</button>
         `;
         grid.appendChild(card);
     });
 }
 
-function handleAddToCartClick(e, id) {
-    e.stopPropagation(); // Pinipigilan nitong mag-pop up ang sales copy kapag button lang ang pinindot
-    const prod = shopProducts.find(p => p.id === id);
-    addToCart(prod.name, prod.price, prod.images[0]);
-}
+// OPEN DYNAMIC MODAL GALLERY SYSTEM
+function openProductModal(productId) {
+    const p = products.find(prod => prod.id === productId);
+    if (!p) return;
 
-// 🔍 OPEN DETAILED SALES COPY MODAL WITH MULTI-IMAGE GALLERY
-function openProductDetails(id) {
-    const prod = shopProducts.find(p => p.id === id);
-    if (!prod) return;
+    document.getElementById("modalTitle").innerText = p.name;
+    document.getElementById("modalPrice").innerText = `₱${p.price.toFixed(2)}`;
+    document.getElementById("modalSalesCopy").innerText = p.salesCopy;
 
-    document.getElementById('modalTitle').innerText = prod.name;
-    document.getElementById('modalPrice').innerText = `₱${prod.price.toFixed(2)}`;
-    document.getElementById('modalSalesCopy').innerText = prod.salesCopy;
-    
-    const mainImg = document.getElementById('modalMainImg');
-    mainImg.src = prod.images[0];
+    const mainImg = document.getElementById("modalMainImg");
+    mainImg.src = p.images[0];
 
-    const thumbsRow = document.getElementById('modalThumbsRow');
+    const thumbsRow = document.getElementById("modalThumbsRow");
     thumbsRow.innerHTML = "";
 
-    prod.images.forEach((imgUrl, idx) => {
-        const thumb = document.createElement('img');
+    // Gumawa ng clickable thumbnails kung higit sa isa ang images
+    p.images.forEach((imgUrl, index) => {
+        const thumb = document.createElement("img");
         thumb.src = imgUrl;
-        thumb.className = `thumb-nav ${idx === 0 ? 'active' : ''}`;
+        thumb.className = `thumb-nav ${index === 0 ? 'active' : ''}`;
         thumb.onclick = () => {
-            document.querySelectorAll('.thumb-nav').forEach(t => t.classList.remove('active'));
-            thumb.classList.add('active');
             mainImg.src = imgUrl;
+            document.querySelectorAll(".thumb-nav").forEach(t => t.classList.remove("active"));
+            thumb.classList.add("active");
         };
         thumbsRow.appendChild(thumb);
     });
 
-    document.getElementById('modalAddToCartBtn').onclick = () => addToCart(prod.name, prod.price, prod.images[0]);
-    document.getElementById('productDetailModal').style.display = 'flex';
+    const cartBtn = document.getElementById("modalAddToCartBtn");
+    cartBtn.onclick = (e) => addToCart(e, p.id);
+
+    openModal("productDetailModal");
 }
 
-// 🛒 SHOPEE STYLE SHOPPING CART LOGIC
-function addToCart(name, price, img) {
-    const existing = cart.find(item => item.name === name);
+// CART CORE FUNCTIONALITIES
+function addToCart(e, productId) {
+    if (e) e.stopPropagation();
+    const p = products.find(prod => prod.id === productId);
+    if (!p) return;
+
+    const existing = cart.find(item => item.id === productId);
     if (existing) {
         existing.quantity += 1;
     } else {
-        cart.push({ name, price, img, quantity: 1, checked: true });
+        cart.push({ id: p.id, name: p.name, price: p.price, quantity: 1, checked: true });
     }
+    saveAndSyncCart();
+}
+
+function saveAndSyncCart() {
+    localStorage.setItem('digitera_cart', JSON.stringify(cart));
     updateCartUI();
-    document.getElementById('cartModal').classList.add('open');
 }
 
 function updateCartUI() {
-    localStorage.setItem('digitera_cart', JSON.stringify(cart));
-    document.getElementById('cart-count').innerText = cart.reduce((sum, i) => sum + i.quantity, 0);
+    const countSpan = document.getElementById("cart-count");
+    const itemsList = document.getElementById("cartItems");
+    const totalSpan = document.getElementById("cartTotal");
 
-    const list = document.getElementById('cartItems');
-    list.innerHTML = "";
+    if (!countSpan || !itemsList || !totalSpan) return;
+
+    let totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+    countSpan.innerText = totalCount;
+
+    itemsList.innerHTML = "";
     let grandTotal = 0;
 
     cart.forEach((item, index) => {
-        if (item.checked) {
-            grandTotal += item.price * item.quantity;
-        }
+        if (item.checked) grandTotal += (item.price * item.quantity);
 
-        const div = document.createElement('div');
-        div.className = "cart-item";
-        div.style.display = "flex";
-        div.style.alignItems = "center";
-        div.style.justifyContent = "space-between";
-        div.style.marginBottom = "10px";
-
-        div.innerHTML = `
-            <div style="display:flex; align-items:center; gap:10px;">
-                <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleItemCheck(${index})" style="cursor:pointer; transform: scale(1.2);">
-                <img src="${item.img}" style="width:40px; height:40px; object-fit:cover; border-radius:4px;">
+        const row = document.createElement("div");
+        row.style = "display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; font-size:14px;";
+        row.innerHTML = `
+            <div style="display:flex; align-items:center; gap:8px;">
+                <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleItemCheck(${index})">
                 <div>
-                    <div style="font-weight:bold; font-size:14px;">${item.name}</div>
-                    <div style="font-size:12px; color:#666;">₱${item.price} x ${item.quantity}</div>
+                    <strong>${item.name}</strong><br>
+                    <span style="color:#888;">₱${item.price} x ${item.quantity}</span>
                 </div>
             </div>
             <button onclick="removeFromCart(${index})" style="background:none; border:none; color:red; cursor:pointer;">🗑️</button>
         `;
-        list.appendChild(div);
+        itemsList.appendChild(row);
     });
 
-    document.getElementById('cartTotal').innerText = grandTotal.toFixed(2);
+    totalSpan.innerText = grandTotal.toFixed(2);
 }
 
 function toggleItemCheck(index) {
-    cart[index].checked = !cart[index].checked; // Re-compute base lang sa may tsek
-    updateCartUI(); 
+    cart[index].checked = !cart[index].checked;
+    saveAndSyncCart();
 }
 
 function removeFromCart(index) {
     cart.splice(index, 1);
-    updateCartUI();
+    saveAndSyncCart();
 }
 
 function toggleCart(e) {
-    if(e) e.stopPropagation();
-    document.getElementById('cartModal').classList.toggle('open');
+    if (e) e.stopPropagation();
+    const modal = document.getElementById("cartModal");
+    modal.classList.toggle("open");
 }
 
-// 🚀 PROCESS CHECKOUT FOR P1.00 AND ABOVE TRANSACTIONS
+// PROCESS CHECKOUT ENGINE FOR P1.00 TEST SETUP
 async function processCheckout() {
     const checkedItems = cart.filter(item => item.checked);
     
@@ -245,7 +238,6 @@ async function processCheckout() {
         return;
     }
 
-    // KAPAG ₱1.00 O MAY BAYAD: Dederetso sa Vercel Paymongo Backend
     try {
         const response = await fetch('https://digitera-shop-backend.vercel.app/api/cart-checkout', {
             method: 'POST',
@@ -262,7 +254,7 @@ async function processCheckout() {
 
         const data = await response.json();
         if (data.checkout_url) {
-            window.location.href = data.checkout_url; // Dederetso na sa safe Paymongo screen!
+            window.location.href = data.checkout_url;
         } else {
             alert("Error sa payment session: " + JSON.stringify(data.error));
         }
@@ -270,9 +262,3 @@ async function processCheckout() {
         alert("Hindi makakonekta sa iyong server: " + error.message);
     }
 }
-
-// ON LAUNCH RUNNERS
-window.onload = () => {
-    renderStorefront();
-    updateCartUI();
-};
