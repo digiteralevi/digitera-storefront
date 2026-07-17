@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digitera Levi Shop</title>
+    
+    <!-- SDK NG FIREBASE PARA SA CLOUD STORAGE CONNECTION -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
     <style>
         :root {
             --bg-color: #FDFBF7;
@@ -63,11 +68,10 @@
         }
         .product-card:hover { transform: translateY(-5px); }
         
-        /* 🖼️ PERFECT 4:3 RATIO VISUALS SETUP FOR GRID CARD */
         .product-thumbnail { 
             width: 100%; 
-            aspect-ratio: 4 / 3; /* Pinapanatili ang perpektong 4:3 standard sizing */
-            object-fit: contain; /* Hindi puputulin ang gilid ng mga layout graphics mo */
+            aspect-ratio: 4 / 3;
+            object-fit: contain; 
             background-color: #FAF6EE;
             border-radius: 8px; 
             display: block;
@@ -80,35 +84,38 @@
         .add-to-cart-btn { background-color: var(--btn-lilac); color: var(--text-purple); border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
         .add-to-cart-btn:hover { background: var(--gold-shine); color: #4A2E80; }
 
-        /* PRODUCT DETAIL MODAL */
+        /* SECRET ADMIN FLOAT BUTTON */
+        #secretAdminBtn {
+            position: fixed; bottom: 20px; right: 20px; 
+            background: var(--gold-shine); border: none; 
+            padding: 15px; border-radius: 50%; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 999;
+            display: none; font-size: 20px;
+        }
+
+        /* ADMIN CONTROLS INSIDE CARD */
+        .admin-card-actions { display: flex; gap: 10px; margin-top: 10px; }
+        .edit-card-btn { background-color: #EFEAF4; border: 1px solid var(--btn-lilac); color: var(--text-purple); padding: 5px 10px; border-radius: 5px; cursor: pointer; flex: 1; font-size: 12px; font-weight: bold; }
+        .delete-card-btn { background-color: #FCE8E6; border: 1px solid #F4B4B0; color: #C5221F; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(74, 46, 128, 0.4); display: none; justify-content: center; align-items: center; z-index: 2000; }
         .modal-content { background-color: var(--card-bg); padding: 30px; border-radius: 15px; max-width: 800px; width: 90%; max-height: 85vh; overflow-y: auto; position: relative; border: 2px solid transparent; border-image: var(--gold-shine) 1; }
         .close-btn { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--text-purple); }
 
         .gallery-container { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
-        
-        /* 🖼️ PERFECT SQUARE/4:3 DISPLAY FOR MAIN PREVIEW */
-        .main-gallery-img { 
-            width: 100%; 
-            aspect-ratio: 4 / 3;
-            object-fit: contain; 
-            border-radius: 10px; 
-            background-color: #FAF6EE; 
-        }
+        .main-gallery-img { width: 100%; aspect-ratio: 4 / 3; object-fit: contain; border-radius: 10px; background-color: #FAF6EE; }
         
         .thumbnails-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 5px; }
         .thumb-nav { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; cursor: pointer; border: 2px solid transparent; background-color: #F0EAE1; }
         .thumb-nav.active { border-color: #BF953F; }
         .sales-copy-area { margin-top: 25px; line-height: 1.6; font-size: 16px; color: #333; white-space: pre-wrap; }
 
-        /* ADMIN FORM STYLE */
         .admin-form-grid { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 15px; }
         .admin-input, .admin-textarea { width: 100%; padding: 10px; border: 1px solid var(--btn-lilac); border-radius: 6px; box-sizing: border-box; }
         .admin-textarea { height: 120px; resize: vertical; }
         .file-upload-label { background-color: #FAF6EE; border: 2px dashed var(--btn-lilac); padding: 15px; text-align: center; border-radius: 6px; cursor: pointer; font-weight: bold; }
         .file-upload-label:hover { border-color: #BF953F; }
 
-        /* CART & LEGALS */
         .cart-modal { position: fixed; top: 0; right: -400px; width: 350px; height: 100%; background-color: var(--card-bg); box-shadow: -5px 0 15px rgba(0,0,0,0.05); transition: 0.3s right ease; padding: 20px; z-index: 1000; display: flex; flex-direction: column; }
         .cart-modal.open { right: 0; }
         .cart-items-list { flex-grow: 1; overflow-y: auto; margin-top: 20px; }
@@ -141,6 +148,9 @@
         <div class="products-grid" id="shopProductsGrid"></div>
     </div>
 
+    <!-- SECRET ADMIN FLOATING GEAR BUTTON -->
+    <button id="secretAdminBtn" onclick="openModal('adminModal')">⚙️</button>
+
     <!-- SALES COPY OVERLAY -->
     <div class="modal-overlay" id="productDetailModal">
         <div class="modal-content">
@@ -157,34 +167,33 @@
         </div>
     </div>
 
-    <!-- ADMIN AREA (CONTAINS BOTH CAPABILITIES REQUESTED) -->
+    <!-- ADMIN AREA -->
     <div class="modal-overlay" id="adminModal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('adminModal')">✕</button>
-            <h2>Add New Digital Asset</h2>
+            <h2 id="adminModalTitle">Add New Digital Asset</h2>
             <div class="admin-form-grid">
+                <input type="hidden" id="adminEditProductId">
                 <input type="text" id="adminName" class="admin-input" placeholder="Product Name">
                 <input type="number" id="adminPrice" class="admin-input" placeholder="Price (PHP)">
                 <input type="text" id="adminShortDesc" class="admin-input" placeholder="Short Description (For Card View)">
                 <textarea id="adminSalesCopy" class="admin-textarea" placeholder="Paste your High-Converting Sales Copy here..."></textarea>
-                
-                <!-- 🌟 NEW SECURE ACCESS LINK INPUT BOX -->
                 <input type="text" id="adminAccessLink" class="admin-input" placeholder="Secure Access / Download File Link (Google Drive, Canva, etc.)">
                 
-                <!-- 🌟 INCREMENTED TO MAX 10 IMAGES LIMITATION -->
                 <h4 style="margin:5px 0 0 0;">Product Images (Select up to 10 files from device):</h4>
+                <div id="editImageNotice" style="font-size: 12px; color: #888; display: none;">*Leave empty to keep existing images*</div>
                 <label class="file-upload-label">
                     📁 Click here to choose files
                     <input type="file" id="adminImages" accept="image/*" multiple style="display:none;" onchange="handleImageSelection()">
                 </label>
                 <div id="uploadPreview" style="display:flex; gap:5px; margin-top:5px; justify-content:center; flex-wrap:wrap; font-size:14px; color:#666;">No images selected yet (Max 10).</div>
                 
-                <button class="add-to-cart-btn" onclick="saveAdminProduct()" style="background:var(--gold-shine); margin-top:10px;">Create & Publish Product</button>
+                <button class="add-to-cart-btn" id="adminSubmitBtn" onclick="saveAdminProduct()" style="background:var(--gold-shine); margin-top:10px;">Create & Publish Product</button>
             </div>
         </div>
     </div>
 
-    <!-- SHOPPING CART SLIDE OUT -->
+    <!-- CART SLIDE OUT -->
     <div class="cart-modal" id="cartModal">
         <div class="cart-header" style="display:flex; justify-content:space-between; align-items:center;">
             <h2>Your Cart</h2>
@@ -197,14 +206,12 @@
         </div>
     </div>
 
-    <!-- POP-UP LEGALS -->
     <div class="legal-modal-overlay" id="termsModal"><div class="legal-modal-content"><button class="close-legal-btn" onclick="closeModal('termsModal')">✕</button><h2>Terms & Conditions</h2><p>All products sold on this platform are digital business assets.</p></div></div>
     <div class="legal-modal-overlay" id="privacyModal"><div class="legal-modal-content"><button class="close-legal-btn" onclick="closeModal('privacyModal')">✕</button><h2>Privacy Policy</h2><p>We collect basic transaction information solely for deployment processing.</p></div></div>
     <div class="legal-modal-overlay" id="refundModal"><div class="legal-modal-content"><button class="close-legal-btn" onclick="closeModal('refundModal')">✕</button><h2>Refund & Fulfillment Policy</h2><p>Digital downloads are delivered instantly upon validation check.</p></div></div>
 
     <footer>
         <div class="footer-links">
-            <a onclick="openModal('adminModal')">⚙️ Admin Area</a>
             <a onclick="openModal('termsModal')">Terms & Conditions</a>
             <a onclick="openModal('privacyModal')">Privacy Policy</a>
             <a onclick="openModal('refundModal')">Refund Policy</a>
