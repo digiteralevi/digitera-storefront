@@ -236,7 +236,7 @@ function toggleCart(e) {
     document.getElementById('cartModal').classList.toggle('open');
 }
 
-// 🚀 PROCESS CHECKOUT TO PAYMONGO VIA VERCEL BACKEND
+// 🚀 PROCESS CHECKOUT FOR P1.00 AND ABOVE TRANSACTIONS
 async function processCheckout() {
     const checkedItems = cart.filter(item => item.checked);
     
@@ -245,12 +245,13 @@ async function processCheckout() {
         return;
     }
 
+    // KAPAG ₱1.00 O MAY BAYAD: Dederetso sa Vercel Paymongo Backend
     try {
-     const response = await fetch('https://digitera-shop-backend.vercel.app/api/cart-checkout', {
+        const response = await fetch('https://digitera-shop-backend.vercel.app/api/cart-checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                redirect_url: 'https://digitera-shop-backend.vercel.app/api/cart-checkout',
+                redirect_url: window.location.origin + '/success.html', 
                 items: checkedItems.map(item => ({
                     name: item.name,
                     price: item.price,
@@ -261,7 +262,7 @@ async function processCheckout() {
 
         const data = await response.json();
         if (data.checkout_url) {
-            window.location.href = data.checkout_url; // Redirect sa safe checkout gateway ni Paymongo
+            window.location.href = data.checkout_url; // Dederetso na sa safe Paymongo screen!
         } else {
             alert("Error sa payment session: " + JSON.stringify(data.error));
         }
