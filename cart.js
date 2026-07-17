@@ -330,7 +330,7 @@ async function processCheckout() {
         return;
     }
     try {
-        const response = await fetch('https://digitera-levi-shop-backend.vercel.app/api/cart-checkout', {
+        const response = await fetch('https://digitera-shop-backend.vercel.app/api/cart-checkout.js', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
