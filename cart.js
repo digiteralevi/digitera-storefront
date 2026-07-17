@@ -1,9 +1,8 @@
-// CLOUDINARY PERMANENT DIRECT CONFIGURATION
+// CLOUDINARY DIRECT CONFIGURATION
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dqo0bc4u/image/upload";
 const CLOUDINARY_PRESET = "hetpqj8w";
 
-let cart = JSON.parse(localStorage.getItem('digitera_cart')) || [];
-// 🌟 FIREBASE GLOBAL INITIALIZATION CONTEXT
+// FIREBASE GLOBAL INITIALIZATION CONTEXT
 const firebaseConfig = {
     apiKey: "AIzaSyDFQcwCJxIkTX0CCz8kaF7Sp2_hZNE1dIs",
     authDomain: "digitera-levi-shop.firebaseapp.com",
@@ -19,17 +18,27 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 let cart = JSON.parse(localStorage.getItem('digitera_cart')) || [];
-let products = []; // Kusa nang manggagaling sa cloud database
+let products = [];
 let selectedFiles = [];
+let isAdminMode = false;
 
 document.addEventListener("DOMContentLoaded", () => {
-    fetchCloudProducts(); // Kukuha ng data mula sa Firebase server
+    checkAdminMode(); // Tinitingnan kung may secret URL extension
+    fetchCloudProducts();
     updateCartUI();
 });
 
-// 🌟 FETCH REAL-TIME UPDATES FROM FIREBASE CLOUD
+// 🛡️ SECRET URL EXTENSION CHECKER
+function checkAdminMode() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('mode') === 'admin') {
+        isAdminMode = true;
+        document.getElementById("secretAdminBtn").style.display = "block"; // Lumalabas lang ang floating icon sa admin
+    }
+}
+
 function fetchCloudProducts() {
-    db.collection("products").onSnapshot((snapshot) => {
+    db.collection("products").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
         products = [];
         snapshot.forEach((doc) => {
             products.push({ id: doc.id, ...doc.data() });
@@ -37,12 +46,11 @@ function fetchCloudProducts() {
         renderShopProducts();
     });
 }
-// 🌟 IMAGE SELECTION WITH RENDER TO MAX 10 IMAGES
+
 function handleImageSelection() {
     const fileInput = document.getElementById("adminImages");
     const previewContainer = document.getElementById("uploadPreview");
     
-    // Suportahan ang hanggang 10 images limit check
     if (fileInput.files.length > 10) {
         alert("Maximum na 10 mga larawan lamang ang maaaring i-upload kada produkto.");
         fileInput.value = "";
@@ -57,13 +65,14 @@ function handleImageSelection() {
     }
 }
 
-// 🌟 SAVE PRODUCT INCORPORATING CLOUDINARY LOOP AND ACCESS LINKS
+// 🌟 SAVE & UPDATE FUNCTIONS INTEGRATED
 async function saveAdminProduct() {
+    const productId = document.getElementById("adminEditProductId").value;
     const name = document.getElementById("adminName").value;
     const price = parseFloat(document.getElementById("adminPrice").value);
     const shortDesc = document.getElementById("adminShortDesc").value;
     const salesCopy = document.getElementById("adminSalesCopy").value;
-    const accessLink = document.getElementById("adminAccessLink").value; // Kinuha ang Drive/Canva box value
+    const accessLink = document.getElementById("adminAccessLink").value;
 
     if (!name || isNaN(price) || !shortDesc || !salesCopy || !accessLink) {
         alert("Paki-kumpleto ang lahat ng text fields kabilang ang Secure Access Link!");
@@ -72,7 +81,6 @@ async function saveAdminProduct() {
 
     let uploadedImageUrls = [];
     
-    // Loop para i-upload ang bawat file nang direkta sa Cloudinary
     if (selectedFiles.length > 0) {
         alert(`Uploading ${selectedFiles.length} images to Cloudinary... Please wait.`);
         for (let file of selectedFiles) {
@@ -92,43 +100,90 @@ async function saveAdminProduct() {
         }
     }
 
-    // Bagong product model object
-    const newProduct = {
-        id: "prod_" + Date.now(),
+    const productData = {
         name,
         price,
         shortDesc,
         salesCopy,
-        accessLink, // Naka-store nang ligtas sa product memory database
-        images: uploadedImageUrls.length > 0 ? uploadedImageUrls : ["https://via.placeholder.com/300"]
+        accessLink
     };
 
-    products.push(newProduct);
-    localStorage.setItem('digitera_products', JSON.stringify(products));
+    try {
+        if (productId) {
+            // ✏️ UPDATE LOGIC
+            if (uploadedImageUrls.length > 0) {
+                productData.images = uploadedImageUrls;
+            }
+            await db.collection("products").doc(productId).update(productData);
+            alert("Success! Product successfully updated in the Cloud Database.");
+        } else {
+            // ➕ CREATE LOGIC
+            productData.images = uploadedImageUrls.length > 0 ? uploadedImageUrls : ["https://via.placeholder.com/300"];
+            productData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+            await db.collection("products").add(productData);
+            alert("Success! Product successfully published to the Cloud Database.");
+        }
+        
+        closeModal('adminModal');
+        resetAdminForm();
+    } catch (error) {
+        alert("Error handling cloud database action: " + error.message);
+    }
+}
+
+// ✏️ PRE-FILL FORM FOR EDITING
+function editProduct(productId, event) {
+    if (event) event.stopPropagation();
+    const p = products.find(prod => prod.id === productId);
+    if (!p) return;
+
+    document.getElementById("adminModalTitle").innerText = "Edit Digital Asset";
+    document.getElementById("adminSubmitBtn").innerText = "Update Product";
+    document.getElementById("adminEditProductId").value = p.id;
+    document.getElementById("adminName").value = p.name;
+    document.getElementById("adminPrice").value = p.price;
+    document.getElementById("adminShortDesc").value = p.shortDesc;
+    document.getElementById("adminSalesCopy").value = p.salesCopy;
+    document.getElementById("adminAccessLink").value = p.accessLink;
     
-    alert("Success! Digital product deployed horizontally with custom visuals.");
-    closeModal('adminModal');
-    
-    // Clear form layout variables
+    document.getElementById("editImageNotice").style.display = "block";
+    openModal('adminModal');
+}
+
+// 🗑️ DELETE FUNCTION FROM FIREBASE
+async function deleteProduct(productId, event) {
+    if (event) event.stopPropagation();
+    if (!confirm("Sigurado ka bang gusto mong burahin ang produktong ito nang permanente sa cloud?")) return;
+
+    try {
+        await db.collection("products").doc(productId).delete();
+        alert("Product successfully deleted from cloud database.");
+    } catch (error) {
+        alert("Error deleting product: " + error.message);
+    }
+}
+
+function resetAdminForm() {
+    document.getElementById("adminModalTitle").innerText = "Add New Digital Asset";
+    document.getElementById("adminSubmitBtn").innerText = "Create & Publish Product";
+    document.getElementById("adminEditProductId").value = "";
     document.getElementById("adminName").value = "";
     document.getElementById("adminPrice").value = "";
     document.getElementById("adminShortDesc").value = "";
     document.getElementById("adminSalesCopy").value = "";
     document.getElementById("adminAccessLink").value = "";
+    document.getElementById("editImageNotice").style.display = "none";
     selectedFiles = [];
     document.getElementById("uploadPreview").innerHTML = "No images selected yet (Max 10).";
-
-    renderShopProducts();
 }
 
-// RENDER PRODUCTS GRID HORIZONTALLY
 function renderShopProducts() {
     const grid = document.getElementById("shopProductsGrid");
     if (!grid) return;
     grid.innerHTML = "";
 
     if (products.length === 0) {
-        grid.innerHTML = `<p style="text-align:center; color:#888; width:100%;">No assets active in your store. Use Admin Area to publish.</p>`;
+        grid.innerHTML = `<p style="text-align:center; color:#888; width:100%;">No assets active in your store.</p>`;
         return;
     }
 
@@ -136,8 +191,23 @@ function renderShopProducts() {
         const card = document.createElement("div");
         card.className = "product-card";
         card.onclick = (e) => {
-            if (!e.target.classList.contains('add-to-cart-btn')) openProductModal(p.id);
+            if (!e.target.classList.contains('add-to-cart-btn') && 
+                !e.target.classList.contains('edit-card-btn') && 
+                !e.target.classList.contains('delete-card-btn')) {
+                openProductModal(p.id);
+            }
         };
+        
+        let adminButtonsHTML = "";
+        // Kung ikaw ay nasa secret admin mode, lalabas ang Edit at Delete buttons sa mismong card box
+        if (isAdminMode) {
+            adminButtonsHTML = `
+                <div class="admin-card-actions">
+                    <button class="edit-card-btn" onclick="editProduct('${p.id}', event)">✏️ Edit</button>
+                    <button class="delete-card-btn" onclick="deleteProduct('${p.id}', event)">🗑️</button>
+                </div>
+            `;
+        }
         
         card.innerHTML = `
             <img src="${p.images[0]}" class="product-thumbnail" alt="${p.name}">
@@ -145,12 +215,12 @@ function renderShopProducts() {
             <p class="short-desc">${p.shortDesc}</p>
             <div class="product-price">₱${p.price.toFixed(2)}</div>
             <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">Add to Cart</button>
+            ${adminButtonsHTML}
         `;
         grid.appendChild(card);
     });
 }
 
-// OPEN DYNAMIC MODAL GALLERY SYSTEM
 function openProductModal(productId) {
     const p = products.find(prod => prod.id === productId);
     if (!p) return;
@@ -165,7 +235,6 @@ function openProductModal(productId) {
     const thumbsRow = document.getElementById("modalThumbsRow");
     thumbsRow.innerHTML = "";
 
-    // Gumawa ng clickable thumbnails kung higit sa isa ang images
     p.images.forEach((imgUrl, index) => {
         const thumb = document.createElement("img");
         thumb.src = imgUrl;
@@ -184,7 +253,6 @@ function openProductModal(productId) {
     openModal("productDetailModal");
 }
 
-// CART CORE FUNCTIONALITIES
 function addToCart(e, productId) {
     if (e) e.stopPropagation();
     const p = products.find(prod => prod.id === productId);
@@ -204,6 +272,7 @@ function saveAndSyncCart() {
     updateCartUI();
 }
 
+// (Nananatili ang parehong UI at checkout logic para sa Paymongo)
 function updateCartUI() {
     const countSpan = document.getElementById("cart-count");
     const itemsList = document.getElementById("cartItems");
@@ -254,15 +323,12 @@ function toggleCart(e) {
     modal.classList.toggle("open");
 }
 
-// PROCESS CHECKOUT ENGINE FOR P1.00 TEST SETUP
 async function processCheckout() {
     const checkedItems = cart.filter(item => item.checked);
-    
     if (checkedItems.length === 0) {
         alert("Pumili muna ng kahit isang produkto na may CHECK sa iyong cart para makapag-checkout!");
         return;
     }
-
     try {
         const response = await fetch('https://digitera-shop-backend.vercel.app/api/cart-checkout', {
             method: 'POST',
@@ -276,7 +342,6 @@ async function processCheckout() {
                 }))
             })
         });
-
         const data = await response.json();
         if (data.checkout_url) {
             window.location.href = data.checkout_url;
