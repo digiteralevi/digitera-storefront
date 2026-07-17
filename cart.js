@@ -352,3 +352,110 @@ async function processCheckout() {
         alert("Hindi makakonekta sa iyong server: " + error.message);
     }
 }
+// ==========================================
+// DIGITERA HIGH-CONVERTING FUNNEL AUTOMATIONS
+// ==========================================
+
+// 1. TESTIMONIALS DATA (NATURAL TAGLISH)
+const reviews = [
+    { name: "Angela M.", tag: "Verified Creator", text: "Highly recommended, very helpful and accommodating talaga! Sobrang haba ng pasensya magturo sa katulad kong beginner na walang alam sa digital products. Di kayo magsisisi sa templates niya, easy transaction pa!" },
+    { name: "Mark Santos", tag: "Side Hustler", text: "Sulit na sulit yung ROI Framework Vault! Akala ko mahihirapan ako mag-set up pero sobrang daling sundan. Yung mga Canva templates ang ganda ng aesthetic, hindi mukhang chipipay." },
+    { name: "Coach Jayson", tag: "Course Creator", text: "Sobrang game changer nung Aesthetic Workbook bundle po. Ginamit ko agad para sa lead magnet ko at ang daming nag-enrol. 10 stars para sa seller!" },
+    { name: "Trisha Cruz", tag: "Digital Marketer", text: "Sobrang instant ng access tapos ready to resell talaga. Ang laking tipid sa oras kesa gumawa ako from scratch. Best investment for my online shop this year." },
+    { name: "Dave_Digital", tag: "Verified Reseller", text: "Legit guys, ang bilis kausap ni admin at guided talaga. Yung Reels Vault gamit na gamit ko ngayon para sa faceless marketing account ko. Super low price para sa quality." },
+    { name: "Mommy Elaine", tag: "Home Preneur", text: "Nagustuhan ng anak ko yung Kids Whys Flipbook, dinownload ko agad at pinrint. Sobrang worth it nung package may kasama pang educational freebies." },
+    { name: "Kevin R.", tag: "Funnel Designer", text: "Ganda ng lines ng Funnelcraft at active lahat ng links. Hindi ka mahihirapan mag-scale. Highly accommodating din si boss sa inquiries." },
+    { name: "Nica Rivera", tag: "E-book Publisher", text: "Ang daming choices sa 3Million E-Books bundle! Dynamic at responsive ang catalog. Perfect para sa mga gustong magsimula ng digital business na maliit ang puhunan." },
+    { name: "Reynald_99", tag: "Store Owner", text: "Fast delivery of assets at ang lilinis ng codes nung mga apps and mini games. Napaka-smooth gamitin sa site ko. Thank you so much po!" },
+    { name: "Chadi F.", tag: "Social Media Manager", text: "Yung Dental at Real Estate templates ang nagligtas sa mga clients ko ngayong linggo. Super aesthetic ng layouts at edit ready na agad sa Canva. Super thumbs up!" }
+];
+
+// 2. FAKE BUYERS POPUP CONFIGURATIONS
+const buyerNames = ["Maria", "John", "Sarah", "Dave", "Kylie", "Mark", "Princess", "James", "Rowena", "Alvin"];
+const buyerLocations = ["Manila", "Cebu", "Davao", "Quezon City", "Ilocos Norte", "Pampanga", "Cavite", "Bulacan", "Laguna", "Baguio"];
+const trendingProducts = [
+    "KIDZCREATOR SYSTEM",
+    "Digital Product ROI Framework Vault",
+    "$1.99 System Kit",
+    "DENTAL Social Media Marketing Templates",
+    "REAL ESTATE SOCIAL MEDIA TEMPLATES",
+    "LUXE GIRL VAULT REELS BUNDLE",
+    "Funnelcraft",
+    "Ai Business Employee (sales Agent Bot)"
+];
+
+function createSocialProofPopupHTML() {
+    if (document.getElementById('social-proof-pop')) return;
+    const pop = document.createElement('div');
+    pop.id = 'social-proof-pop';
+    pop.className = 'social-proof-container';
+    pop.innerHTML = `
+        <div class="social-proof-content">
+            <p class="buyer-text"><span style="font-size:16px;">🛍️</span> <strong id="buyer-name"></strong> from <span id="buyer-location"></span></p>
+            <p class="product-text">just purchased <strong id="bought-product"></strong></p>
+            <span class="time-ago" id="buy-time"></span>
+        </div>
+    `;
+    document.body.appendChild(pop);
+}
+
+function showSocialProof() {
+    const container = document.getElementById('social-proof-pop');
+    if (!container) return;
+
+    const randomName = buyerNames[Math.floor(Math.random() * buyerNames.length)];
+    const randomLoc = buyerLocations[Math.floor(Math.random() * buyerLocations.length)];
+    const randomProd = trendingProducts[Math.floor(Math.random() * trendingProducts.length)];
+    const randomTime = Math.floor(Math.random() * 4) + 1;
+
+    document.getElementById('buyer-name').textContent = randomName;
+    document.getElementById('buyer-location').textContent = randomLoc;
+    document.getElementById('bought-product').textContent = randomProd;
+    document.getElementById('buy-time').textContent = `${randomTime} minute${randomTime > 1 ? 's' : ''} ago`;
+
+    container.classList.add('show');
+    setTimeout(() => { container.classList.remove('show'); }, 5000);
+}
+
+// 3. FAKE LIVE VIEWERS COUNTER LOGIC
+function updateLiveViewers() {
+    const viewerElement = document.getElementById('live-viewer-count');
+    if (!viewerElement) return;
+    let currentViewers = parseInt(viewerElement.textContent) || 47;
+    const change = Math.floor(Math.random() * 7) - 3; // Randomly adds or subtracts 1 to 3 viewers
+    currentViewers += change;
+    if (currentViewers < 30) currentViewers = 34;
+    if (currentViewers > 85) currentViewers = 78;
+    viewerElement.textContent = currentViewers;
+}
+
+// INITIALIZE ALL FUNNEL SYSTEM ON WINDOW LOAD
+window.addEventListener('load', () => {
+    // Render the marquee items dynamically
+    const track = document.getElementById('marquee-track');
+    if (track) {
+        const doubleReviews = [...reviews, ...reviews];
+        track.innerHTML = doubleReviews.map(rev => `
+            <div class="testimonial-card">
+                <div>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="review-text">"${rev.text}"</p>
+                </div>
+                <div class="reviewer-info">
+                    <p class="reviewer-name">${rev.name}</p>
+                    <p class="reviewer-tag">${rev.tag}</p>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Initialize popup containers and event loops
+    createSocialProofPopupHTML();
+    setTimeout(() => {
+        showSocialProof();
+        setInterval(showSocialProof, 18000); // Triggers fake buyer event every 18 seconds
+    }, 4000);
+
+    // Run active dynamic viewers loop
+    setInterval(updateLiveViewers, 5000);
+});
