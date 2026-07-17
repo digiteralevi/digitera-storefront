@@ -221,6 +221,17 @@ function renderShopProducts() {
     });
 }
 
+// MODALS AND UI MANAGEMENT
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) modal.style.display = "block";
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) modal.style.display = "none";
+}
+
 function openProductModal(productId) {
     const p = products.find(prod => prod.id === productId);
     if (!p) return;
@@ -272,7 +283,6 @@ function saveAndSyncCart() {
     updateCartUI();
 }
 
-// (Nananatili ang parehong UI at checkout logic para sa Paymongo)
 function updateCartUI() {
     const countSpan = document.getElementById("cart-count");
     const itemsList = document.getElementById("cartItems");
@@ -323,18 +333,35 @@ function toggleCart(e) {
     modal.classList.toggle("open");
 }
 
+// 🛍️ UPDATED PROCESS CHECKOUT WITH EMAIL PROMPT BOX
 async function processCheckout() {
     const checkedItems = cart.filter(item => item.checked);
     if (checkedItems.length === 0) {
         alert("Pumili muna ng kahit isang produkto na may CHECK sa iyong cart para makapag-checkout!");
         return;
     }
+
+    const buyerEmail = prompt("Saan namin ipadadala ang iyong digital products? Pakisulat ang iyong active Email Address:");
+    
+    if (!buyerEmail) {
+        alert("Kailangan mo pong ilagay ang iyong Email Address para matanggap ang iyong produkto.");
+        return;
+    }
+
+    if (!buyerEmail.includes("@") || !buyerEmail.includes(".")) {
+        alert("Paki-check po ang iyong email. Siguraduhing tama at may '@' at '.' (e.g., sample@gmail.com)");
+        return;
+    }
+
+    localStorage.setItem("buyer_email", buyerEmail);
+
     try {
         const response = await fetch('https://digitera-shop-backend.vercel.app/api/cart-checkout.js', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 redirect_url: window.location.origin + '/success.html', 
+                email: buyerEmail,
                 items: checkedItems.map(item => ({
                     name: item.name,
                     price: item.price,
@@ -352,11 +379,11 @@ async function processCheckout() {
         alert("Hindi makakonekta sa iyong server: " + error.message);
     }
 }
+
 // ==========================================
 // DIGITERA HIGH-CONVERTING FUNNEL AUTOMATIONS
 // ==========================================
 
-// 1. TESTIMONIALS DATA (NATURAL TAGLISH)
 const reviews = [
     { name: "Angela M.", tag: "Verified Creator", text: "Highly recommended, very helpful and accommodating talaga! Sobrang haba ng pasensya magturo sa katulad kong beginner na walang alam sa digital products. Di kayo magsisisi sa templates niya, easy transaction pa!" },
     { name: "Mark Santos", tag: "Side Hustler", text: "Sulit na sulit yung ROI Framework Vault! Akala ko mahihirapan ako mag-set up pero sobrang daling sundan. Yung mga Canva templates ang ganda ng aesthetic, hindi mukhang chipipay." },
@@ -370,7 +397,6 @@ const reviews = [
     { name: "Chadi F.", tag: "Social Media Manager", text: "Yung Dental at Real Estate templates ang nagligtas sa mga clients ko ngayong linggo. Super aesthetic ng layouts at edit ready na agad sa Canva. Super thumbs up!" }
 ];
 
-// 2. FAKE BUYERS POPUP CONFIGURATIONS
 const buyerNames = ["Maria", "John", "Sarah", "Dave", "Kylie", "Mark", "Princess", "James", "Rowena", "Alvin"];
 const buyerLocations = ["Manila", "Cebu", "Davao", "Quezon City", "Ilocos Norte", "Pampanga", "Cavite", "Bulacan", "Laguna", "Baguio"];
 const trendingProducts = [
@@ -417,21 +443,18 @@ function showSocialProof() {
     setTimeout(() => { container.classList.remove('show'); }, 5000);
 }
 
-// 3. FAKE LIVE VIEWERS COUNTER LOGIC
 function updateLiveViewers() {
     const viewerElement = document.getElementById('live-viewer-count');
     if (!viewerElement) return;
     let currentViewers = parseInt(viewerElement.textContent) || 47;
-    const change = Math.floor(Math.random() * 7) - 3; // Randomly adds or subtracts 1 to 3 viewers
+    const change = Math.floor(Math.random() * 7) - 3;
     currentViewers += change;
     if (currentViewers < 30) currentViewers = 34;
     if (currentViewers > 85) currentViewers = 78;
     viewerElement.textContent = currentViewers;
 }
 
-// INITIALIZE ALL FUNNEL SYSTEM ON WINDOW LOAD
 window.addEventListener('load', () => {
-    // Render the marquee items dynamically
     const track = document.getElementById('marquee-track');
     if (track) {
         const doubleReviews = [...reviews, ...reviews];
@@ -449,13 +472,11 @@ window.addEventListener('load', () => {
         `).join('');
     }
 
-    // Initialize popup containers and event loops
     createSocialProofPopupHTML();
     setTimeout(() => {
         showSocialProof();
-        setInterval(showSocialProof, 18000); // Triggers fake buyer event every 18 seconds
+        setInterval(showSocialProof, 18000);
     }, 4000);
 
-    // Run active dynamic viewers loop
     setInterval(updateLiveViewers, 5000);
 });
