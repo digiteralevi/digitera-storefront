@@ -68,7 +68,77 @@
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
         }
 
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; flex: 1; }
+        /* --- NEW: FILTER & SEARCH CONTROL PANEL STYLE --- */
+        .controls-panel {
+            max-width: 1200px;
+            margin: 30px auto 10px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .search-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        .search-input {
+            width: 100%;
+            padding: 14px 20px 14px 45px;
+            border: 1.5px solid var(--btn-lilac);
+            border-radius: 30px;
+            font-size: 15px;
+            color: var(--text-purple);
+            outline: none;
+            background-color: var(--card-bg);
+            box-shadow: 0 2px 8px rgba(74, 46, 128, 0.03);
+            box-sizing: border-box;
+            transition: 0.3s;
+        }
+        .search-input:focus {
+            border-color: #BF953F;
+            box-shadow: 0 4px 12px rgba(191, 149, 99, 0.15);
+        }
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #888;
+            pointer-events: none;
+        }
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            background-color: var(--card-bg);
+            color: var(--text-purple);
+            border: 1px solid var(--btn-lilac);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .filter-btn:hover {
+            background-color: var(--btn-lilac-hover);
+        }
+        .filter-btn.active {
+            background: var(--gold-shine);
+            color: #4A2E80;
+            border-color: transparent;
+            box-shadow: 0 4px 10px rgba(191, 149, 63, 0.3);
+        }
+
+        .container { max-width: 1200px; margin: 20px auto 40px auto; padding: 0 20px; flex: 1; }
         
         .products-grid { 
             display: grid; 
@@ -208,6 +278,23 @@
         </div>
     </div>
 
+    <!-- NEW: SEARCH & CATEGORY FILTERS PANEL -->
+    <div class="controls-panel">
+        <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="shopSearchInput" class="search-input" placeholder="Search digital assets..." oninput="filterShopProducts()">
+        </div>
+        
+        <div class="filter-tabs" id="filterTabsContainer">
+            <button class="filter-btn active" onclick="selectCategory('all', this)">All Products</button>
+            <button class="filter-btn" onclick="selectCategory('Templates', this)">Canva Templates</button>
+            <button class="filter-btn" onclick="selectCategory('Reels', this)">Reels & Vaults</button>
+            <button class="filter-btn" onclick="selectCategory('Workbook', this)">Course Workbooks</button>
+            <button class="filter-btn" onclick="selectCategory('Education', this)">Educational Kits</button>
+            <button class="filter-btn" onclick="selectCategory('Software', this)">System & Apps</button>
+        </div>
+    </div>
+
     <div class="container">
         <div class="products-grid" id="shopProductsGrid"></div>
     </div>
@@ -241,6 +328,17 @@
                 <input type="text" id="adminName" class="admin-input" placeholder="Product Name">
                 <input type="number" id="adminPrice" class="admin-input" placeholder="Price (PHP)">
                 <input type="text" id="adminShortDesc" class="admin-input" placeholder="Short Description (For Card View)">
+                
+                <!-- NEW: Category field so newly created products can be filtered! -->
+                <select id="adminCategory" class="admin-input" style="background: var(--card-bg);">
+                    <option value="all">Uncategorized</option>
+                    <option value="Templates">Canva Templates</option>
+                    <option value="Reels">Reels & Vaults</option>
+                    <option value="Workbook">Course Workbooks</option>
+                    <option value="Education">Educational Kits</option>
+                    <option value="Software">System & Apps</option>
+                </select>
+                
                 <textarea id="adminSalesCopy" class="admin-textarea" placeholder="Paste your High-Converting Sales Copy here..."></textarea>
                 <input type="text" id="adminAccessLink" class="admin-input" placeholder="Secure Access / Download File Link (Google Drive, Canva, etc.)">
                 
@@ -301,59 +399,93 @@
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // --- AUTOMATED LINK-SHARING ROUTER ---
-        // Ito ang gumagawa ng magic nang hindi ginagalaw ang Firebase/cart.js mo!
-        
-        // Tagalog Helper para gawing safe URL slug ang pangalan ng kahit anong produkto
-        function makeSlug(text) {
-            return text.toLowerCase()
-                .replace(/[^a-z0-9\s-]/g, '') // Tanggalin ang symbols
-                .trim()
-                .replace(/\s+/g, '-'); // Palitan ng dash ang spaces
+        // --- GLOBAL FILTERING STATE VARIABLES ---
+        let selectedCategoryGlobal = 'all';
+
+        // Helper na tagabago ng active state ng category buttons
+        function selectCategory(category, buttonElement) {
+            selectedCategoryGlobal = category;
+            
+            // Tanggalin ang 'active' style sa lumang button
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Ilagay ang 'active' style sa clinick na button
+            buttonElement.classList.add('active');
+            
+            filterShopProducts();
         }
 
-        // Tagasubaybay kung anong card ang clinick ng user para baguhin ang URL link
+        // Core filter engine (Sinasala ang grid cards depende sa Search Bar + Category Tab)
+        function filterShopProducts() {
+            const searchQuery = document.getElementById('shopSearchInput').value.toLowerCase().trim();
+            const productCards = document.querySelectorAll('.product-card');
+
+            productCards.forEach(card => {
+                // Kunin ang mga datus ng card
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const shortDesc = card.querySelector('.short-desc').textContent.toLowerCase();
+                
+                // Kumukuha ng category attribute (Kung wala, ginagawang 'all')
+                const productCategory = card.getAttribute('data-category') || 'all';
+
+                // Rules ng pagsasala:
+                const matchesSearch = title.includes(searchQuery) || shortDesc.includes(searchQuery);
+                const matchesCategory = (selectedCategoryGlobal === 'all') || (productCategory === selectedCategoryGlobal);
+
+                if (matchesSearch && matchesCategory) {
+                    card.style.display = 'flex'; // Ipakita ang card
+                } else {
+                    card.style.display = 'none'; // Itago ang card
+                }
+            });
+        }
+
+        // --- AUTOMATED LINK-SHARING ROUTER ---
+        function makeSlug(text) {
+            return text.toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .trim()
+                .replace(/\s+/g, '-');
+        }
+
         document.addEventListener('click', (e) => {
             const card = e.target.closest('.product-card');
             if (card) {
                 const titleElement = card.querySelector('h3');
                 if (titleElement) {
                     const slug = makeSlug(titleElement.textContent);
-                    window.location.hash = slug; // Kusa nitong binabago ang link sa browser bar!
+                    window.location.hash = slug;
                 }
             }
             
-            // Kapag sinara ng user ang modal o nag-click sa labas, burahin ang hash parameter sa URL
             if (e.target.closest('#modalCloseBtn') || (e.target.classList.contains('modal-overlay') && e.target.id === 'productDetailModal')) {
                 setTimeout(() => {
                     const modal = document.getElementById('productDetailModal');
                     if (modal && modal.style.display === 'none') {
-                        history.replaceState(null, null, ' '); // Inaalis ang '#' nang hindi nagre-refresh ang site
+                        history.replaceState(null, null, ' ');
                     }
                 }, 150);
             }
         });
 
-        // Taga-basa ng link kapag may nag-click ng direct link mula sa Facebook o social media
         function checkURLHashAndOpenProduct() {
             const hash = window.location.hash.replace('#', '');
             if (hash) {
-                // Mag-aantay nang kaunti hanggang sa ma-load ng Firebase ang mga cards sa grid
                 const checkInterval = setInterval(() => {
                     const cards = document.querySelectorAll('.product-card');
                     if (cards.length > 0) {
-                        clearInterval(checkInterval); // Ihinto ang pag-loop kapag may cards na
+                        clearInterval(checkInterval);
                         
                         cards.forEach(card => {
                             const titleElement = card.querySelector('h3');
                             if (titleElement && makeSlug(titleElement.textContent) === hash) {
-                                card.click(); // Kunwari clinick ng bumisita yung card para bumukas ang popup!
+                                card.click();
                             }
                         });
                     }
-                }, 400); // Titingin sa screen kada 400 milisegundo
+                }, 400);
 
-                // Ihihinto ang checking pagkatapos ng 6 na segundo para hindi mag-overload ang browser
                 setTimeout(() => clearInterval(checkInterval), 6000);
             }
         }
