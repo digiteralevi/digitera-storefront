@@ -3,15 +3,40 @@ const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dqo0bc4u/image/upload";
 const CLOUDINARY_PRESET = "hetpqj8w";
 
 let cart = JSON.parse(localStorage.getItem('digitera_cart')) || [];
-let products = JSON.parse(localStorage.getItem('digitera_products')) || [];
+// 🌟 FIREBASE GLOBAL INITIALIZATION CONTEXT
+const firebaseConfig = {
+    apiKey: "AIzaSyDFQcwCJxIkTX0CCz8kaF7Sp2_hZNE1dIs",
+    authDomain: "digitera-levi-shop.firebaseapp.com",
+    projectId: "digitera-levi-shop",
+    storageBucket: "digitera-levi-shop.firebasestorage.app",
+    messagingSenderId: "63166329156",
+    appId: "1:63166329156:web:0b797f9438a98c84e46711",
+    measurementId: "G-NX45XW9X8Q"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let cart = JSON.parse(localStorage.getItem('digitera_cart')) || [];
+let products = []; // Kusa nang manggagaling sa cloud database
 let selectedFiles = [];
 
-// INITIALIZE SHOP DATA ON LOAD
 document.addEventListener("DOMContentLoaded", () => {
-    renderShopProducts();
+    fetchCloudProducts(); // Kukuha ng data mula sa Firebase server
     updateCartUI();
 });
 
+// 🌟 FETCH REAL-TIME UPDATES FROM FIREBASE CLOUD
+function fetchCloudProducts() {
+    db.collection("products").onSnapshot((snapshot) => {
+        products = [];
+        snapshot.forEach((doc) => {
+            products.push({ id: doc.id, ...doc.data() });
+        });
+        renderShopProducts();
+    });
+}
 // 🌟 IMAGE SELECTION WITH RENDER TO MAX 10 IMAGES
 function handleImageSelection() {
     const fileInput = document.getElementById("adminImages");
