@@ -218,7 +218,7 @@
     <!-- SALES COPY OVERLAY -->
     <div class="modal-overlay" id="productDetailModal">
         <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('productDetailModal')">✕</button>
+            <button class="close-btn" id="modalCloseBtn" onclick="closeModal('productDetailModal')">✕</button>
             <div class="gallery-container">
                 <img src="" id="modalMainImg" class="main-gallery-img">
                 <div class="thumbnails-row" id="modalThumbsRow"></div>
@@ -300,6 +300,66 @@
     <script>
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        // --- AUTOMATED LINK-SHARING ROUTER ---
+        // Ito ang gumagawa ng magic nang hindi ginagalaw ang Firebase/cart.js mo!
+        
+        // Tagalog Helper para gawing safe URL slug ang pangalan ng kahit anong produkto
+        function makeSlug(text) {
+            return text.toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '') // Tanggalin ang symbols
+                .trim()
+                .replace(/\s+/g, '-'); // Palitan ng dash ang spaces
+        }
+
+        // Tagasubaybay kung anong card ang clinick ng user para baguhin ang URL link
+        document.addEventListener('click', (e) => {
+            const card = e.target.closest('.product-card');
+            if (card) {
+                const titleElement = card.querySelector('h3');
+                if (titleElement) {
+                    const slug = makeSlug(titleElement.textContent);
+                    window.location.hash = slug; // Kusa nitong binabago ang link sa browser bar!
+                }
+            }
+            
+            // Kapag sinara ng user ang modal o nag-click sa labas, burahin ang hash parameter sa URL
+            if (e.target.closest('#modalCloseBtn') || (e.target.classList.contains('modal-overlay') && e.target.id === 'productDetailModal')) {
+                setTimeout(() => {
+                    const modal = document.getElementById('productDetailModal');
+                    if (modal && modal.style.display === 'none') {
+                        history.replaceState(null, null, ' '); // Inaalis ang '#' nang hindi nagre-refresh ang site
+                    }
+                }, 150);
+            }
+        });
+
+        // Taga-basa ng link kapag may nag-click ng direct link mula sa Facebook o social media
+        function checkURLHashAndOpenProduct() {
+            const hash = window.location.hash.replace('#', '');
+            if (hash) {
+                // Mag-aantay nang kaunti hanggang sa ma-load ng Firebase ang mga cards sa grid
+                const checkInterval = setInterval(() => {
+                    const cards = document.querySelectorAll('.product-card');
+                    if (cards.length > 0) {
+                        clearInterval(checkInterval); // Ihinto ang pag-loop kapag may cards na
+                        
+                        cards.forEach(card => {
+                            const titleElement = card.querySelector('h3');
+                            if (titleElement && makeSlug(titleElement.textContent) === hash) {
+                                card.click(); // Kunwari clinick ng bumisita yung card para bumukas ang popup!
+                            }
+                        });
+                    }
+                }, 400); // Titingin sa screen kada 400 milisegundo
+
+                // Ihihinto ang checking pagkatapos ng 6 na segundo para hindi mag-overload ang browser
+                setTimeout(() => clearInterval(checkInterval), 6000);
+            }
+        }
+
+        window.addEventListener('hashchange', checkURLHashAndOpenProduct);
+        window.addEventListener('DOMContentLoaded', checkURLHashAndOpenProduct);
     </script>
     <script src="cart.js"></script>
 </body>
