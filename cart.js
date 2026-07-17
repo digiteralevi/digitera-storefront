@@ -333,7 +333,7 @@ function toggleCart(e) {
     modal.classList.toggle("open");
 }
 
-// 🛍️ UPDATED PROCESS CHECKOUT WITH EMAIL PROMPT BOX
+// 🛍️ UPDATED PROCESS CHECKOUT WITH EMAIL PROMPT BOX (FIXED ENDPOINT)
 async function processCheckout() {
     const checkedItems = cart.filter(item => item.checked);
     if (checkedItems.length === 0) {
@@ -356,7 +356,8 @@ async function processCheckout() {
     localStorage.setItem("buyer_email", buyerEmail);
 
     try {
-        const response = await fetch('https://digitera-shop-backend.vercel.app/api/cart-checkout.js', {
+        // INAYOS NA ENDPOINT: Tinanggal ang .js sa dulo para sa Vercel routing match
+        const response = await fetch('https://digitera-shop-backend.vercel.app/api/cart-checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -461,7 +462,7 @@ window.addEventListener('load', () => {
         track.innerHTML = doubleReviews.map(rev => `
             <div class="testimonial-card">
                 <div>
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <div class="stars">⭐⭐⭐⭐•</div>
                     <p class="review-text">"${rev.text}"</p>
                 </div>
                 <div class="reviewer-info">
