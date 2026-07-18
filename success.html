@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful | Digitera Shop</title>
+    <style>
+        :root {
+            --text-purple: #4A2E80;
+            --gold-shine: linear-gradient(135deg, #BF953F 0%, #FCF6BA 25%, #B38728 50%, #FBF5B7 75%, #AA771C 100%);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #FDFBF7;
+            color: var(--text-purple);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+        .card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 50px 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(74, 46, 128, 0.1);
+            border-top: 4px solid transparent;
+            border-image: var(--gold-shine) 1;
+        }
+        .checkmark {
+            font-size: 70px;
+            margin-bottom: 20px;
+            animation: pop 0.5s ease;
+        }
+        @keyframes pop {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--text-purple);
+        }
+        p {
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .email-note {
+            background: #F7F3EB;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin: 20px 0;
+            font-size: 15px;
+            color: var(--text-purple);
+            font-weight: 600;
+        }
+        .btn {
+            display: inline-block;
+            background: var(--gold-shine);
+            color: var(--text-purple);
+            font-weight: bold;
+            padding: 14px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 15px;
+            margin-top: 10px;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(191, 149, 63, 0.3);
+        }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .brand { 
+            margin-top: 30px; 
+            font-size: 13px; 
+            color: #aaa; 
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="checkmark">✅</div>
+        <h1>Payment Successful!</h1>
+        <p>Salamat sa iyong purchase!</p>
+        <div class="email-note">
+            📧 Check your email — ang iyong download link ay naka-send na sa iyong inbox!
+        </div>
+        <p>Hindi mo nahanap ang email? I-check ang iyong <strong>Spam</strong> o <strong>Promotions</strong> folder.</p>
+        <a href="/digitera-storefront/" class="btn">🛍️ Back to Shop</a>
+        <p class="brand">&copy; 2026 Digitera Levi. All Rights Reserved.</p>
+    </div>
+</body>
+</html>
