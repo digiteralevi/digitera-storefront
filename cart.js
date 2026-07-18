@@ -357,7 +357,7 @@ async function processCheckout() {
 
     try {
         // INAYOS NA ENDPOINT: Tinanggal ang .js sa dulo para sa Vercel routing match
-        const response = await fetch('https://digitera-shop-backend.vercel.app/api/webhook', {
+        const response = await fetch('https://digi-tera-shop-backend.vercel.app/api/cart-checkout', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
