@@ -593,13 +593,15 @@
                 }
             }
 
-            const productData = {
-                name,
-                price,
-                shortDesc,
-                salesCopy,
-                accessLink
-            };
+           const category = document.getElementById("adminCategory").value;
+const productData = {
+    name,
+    price,
+    shortDesc,
+    salesCopy,
+    accessLink,
+    category
+};
 
             try {
                 if (productId) {
@@ -638,6 +640,7 @@
             document.getElementById("adminShortDesc").value = p.shortDesc;
             document.getElementById("adminSalesCopy").value = p.salesCopy;
             document.getElementById("adminAccessLink").value = p.accessLink;
+            document.getElementById("adminCategory").value = p.category || 'all';
             
             document.getElementById("editImageNotice").style.display = "block";
             openModal('adminModal');
