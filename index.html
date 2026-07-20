@@ -51,7 +51,6 @@
         .hero-banner h2 { font-size: 36px; margin-bottom: 10px; font-weight: 800; }
         .hero-banner p { font-size: 18px; color: #666; max-width: 600px; margin: 0 auto; }
 
-        /* LIVE VIEWERS BADGE STYLE */
         .live-viewers-badge {
             display: flex; align-items: center; justify-content: center; gap: 8px;
             background-color: #FAF3EB; border: 1px solid rgba(191, 149, 63, 0.2);
@@ -68,7 +67,6 @@
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 204, 113, 0); }
         }
 
-        /* --- FILTER & SEARCH CONTROL PANEL STYLE --- */
         .controls-panel {
             max-width: 1200px;
             margin: 30px auto 10px auto;
@@ -128,9 +126,7 @@
             transition: 0.3s;
             box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
-        .filter-btn:hover {
-            background-color: var(--btn-lilac-hover);
-        }
+        .filter-btn:hover { background-color: var(--btn-lilac-hover); }
         .filter-btn.active {
             background: var(--gold-shine);
             color: #4A2E80;
@@ -171,7 +167,34 @@
         .add-to-cart-btn { background-color: var(--btn-lilac); color: var(--text-purple); border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
         .add-to-cart-btn:hover { background: var(--gold-shine); color: #4A2E80; }
 
-        /* SECRET ADMIN FLOAT BUTTON */
+        /* MORE DETAILS BUTTON */
+        .more-details-btn {
+            background: var(--gold-shine);
+            color: #4A2E80;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            white-space: nowrap;
+        }
+        .more-details-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+
+        /* Modal action buttons row */
+        .modal-action-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .modal-action-row .add-to-cart-btn {
+            width: auto;
+            flex: 1;
+            min-width: 140px;
+        }
+
         #secretAdminBtn {
             position: fixed; bottom: 20px; right: 20px; 
             background: var(--gold-shine); border: none; 
@@ -180,7 +203,6 @@
             display: none; font-size: 20px;
         }
 
-        /* ADMIN CONTROLS INSIDE CARD */
         .admin-card-actions { display: flex; gap: 10px; margin-top: 10px; }
         .edit-card-btn { background-color: #EFEAF4; border: 1px solid var(--btn-lilac); color: var(--text-purple); padding: 5px 10px; border-radius: 5px; cursor: pointer; flex: 1; font-size: 12px; font-weight: bold; }
         .delete-card-btn { background-color: #FCE8E6; border: 1px solid #F4B4B0; color: #C5221F; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
@@ -203,6 +225,9 @@
         .file-upload-label { background-color: #FAF6EE; border: 2px dashed var(--btn-lilac); padding: 15px; text-align: center; border-radius: 6px; cursor: pointer; font-weight: bold; }
         .file-upload-label:hover { border-color: #BF953F; }
 
+        /* Sales page URL hint */
+        .input-hint { font-size: 11px; color: #888; margin-top: -8px; padding-left: 4px; }
+
         .cart-modal { position: fixed; top: 0; right: -400px; width: 350px; height: 100%; background-color: var(--card-bg); box-shadow: -5px 0 15px rgba(0,0,0,0.05); transition: 0.3s right ease; padding: 20px; z-index: 1000; display: flex; flex-direction: column; }
         .cart-modal.open { right: 0; }
         .cart-items-list { flex-grow: 1; overflow-y: auto; margin-top: 20px; }
@@ -211,7 +236,6 @@
         .legal-modal-content { background-color: var(--card-bg); padding: 30px; border-radius: 15px; max-width: 600px; width: 90%; max-height: 70vh; overflow-y: auto; position: relative; border: 2px solid transparent; border-image: var(--gold-shine) 1; }
         .close-legal-btn { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text-purple); }
 
-        /* --- INFINITE MARQUEE TESTIMONIALS STYLE --- */
         .testimonials-section {
             padding: 50px 0;
             background: #FAF8FE;
@@ -236,7 +260,6 @@
         .reviewer-tag { font-size: 11px; color: #888; margin: 2px 0 0 0; }
         @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* --- FAKE BUYERS POPUP STYLE --- */
         .social-proof-container {
             position: fixed; bottom: 20px; left: -400px;
             background: var(--card-bg); border: 1.5px solid var(--btn-lilac); border-radius: 12px;
@@ -270,8 +293,6 @@
     <div class="hero-banner">
         <h2>Premium Digital Business Assets</h2>
         <p>Establish your storefront, scale your reach, and automate your sales with high-converting assets.</p>
-        
-        <!-- Fake Live Viewers Counter Widget -->
         <div class="live-viewers-badge">
             <span class="pulse-dot"></span>
             <span id="live-viewer-count">47</span> people are viewing this storefront right now
@@ -284,7 +305,6 @@
             <span class="search-icon">🔍</span>
             <input type="text" id="shopSearchInput" class="search-input" placeholder="Search digital assets..." oninput="filterShopProducts()">
         </div>
-        
         <div class="filter-tabs" id="filterTabsContainer">
             <button class="filter-btn active" onclick="selectCategory('all', this)">All Products</button>
             <button class="filter-btn" onclick="selectCategory('Templates', this)">Canva Templates</button>
@@ -302,7 +322,7 @@
     <!-- SECRET ADMIN FLOATING GEAR BUTTON -->
     <button id="secretAdminBtn" onclick="openModal('adminModal')">⚙️</button>
 
-    <!-- SALES COPY OVERLAY -->
+    <!-- PRODUCT DETAIL MODAL -->
     <div class="modal-overlay" id="productDetailModal">
         <div class="modal-content">
             <button class="close-btn" id="modalCloseBtn" onclick="closeModal('productDetailModal')">✕</button>
@@ -312,7 +332,13 @@
             </div>
             <h2 id="modalTitle" style="margin-top:20px; font-size:28px;"></h2>
             <h3 id="modalPrice" style="color:#BF953F; font-size:24px; margin: 5px 0;"></h3>
-            <button class="add-to-cart-btn" id="modalAddToCartBtn" style="max-width:200px; margin-bottom:20px;">Add to Cart</button>
+            
+            <!-- ACTION BUTTONS ROW -->
+            <div class="modal-action-row">
+                <button class="add-to-cart-btn" id="modalAddToCartBtn">Add to Cart</button>
+                <button class="more-details-btn" id="modalMoreDetailsBtn" style="display:none;">✨ More Details</button>
+            </div>
+
             <hr style="border:0; border-top:1px solid rgba(74,46,128,0.1);">
             <div class="sales-copy-area" id="modalSalesCopy"></div>
         </div>
@@ -340,6 +366,8 @@
                 
                 <textarea id="adminSalesCopy" class="admin-textarea" placeholder="Paste your High-Converting Sales Copy here..."></textarea>
                 <input type="text" id="adminAccessLink" class="admin-input" placeholder="Secure Access / Download File Link (Google Drive, Canva, etc.)">
+                <input type="text" id="adminSalesPageUrl" class="admin-input" placeholder="Sales Page / Funnel URL (Optional) — para sa More Details button">
+                <p class="input-hint">💡 Pag may nilagay kang Sales Page URL, lalabas ang "More Details" button sa product modal ng buyer.</p>
                 
                 <h4 style="margin:5px 0 0 0;">Product Images (Select up to 10 files from device):</h4>
                 <div id="editImageNotice" style="font-size: 12px; color: #888; display: none;">*Leave empty to keep existing images*</div>
@@ -377,11 +405,8 @@
             <h2>What Our Creators Say</h2>
             <p>Real experiences from people who launched with Digitera</p>
         </div>
-        
         <div class="marquee-wrapper">
-            <div class="marquee-content" id="marquee-track">
-                <!-- Dito papasok ang mga testimonials gamit ang JavaScript -->
-            </div>
+            <div class="marquee-content" id="marquee-track"></div>
         </div>
     </section>
 
@@ -398,67 +423,41 @@
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-        // --- GLOBAL FILTERING STATE VARIABLES ---
         let selectedCategoryGlobal = 'all';
 
-        // Helper na tagabago ng active state ng category buttons
         function selectCategory(category, buttonElement) {
             selectedCategoryGlobal = category;
-            
-            const buttons = document.querySelectorAll('.filter-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             buttonElement.classList.add('active');
-            
             filterShopProducts();
         }
 
-        // Core filter engine (Sinasala ang grid cards depende sa Search Bar + Category Tab)
         function filterShopProducts() {
             const searchQuery = document.getElementById('shopSearchInput').value.toLowerCase().trim();
-            const productCards = document.querySelectorAll('.product-card');
-
-            productCards.forEach(card => {
+            document.querySelectorAll('.product-card').forEach(card => {
                 const title = card.querySelector('h3').textContent.toLowerCase();
                 const shortDesc = card.querySelector('.short-desc').textContent.toLowerCase();
-                
                 const productCategory = card.getAttribute('data-category') || 'all';
-
                 const matchesSearch = title.includes(searchQuery) || shortDesc.includes(searchQuery);
                 const matchesCategory = (selectedCategoryGlobal === 'all') || (productCategory === selectedCategoryGlobal);
-
-                if (matchesSearch && matchesCategory) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = (matchesSearch && matchesCategory) ? 'flex' : 'none';
             });
         }
 
-        // --- AUTOMATED LINK-SHARING ROUTER ---
         function makeSlug(text) {
-            return text.toLowerCase()
-                .replace(/[^a-z0-9\s-]/g, '')
-                .trim()
-                .replace(/\s+/g, '-');
+            return text.toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
         }
 
         document.addEventListener('click', (e) => {
             const card = e.target.closest('.product-card');
             if (card) {
                 const titleElement = card.querySelector('h3');
-                if (titleElement) {
-                    const slug = makeSlug(titleElement.textContent);
-                    window.location.hash = slug;
-                }
+                if (titleElement) window.location.hash = makeSlug(titleElement.textContent);
             }
-            
             if (e.target.closest('#modalCloseBtn') || (e.target.classList.contains('modal-overlay') && e.target.id === 'productDetailModal')) {
                 setTimeout(() => {
                     const modal = document.getElementById('productDetailModal');
-                    if (modal && modal.style.display === 'none') {
-                        history.replaceState(null, null, ' ');
-                    }
+                    if (modal && modal.style.display === 'none') history.replaceState(null, null, ' ');
                 }, 150);
             }
         });
@@ -470,16 +469,27 @@
                     const cards = document.querySelectorAll('.product-card');
                     if (cards.length > 0) {
                         clearInterval(checkInterval);
-                        
                         cards.forEach(card => {
                             const titleElement = card.querySelector('h3');
-                            if (titleElement && makeSlug(titleElement.textContent) === hash) {
-                                card.click();
-                            }
+                            if (titleElement && makeSlug(titleElement.textContent) === hash) card.click();
                         });
                     }
                 }, 400);
+                setTimeout(() => clearInterval(checkInterval), 6000);
+            }
+        }
 
+        // ✅ CHECK ?product=PRODUCT_ID SA URL — auto-open ng product modal
+        function checkProductUrlParam() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('product');
+            if (productId) {
+                const checkInterval = setInterval(() => {
+                    if (products.length > 0) {
+                        clearInterval(checkInterval);
+                        openProductModal(productId);
+                    }
+                }, 400);
                 setTimeout(() => clearInterval(checkInterval), 6000);
             }
         }
@@ -487,15 +497,10 @@
         window.addEventListener('hashchange', checkURLHashAndOpenProduct);
         window.addEventListener('DOMContentLoaded', checkURLHashAndOpenProduct);
 
-        // ==========================================
-        // CART.JS CONTENT (dating hiwalay na file, isinama na dito)
-        // ==========================================
-
         // CLOUDINARY DIRECT CONFIGURATION
         const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dqo0bc4u/image/upload";
         const CLOUDINARY_PRESET = "hetpqj8w";
 
-        // FIREBASE GLOBAL INITIALIZATION CONTEXT
         const firebaseConfig = {
             apiKey: "AIzaSyDFQcwCJxIkTX0CCz8kaF7Sp2_hZNE1dIs",
             authDomain: "digitera-levi-shop.firebaseapp.com",
@@ -506,7 +511,6 @@
             measurementId: "G-NX45XW9X8Q"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
@@ -516,26 +520,24 @@
         let isAdminMode = false;
 
         document.addEventListener("DOMContentLoaded", () => {
-            checkAdminMode(); // Tinitingnan kung may secret URL extension
+            checkAdminMode();
             fetchCloudProducts();
             updateCartUI();
+            checkProductUrlParam(); // ✅ Auto-open product modal pag may ?product= sa URL
         });
 
-        // 🛡️ SECRET URL EXTENSION CHECKER
         function checkAdminMode() {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('mode') === 'admin') {
                 isAdminMode = true;
-                document.getElementById("secretAdminBtn").style.display = "block"; // Lumalabas lang ang floating icon sa admin
+                document.getElementById("secretAdminBtn").style.display = "block";
             }
         }
 
         function fetchCloudProducts() {
             db.collection("products").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
                 products = [];
-                snapshot.forEach((doc) => {
-                    products.push({ id: doc.id, ...doc.data() });
-                });
+                snapshot.forEach((doc) => { products.push({ id: doc.id, ...doc.data() }); });
                 renderShopProducts();
             });
         }
@@ -543,22 +545,17 @@
         function handleImageSelection() {
             const fileInput = document.getElementById("adminImages");
             const previewContainer = document.getElementById("uploadPreview");
-            
             if (fileInput.files.length > 10) {
                 alert("Maximum na 10 mga larawan lamang ang maaaring i-upload kada produkto.");
                 fileInput.value = "";
                 return;
             }
-
             selectedFiles = Array.from(fileInput.files);
-            if (selectedFiles.length > 0) {
-                previewContainer.innerHTML = `Selected ${selectedFiles.length} images ready for Cloudinary upload.`;
-            } else {
-                previewContainer.innerHTML = "No images selected yet (Max 10).";
-            }
+            previewContainer.innerHTML = selectedFiles.length > 0
+                ? `Selected ${selectedFiles.length} images ready for Cloudinary upload.`
+                : "No images selected yet (Max 10).";
         }
 
-        // 🌟 SAVE & UPDATE FUNCTIONS INTEGRATED
         async function saveAdminProduct() {
             const productId = document.getElementById("adminEditProductId").value;
             const name = document.getElementById("adminName").value;
@@ -566,6 +563,8 @@
             const shortDesc = document.getElementById("adminShortDesc").value;
             const salesCopy = document.getElementById("adminSalesCopy").value;
             const accessLink = document.getElementById("adminAccessLink").value;
+            const category = document.getElementById("adminCategory").value;
+            const salesPageUrl = document.getElementById("adminSalesPageUrl").value.trim(); // ✅ SALES PAGE URL
 
             if (!name || isNaN(price) || !shortDesc || !salesCopy || !accessLink) {
                 alert("Paki-kumpleto ang lahat ng text fields kabilang ang Secure Access Link!");
@@ -573,52 +572,43 @@
             }
 
             let uploadedImageUrls = [];
-            
             if (selectedFiles.length > 0) {
                 alert(`Uploading ${selectedFiles.length} images to Cloudinary... Please wait.`);
                 for (let file of selectedFiles) {
                     const formData = new FormData();
                     formData.append("file", file);
                     formData.append("upload_preset", CLOUDINARY_PRESET);
-
                     try {
                         const res = await fetch(CLOUDINARY_URL, { method: "POST", body: formData });
                         const fileData = await res.json();
-                        if (fileData.secure_url) {
-                            uploadedImageUrls.push(fileData.secure_url);
-                        }
+                        if (fileData.secure_url) uploadedImageUrls.push(fileData.secure_url);
                     } catch (err) {
                         console.error("Cloudinary upload issue:", err);
                     }
                 }
             }
 
-           const category = document.getElementById("adminCategory").value;
-const productData = {
-    name,
-    price,
-    shortDesc,
-    salesCopy,
-    accessLink,
-    category
-};
+            const productData = {
+                name,
+                price,
+                shortDesc,
+                salesCopy,
+                accessLink,
+                category,
+                salesPageUrl // ✅ ISAVE SA FIREBASE
+            };
 
             try {
                 if (productId) {
-                    // ✏️ UPDATE LOGIC
-                    if (uploadedImageUrls.length > 0) {
-                        productData.images = uploadedImageUrls;
-                    }
+                    if (uploadedImageUrls.length > 0) productData.images = uploadedImageUrls;
                     await db.collection("products").doc(productId).update(productData);
                     alert("Success! Product successfully updated in the Cloud Database.");
                 } else {
-                    // ➕ CREATE LOGIC
                     productData.images = uploadedImageUrls.length > 0 ? uploadedImageUrls : ["https://via.placeholder.com/300"];
                     productData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
                     await db.collection("products").add(productData);
                     alert("Success! Product successfully published to the Cloud Database.");
                 }
-                
                 closeModal('adminModal');
                 resetAdminForm();
             } catch (error) {
@@ -626,7 +616,6 @@ const productData = {
             }
         }
 
-        // ✏️ PRE-FILL FORM FOR EDITING
         function editProduct(productId, event) {
             if (event) event.stopPropagation();
             const p = products.find(prod => prod.id === productId);
@@ -641,16 +630,14 @@ const productData = {
             document.getElementById("adminSalesCopy").value = p.salesCopy;
             document.getElementById("adminAccessLink").value = p.accessLink;
             document.getElementById("adminCategory").value = p.category || 'all';
-            
+            document.getElementById("adminSalesPageUrl").value = p.salesPageUrl || ''; // ✅ PRE-FILL
             document.getElementById("editImageNotice").style.display = "block";
             openModal('adminModal');
         }
 
-        // 🗑️ DELETE FUNCTION FROM FIREBASE
         async function deleteProduct(productId, event) {
             if (event) event.stopPropagation();
             if (!confirm("Sigurado ka bang gusto mong burahin ang produktong ito nang permanente sa cloud?")) return;
-
             try {
                 await db.collection("products").doc(productId).delete();
                 alert("Product successfully deleted from cloud database.");
@@ -668,6 +655,7 @@ const productData = {
             document.getElementById("adminShortDesc").value = "";
             document.getElementById("adminSalesCopy").value = "";
             document.getElementById("adminAccessLink").value = "";
+            document.getElementById("adminSalesPageUrl").value = ""; // ✅ RESET
             document.getElementById("editImageNotice").style.display = "none";
             selectedFiles = [];
             document.getElementById("uploadPreview").innerHTML = "No images selected yet (Max 10).";
@@ -688,15 +676,14 @@ const productData = {
                 card.className = "product-card";
                 if (p.category) card.setAttribute('data-category', p.category);
                 card.onclick = (e) => {
-                    if (!e.target.classList.contains('add-to-cart-btn') && 
-                        !e.target.classList.contains('edit-card-btn') && 
+                    if (!e.target.classList.contains('add-to-cart-btn') &&
+                        !e.target.classList.contains('edit-card-btn') &&
                         !e.target.classList.contains('delete-card-btn')) {
                         openProductModal(p.id);
                     }
                 };
-                
+
                 let adminButtonsHTML = "";
-                // Kung ikaw ay nasa secret admin mode, lalabas ang Edit at Delete buttons sa mismong card box
                 if (isAdminMode) {
                     adminButtonsHTML = `
                         <div class="admin-card-actions">
@@ -705,7 +692,7 @@ const productData = {
                         </div>
                     `;
                 }
-                
+
                 card.innerHTML = `
                     <img src="${p.images[0]}" class="product-thumbnail" alt="${p.name}">
                     <h3>${p.name}</h3>
@@ -717,7 +704,6 @@ const productData = {
                 grid.appendChild(card);
             });
 
-            // Ire-reapply ang current filter/search state pagkatapos mag-render mula sa Firestore
             filterShopProducts();
         }
 
@@ -734,7 +720,6 @@ const productData = {
 
             const thumbsRow = document.getElementById("modalThumbsRow");
             thumbsRow.innerHTML = "";
-
             p.images.forEach((imgUrl, index) => {
                 const thumb = document.createElement("img");
                 thumb.src = imgUrl;
@@ -747,8 +732,18 @@ const productData = {
                 thumbsRow.appendChild(thumb);
             });
 
+            // ✅ ADD TO CART BUTTON
             const cartBtn = document.getElementById("modalAddToCartBtn");
             cartBtn.onclick = (e) => addToCart(e, p.id);
+
+            // ✅ MORE DETAILS BUTTON — lumalabas lang kung may salesPageUrl
+            const moreDetailsBtn = document.getElementById("modalMoreDetailsBtn");
+            if (p.salesPageUrl && p.salesPageUrl.trim() !== '') {
+                moreDetailsBtn.style.display = "inline-block";
+                moreDetailsBtn.onclick = () => window.open(p.salesPageUrl, '_blank');
+            } else {
+                moreDetailsBtn.style.display = "none";
+            }
 
             openModal("productDetailModal");
         }
@@ -757,7 +752,6 @@ const productData = {
             if (e) e.stopPropagation();
             const p = products.find(prod => prod.id === productId);
             if (!p) return;
-
             const existing = cart.find(item => item.id === productId);
             if (existing) {
                 existing.quantity += 1;
@@ -776,18 +770,14 @@ const productData = {
             const countSpan = document.getElementById("cart-count");
             const itemsList = document.getElementById("cartItems");
             const totalSpan = document.getElementById("cartTotal");
-
             if (!countSpan || !itemsList || !totalSpan) return;
 
-            let totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-            countSpan.innerText = totalCount;
-
+            countSpan.innerText = cart.reduce((sum, item) => sum + item.quantity, 0);
             itemsList.innerHTML = "";
             let grandTotal = 0;
 
             cart.forEach((item, index) => {
                 if (item.checked) grandTotal += (item.price * item.quantity);
-
                 const row = document.createElement("div");
                 row.style = "display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; font-size:14px;";
                 row.innerHTML = `
@@ -818,11 +808,9 @@ const productData = {
 
         function toggleCart(e) {
             if (e) e.stopPropagation();
-            const modal = document.getElementById("cartModal");
-            modal.classList.toggle("open");
+            document.getElementById("cartModal").classList.toggle("open");
         }
 
-        // 🛍️ PROCESS CHECKOUT — tumatawag sa Vercel backend (webhook.js) na siyang kumakausap sa PayMongo
         async function processCheckout() {
             const checkedItems = cart.filter(item => item.checked);
             if (checkedItems.length === 0) {
@@ -831,12 +819,10 @@ const productData = {
             }
 
             const buyerEmail = prompt("Saan namin ipadadala ang iyong digital products? Pakisulat ang iyong active Email Address:");
-            
             if (!buyerEmail) {
                 alert("Kailangan mo pong ilagay ang iyong Email Address para matanggap ang iyong produkto.");
                 return;
             }
-
             if (!buyerEmail.includes("@") || !buyerEmail.includes(".")) {
                 alert("Paki-check po ang iyong email. Siguraduhing tama at may '@' at '.' (e.g., sample@gmail.com)");
                 return;
@@ -845,12 +831,11 @@ const productData = {
             localStorage.setItem("buyer_email", buyerEmail);
 
             try {
-                // Tinawag ang /api/webhook (dating cart-checkout.js, na-rename sa backend repo)
                 const response = await fetch('https://digitera-shop-backend.vercel.app/api/webhook', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        redirect_url: window.location.origin + '/digitera-storefront/success.html', 
+                        redirect_url: window.location.origin + '/digitera-storefront/success.html',
                         email: buyerEmail,
                         items: checkedItems.map(item => ({
                             name: item.name,
@@ -890,14 +875,9 @@ const productData = {
         const buyerNames = ["Maria", "John", "Sarah", "Dave", "Kylie", "Mark", "Princess", "James", "Rowena", "Alvin"];
         const buyerLocations = ["Manila", "Cebu", "Davao", "Quezon City", "Ilocos Norte", "Pampanga", "Cavite", "Bulacan", "Laguna", "Baguio"];
         const trendingProducts = [
-            "KIDZCREATOR SYSTEM",
-            "Digital Product ROI Framework Vault",
-            "$1.99 System Kit",
-            "DENTAL Social Media Marketing Templates",
-            "REAL ESTATE SOCIAL MEDIA TEMPLATES",
-            "LUXE GIRL VAULT REELS BUNDLE",
-            "Funnelcraft",
-            "Ai Business Employee (sales Agent Bot)"
+            "KIDZCREATOR SYSTEM", "Digital Product ROI Framework Vault", "$1.99 System Kit",
+            "DENTAL Social Media Marketing Templates", "REAL ESTATE SOCIAL MEDIA TEMPLATES",
+            "LUXE GIRL VAULT REELS BUNDLE", "Funnelcraft", "Ai Business Employee (sales Agent Bot)"
         ];
 
         function createSocialProofPopupHTML() {
@@ -918,17 +898,14 @@ const productData = {
         function showSocialProof() {
             const container = document.getElementById('social-proof-pop');
             if (!container) return;
-
             const randomName = buyerNames[Math.floor(Math.random() * buyerNames.length)];
             const randomLoc = buyerLocations[Math.floor(Math.random() * buyerLocations.length)];
             const randomProd = trendingProducts[Math.floor(Math.random() * trendingProducts.length)];
             const randomTime = Math.floor(Math.random() * 4) + 1;
-
             document.getElementById('buyer-name').textContent = randomName;
             document.getElementById('buyer-location').textContent = randomLoc;
             document.getElementById('bought-product').textContent = randomProd;
             document.getElementById('buy-time').textContent = `${randomTime} minute${randomTime > 1 ? 's' : ''} ago`;
-
             container.classList.add('show');
             setTimeout(() => { container.classList.remove('show'); }, 5000);
         }
