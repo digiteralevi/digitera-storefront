@@ -165,6 +165,25 @@
         .product-price { font-size: 22px; font-weight: bold; margin: 10px 0; }
 
         .add-to-cart-btn { background-color: var(--btn-lilac); color: var(--text-purple); border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; transition: 0.3s; }
+        .card-more-details-btn {
+            display: block;
+            width: 100%;
+            background: var(--gold-shine);
+            color: #4A2E80;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 13px;
+            text-align: center;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(191, 149, 63, 0.2);
+            box-sizing: border-box;
+            margin-top: 8px;
+            transition: 0.3s;
+        }
+        .card-more-details-btn:hover { opacity: 0.88; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(191, 149, 63, 0.35); }
         .add-to-cart-btn:hover { background: var(--gold-shine); color: #4A2E80; }
 
         /* MORE DETAILS BUTTON */
@@ -682,7 +701,8 @@
                 card.onclick = (e) => {
                     if (!e.target.classList.contains('add-to-cart-btn') &&
                         !e.target.classList.contains('edit-card-btn') &&
-                        !e.target.classList.contains('delete-card-btn')) {
+                        !e.target.classList.contains('delete-card-btn') &&
+                        !e.target.classList.contains('card-more-details-btn')) {
                         openProductModal(p.id);
                     }
                 };
@@ -697,12 +717,17 @@
                     `;
                 }
 
+                const moreDetailsBtnHTML = (p.salesPageUrl && p.salesPageUrl.trim() !== '')
+                    ? `<a href="${p.salesPageUrl}" target="_blank" class="card-more-details-btn">👆 Click here for more details &nbsp;→</a>`
+                    : '';
+
                 card.innerHTML = `
                     <img src="${p.images[0]}" class="product-thumbnail" alt="${p.name}">
                     <h3>${p.name}</h3>
                     <p class="short-desc">${p.shortDesc}</p>
                     <div class="product-price">₱${p.price.toFixed(2)}</div>
                     <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">Add to Cart</button>
+                    ${moreDetailsBtnHTML}
                     ${adminButtonsHTML}
                 `;
                 grid.appendChild(card);
