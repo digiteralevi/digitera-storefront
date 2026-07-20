@@ -372,6 +372,32 @@
             display: none; font-size: 20px;
         }
 
+        /* DRAG AND DROP */
+        .product-card.dragging { opacity: 0.4; border: 2px dashed #BF953F; }
+        .product-card.drag-over { border: 2px solid #BF953F; transform: scale(1.02); }
+        .drag-handle {
+            display: none;
+            cursor: grab;
+            font-size: 18px;
+            color: #BF953F;
+            padding: 5px;
+            text-align: center;
+            user-select: none;
+        }
+        .drag-handle:active { cursor: grabbing; }
+        .admin-mode .drag-handle { display: block; }
+        .drag-hint {
+            display: none;
+            text-align: center;
+            font-size: 12px;
+            color: #888;
+            padding: 8px;
+            background: #FAF6EE;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        .admin-mode .drag-hint { display: block; }
+
         .admin-card-actions { display: flex; gap: 10px; margin-top: 10px; }
         .edit-card-btn { background-color: #EFEAF4; border: 1px solid var(--btn-lilac); color: var(--text-purple); padding: 5px 10px; border-radius: 5px; cursor: pointer; flex: 1; font-size: 12px; font-weight: bold; }
         .delete-card-btn { background-color: #FCE8E6; border: 1px solid #F4B4B0; color: #C5221F; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px; }
@@ -568,6 +594,7 @@
     </div>
 
     <div class="container">
+        <p class="drag-hint">⬆️⬇️ Drag and drop products to reorder — changes save automatically!</p>
         <div class="products-grid" id="shopProductsGrid"></div>
     </div>
 
@@ -939,13 +966,23 @@
             if (urlParams.get('mode') === 'admin') {
                 isAdminMode = true;
                 document.getElementById("secretAdminBtn").style.display = "block";
+                document.body.classList.add('admin-mode');
             }
         }
 
         function fetchCloudProducts() {
-            db.collection("products").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+            db.collection("products").onSnapshot((snapshot) => {
                 products = [];
                 snapshot.forEach((doc) => { products.push({ id: doc.id, ...doc.data() }); });
+                // Sort by sortOrder if available, otherwise by createdAt
+                products.sort((a, b) => {
+                    if (a.sortOrder !== undefined && b.sortOrder !== undefined) return a.sortOrder - b.sortOrder;
+                    if (a.sortOrder !== undefined) return -1;
+                    if (b.sortOrder !== undefined) return 1;
+                    const aTime = a.createdAt?.seconds || 0;
+                    const bTime = b.createdAt?.seconds || 0;
+                    return bTime - aTime;
+                });
                 renderShopProducts();
             });
         }
@@ -1069,6 +1106,8 @@
             document.getElementById("uploadPreview").innerHTML = "No images selected yet (Max 10).";
         }
 
+        let dragSrcId = null;
+
         function renderShopProducts() {
             const grid = document.getElementById("shopProductsGrid");
             if (!grid) return;
@@ -1082,19 +1121,49 @@
             products.forEach(p => {
                 const card = document.createElement("div");
                 card.className = "product-card";
+                card.setAttribute('data-id', p.id);
                 if (p.category) card.setAttribute('data-category', p.category);
                 card.onclick = (e) => {
                     if (!e.target.classList.contains('add-to-cart-btn') &&
                         !e.target.classList.contains('edit-card-btn') &&
                         !e.target.classList.contains('delete-card-btn') &&
-                        !e.target.classList.contains('card-more-details-btn')) {
+                        !e.target.classList.contains('card-more-details-btn') &&
+                        !e.target.classList.contains('drag-handle')) {
                         openProductModal(p.id);
                     }
                 };
 
+                // DRAG AND DROP (admin only)
+                if (isAdminMode) {
+                    card.draggable = true;
+                    card.addEventListener('dragstart', (e) => {
+                        dragSrcId = p.id;
+                        card.classList.add('dragging');
+                        e.dataTransfer.effectAllowed = 'move';
+                    });
+                    card.addEventListener('dragend', () => {
+                        card.classList.remove('dragging');
+                        document.querySelectorAll('.product-card').forEach(c => c.classList.remove('drag-over'));
+                    });
+                    card.addEventListener('dragover', (e) => {
+                        e.preventDefault();
+                        e.dataTransfer.dropEffect = 'move';
+                        if (dragSrcId !== p.id) card.classList.add('drag-over');
+                    });
+                    card.addEventListener('dragleave', () => card.classList.remove('drag-over'));
+                    card.addEventListener('drop', (e) => {
+                        e.preventDefault();
+                        card.classList.remove('drag-over');
+                        if (dragSrcId && dragSrcId !== p.id) {
+                            reorderProducts(dragSrcId, p.id);
+                        }
+                    });
+                }
+
                 let adminButtonsHTML = "";
                 if (isAdminMode) {
                     adminButtonsHTML = `
+                        <div class="drag-handle">☰ Drag to reorder</div>
                         <div class="admin-card-actions">
                             <button class="edit-card-btn" onclick="editProduct('${p.id}', event)">✏️ Edit</button>
                             <button class="delete-card-btn" onclick="deleteProduct('${p.id}', event)">🗑️</button>
@@ -1119,6 +1188,30 @@
             });
 
             filterShopProducts();
+        }
+
+        async function reorderProducts(draggedId, targetId) {
+            const draggedIndex = products.findIndex(p => p.id === draggedId);
+            const targetIndex = products.findIndex(p => p.id === targetId);
+            if (draggedIndex === -1 || targetIndex === -1) return;
+
+            // Reorder in local array
+            const [draggedProduct] = products.splice(draggedIndex, 1);
+            products.splice(targetIndex, 0, draggedProduct);
+
+            // Save new order to Firebase
+            const batch = db.batch();
+            products.forEach((p, index) => {
+                const ref = db.collection('products').doc(p.id);
+                batch.update(ref, { sortOrder: index });
+            });
+
+            try {
+                await batch.commit();
+                renderShopProducts();
+            } catch (err) {
+                console.error('Error saving order:', err);
+            }
         }
 
         function openProductModal(productId) {
