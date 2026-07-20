@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://digiteralevi.github.io/digitera-storefront/sitemap.xml
