@@ -3,8 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digitera Levi Shop</title>
     
+    <!-- ============================================
+         SEO META TAGS
+    ============================================ -->
+    <title>Digitera Levi Shop | Premium Digital Business Tools & Assets</title>
+    <meta name="description" content="Premium no-code digital business tools — funnel builders, shop systems, game apps, inventory managers, Canva templates, PLR products & more. Instant delivery worldwide.">
+    <meta name="keywords" content="digital products, no-code business tools, Canva templates, PLR products, funnel builder, digital shop system, resell rights, online business tools, digital assets, passive income tools">
+    <meta name="author" content="Digitera Levi">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://digiteralevi.github.io/digitera-storefront/">
+
+    <!-- ============================================
+         OPEN GRAPH (Facebook, Instagram, LinkedIn)
+    ============================================ -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://digiteralevi.github.io/digitera-storefront/">
+    <meta property="og:title" content="Digitera Levi Shop | Premium Digital Business Tools & Assets">
+    <meta property="og:description" content="Premium no-code digital business tools — funnel builders, shop systems, game apps, Canva templates, PLR products & more. Instant delivery worldwide.">
+    <meta property="og:image" content="https://res.cloudinary.com/dqo0bc4u/image/upload/v1784271943/Digitera_profile_gif_logo_jd7njm.gif">
+    <meta property="og:site_name" content="Digitera Levi Shop">
+    <meta property="og:locale" content="en_US">
+
+    <!-- ============================================
+         TWITTER CARD
+    ============================================ -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Digitera Levi Shop | Premium Digital Business Tools">
+    <meta name="twitter:description" content="No-code digital business tools — funnel builders, shop systems, game apps, PLR products & more. Instant delivery worldwide.">
+    <meta name="twitter:image" content="https://res.cloudinary.com/dqo0bc4u/image/upload/v1784271943/Digitera_profile_gif_logo_jd7njm.gif">
+
+    <!-- ============================================
+         SCHEMA MARKUP (Google Rich Results)
+    ============================================ -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Store",
+        "name": "Digitera Levi Shop",
+        "url": "https://digiteralevi.github.io/digitera-storefront/",
+        "description": "Premium no-code digital business tools — funnel builders, shop systems, game apps, Canva templates, PLR products and more. Instant delivery worldwide.",
+        "image": "https://res.cloudinary.com/dqo0bc4u/image/upload/v1784271943/Digitera_profile_gif_logo_jd7njm.gif",
+        "priceRange": "₱1 - ₱2997",
+        "currenciesAccepted": "PHP",
+        "paymentAccepted": "GCash, Maya, Credit Card, QR Ph",
+        "availableLanguage": "English",
+        "sameAs": [],
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Digital Business Assets",
+            "itemListElement": [
+                { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "No-Code Business Tools" } },
+                { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Canva Templates" } },
+                { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "PLR Digital Products" } },
+                { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Funnel Builder Systems" } },
+                { "@type": "Offer", "itemOffered": { "@type": "Product", "name": "Game Apps" } }
+            ]
+        }
+    }
+    </script>
+
+    <!-- ============================================
+         GOOGLE ANALYTICS 4
+    ============================================ -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7FMDB7SXCP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-7FMDB7SXCP');
+    </script>
+
+    <!-- ============================================
+         MICROSOFT CLARITY (Heatmaps & Recordings)
+    ============================================ -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "xp72zpn8rq");
+    </script>
+
+    <!-- ============================================
+         FACEBOOK PIXEL
+    ============================================ -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1465403718140669');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=1465403718140669&ev=PageView&noscript=1"/></noscript>
+
     <!-- SDK NG FIREBASE PARA SA CLOUD STORAGE CONNECTION -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -40,6 +138,54 @@
             border-bottom: 3px solid transparent;
             border-image: var(--gold-shine) 1;
         }
+
+        /* NAVIGATION */
+        nav {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid rgba(74, 46, 128, 0.08);
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            color: var(--text-purple);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 14px 18px;
+            border-bottom: 3px solid transparent;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .nav-link:hover, .nav-link.active {
+            border-bottom: 3px solid #BF953F;
+            color: #BF953F;
+        }
+
+        /* PAGE SECTIONS */
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+
+        /* ABOUT, FAQ, CONTACT MODAL */
+        .page-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(74, 46, 128, 0.4);
+            display: none; justify-content: center; align-items: center; z-index: 2000;
+        }
+        .page-modal-content {
+            background-color: var(--card-bg); padding: 40px; border-radius: 15px;
+            max-width: 700px; width: 90%; max-height: 85vh; overflow-y: auto;
+            position: relative; border: 2px solid transparent; border-image: var(--gold-shine) 1;
+        }
+        .page-modal-content h2 { color: var(--text-purple); margin-top: 0; font-size: 28px; }
+        .page-modal-content p { color: #555; line-height: 1.7; }
+        .page-modal-content .faq-item { margin-bottom: 20px; border-bottom: 1px solid #F0EAE1; padding-bottom: 15px; }
+        .page-modal-content .faq-item h4 { color: var(--text-purple); margin-bottom: 5px; font-size: 16px; }
+        .page-modal-content .faq-item p { margin: 0; font-size: 14px; }
+        .contact-link { display: inline-block; background: var(--gold-shine); color: #4A2E80; padding: 12px 25px; border-radius: 8px; text-decoration: none; font-weight: bold; margin: 5px; transition: 0.3s; }
+        .contact-link:hover { opacity: 0.85; transform: translateY(-2px); }
 
         .brand-profile { display: flex; align-items: center; gap: 15px; }
         .brand-logo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 2px solid #BF953F; box-shadow: 0 0 10px rgba(252, 246, 186, 0.6); }
@@ -251,6 +397,17 @@
         /* Sales page URL hint */
         .input-hint { font-size: 11px; color: #888; margin-top: -8px; padding-left: 4px; }
 
+        /* COUPON STYLES */
+        .coupon-section { margin: 15px 0; padding: 15px; background: #FAF6EE; border-radius: 8px; border: 1px dashed #BF953F; }
+        .coupon-section label { font-size: 12px; font-weight: bold; color: var(--text-purple); display: block; margin-bottom: 6px; }
+        .coupon-input-row { display: flex; gap: 8px; }
+        .coupon-input { flex: 1; padding: 8px 12px; border: 1px solid var(--btn-lilac); border-radius: 6px; font-size: 13px; color: var(--text-purple); outline: none; }
+        .coupon-input:focus { border-color: #BF953F; }
+        .coupon-apply-btn { background: var(--gold-shine); border: none; padding: 8px 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 12px; color: #4A2E80; white-space: nowrap; }
+        .coupon-msg { font-size: 12px; margin-top: 6px; }
+        .coupon-msg.success { color: #2ecc71; }
+        .coupon-msg.error { color: #e74c3c; }
+
         .cart-modal { position: fixed; top: 0; right: -400px; width: 350px; height: 100%; background-color: var(--card-bg); box-shadow: -5px 0 15px rgba(0,0,0,0.05); transition: 0.3s right ease; padding: 20px; z-index: 1000; display: flex; flex-direction: column; }
         .cart-modal.open { right: 0; }
         .cart-items-list { flex-grow: 1; overflow-y: auto; margin-top: 20px; }
@@ -312,6 +469,78 @@
         </div>
         <button class="cart-icon-btn" onclick="toggleCart(event)">🛒 Cart (<span id="cart-count">0</span>)</button>
     </header>
+
+    <!-- NAVIGATION -->
+    <nav>
+        <a class="nav-link active" onclick="showPage('home')">🏠 Home</a>
+        <a class="nav-link" onclick="showPage('about')">👤 About Us</a>
+        <a class="nav-link" onclick="showPage('faqs')">❓ FAQs</a>
+        <a class="nav-link" onclick="showPage('contact')">📩 Contact</a>
+    </nav>
+
+    <!-- ABOUT US MODAL -->
+    <div class="page-modal-overlay" id="aboutModal">
+        <div class="page-modal-content">
+            <button class="close-btn" onclick="closePageModal('aboutModal', 'about')">✕</button>
+            <h2>👤 About Digitera Levi</h2>
+            <p>Hi! I'm Levi, the creator behind <strong>Digitera Levi Shop</strong> — your go-to source for premium no-code digital business tools and assets.</p>
+            <p>I started this shop with one goal: to help everyday entrepreneurs — even those without tech backgrounds — build and scale their online businesses using done-for-you digital tools.</p>
+            <p>From funnel builders and shop systems to Canva templates, PLR products, game apps, and inventory managers — everything here is designed to save you time, eliminate guesswork, and help you earn faster.</p>
+            <p><strong>My promise to you:</strong> Every product I sell is something I've built, used, or tested myself. You're getting real tools, not just pretty templates.</p>
+            <p style="margin-top:20px; font-style:italic; color:#888;">Thank you for trusting Digitera Levi. Let's build your digital empire together! 🚀</p>
+        </div>
+    </div>
+
+    <!-- FAQs MODAL -->
+    <div class="page-modal-overlay" id="faqsModal">
+        <div class="page-modal-content">
+            <button class="close-btn" onclick="closePageModal('faqsModal', 'faqs')">✕</button>
+            <h2>❓ Frequently Asked Questions</h2>
+            <div class="faq-item">
+                <h4>How will I receive my purchase?</h4>
+                <p>After successful payment, an email with your download link will be sent automatically to the email address you provided at checkout. Please check your spam/promotions folder if you don't see it.</p>
+            </div>
+            <div class="faq-item">
+                <h4>What payment methods do you accept?</h4>
+                <p>We accept GCash, Maya, Credit/Debit Card, and QR Ph — all powered by PayMongo.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Can I resell these products?</h4>
+                <p>Products with Master Resell Rights (MRR) or PLR can be resold. Please check the product description for specific licensing terms.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Do you offer refunds?</h4>
+                <p>Due to the digital nature of our products, all sales are final. However, if you experience technical issues with your download, please contact us and we'll make it right.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Do I need technical skills to use these products?</h4>
+                <p>No! All our products are designed for non-techies. They come with instructions and are ready to use out of the box.</p>
+            </div>
+            <div class="faq-item">
+                <h4>How do I use a coupon code?</h4>
+                <p>Add your items to cart, then enter your coupon code in the "Have a coupon?" field before checkout. The discount will be applied automatically.</p>
+            </div>
+            <div class="faq-item" style="border-bottom:none;">
+                <h4>I have more questions. How can I reach you?</h4>
+                <p>Click the Contact tab in the navigation menu or message us on Facebook Messenger. We respond within 24 hours!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTACT MODAL -->
+    <div class="page-modal-overlay" id="contactModal">
+        <div class="page-modal-content">
+            <button class="close-btn" onclick="closePageModal('contactModal', 'contact')">✕</button>
+            <h2>📩 Contact Us</h2>
+            <p>We'd love to hear from you! Reach out to us through any of these channels:</p>
+            <div style="margin-top:20px; display:flex; flex-direction:column; gap:15px;">
+                <a href="mailto:digiteralevi@gmail.com" class="contact-link">📧 Email Us</a>
+                <a href="https://m.me/digiteralevi" target="_blank" class="contact-link">💬 Message on Facebook</a>
+                <a href="https://instagram.com/digiteralevi" target="_blank" class="contact-link">📸 Instagram</a>
+            </div>
+            <p style="margin-top:25px; font-size:13px; color:#888;">⏰ Response time: Within 24 hours on business days.</p>
+        </div>
+    </div>
 
     <div class="hero-banner">
         <h2>Premium Digital Business Assets</h2>
@@ -401,9 +630,32 @@
                 <div id="uploadPreview" style="display:flex; gap:5px; margin-top:5px; justify-content:center; flex-wrap:wrap; font-size:14px; color:#666;">No images selected yet (Max 10).</div>
                 
                 <button class="add-to-cart-btn" id="adminSubmitBtn" onclick="saveAdminProduct()" style="background:var(--gold-shine); margin-top:10px;">Create & Publish Product</button>
+                <button class="add-to-cart-btn" onclick="openModal('couponModal')" style="background:#EFEAF4; color:var(--text-purple); margin-top:5px;">🎟️ Manage Coupons</button>
             </div>
         </div>
     </div>
+
+    <!-- COUPON MANAGER MODAL -->
+    <div class="modal-overlay" id="couponModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('couponModal')">✕</button>
+            <h2>🎟️ Coupon Manager</h2>
+            <div class="admin-form-grid">
+                <input type="text" id="couponCode" class="admin-input" placeholder="Coupon Code (e.g. SAVE200, LEVI20)">
+                <select id="couponType" class="admin-input" style="background:var(--card-bg);">
+                    <option value="fixed">Fixed Amount (₱)</option>
+                    <option value="percent">Percentage (%)</option>
+                </select>
+                <input type="number" id="couponValue" class="admin-input" placeholder="Discount Value (e.g. 200 or 20)">
+                <button class="add-to-cart-btn" onclick="saveCoupon()" style="background:var(--gold-shine);">Save Coupon</button>
+            </div>
+            <hr style="margin:20px 0; border:0; border-top:1px solid #F0EAE1;">
+            <h3 style="margin-bottom:10px;">Active Coupons</h3>
+            <div id="couponList"></div>
+        </div>
+    </div>
+
+
 
     <!-- CART SLIDE OUT -->
     <div class="cart-modal" id="cartModal">
@@ -413,6 +665,17 @@
         </div>
         <div class="cart-items-list" id="cartItems"></div>
         <div style="border-top:2px solid var(--btn-lilac); padding-top:20px;">
+            <!-- COUPON CODE SECTION -->
+            <div class="coupon-section">
+                <label>🎟️ Have a coupon?</label>
+                <div class="coupon-input-row">
+                    <input type="text" id="couponInput" class="coupon-input" placeholder="Enter coupon code">
+                    <button class="coupon-apply-btn" onclick="applyCoupon()">Apply</button>
+                </div>
+                <div id="couponMsg" class="coupon-msg"></div>
+            </div>
+            <h3>Subtotal: ₱<span id="cartSubtotal">0.00</span></h3>
+            <h3 id="discountRow" style="display:none; color:#2ecc71; font-size:15px;">Discount: -₱<span id="discountAmount">0.00</span> (<span id="couponCodeApplied"></span>)</h3>
             <h3>Total: ₱<span id="cartTotal">0.00</span></h3>
             <button style="background:var(--gold-shine); border:none; padding:15px; border-radius:8px; font-weight:bold; width:100%; cursor:pointer;" onclick="processCheckout()">Proceed to Checkout</button>
         </div>
@@ -445,6 +708,128 @@
     <script>
         function openModal(id) { document.getElementById(id).style.display = 'flex'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        // ============================================
+        // NAVIGATION
+        // ============================================
+        function showPage(page) {
+            // Update nav active state
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (page === 'home') return; // Home is default, no modal needed
+            
+            const modals = { about: 'aboutModal', faqs: 'faqsModal', contact: 'contactModal' };
+            if (modals[page]) openModal(modals[page]);
+        }
+
+        function closePageModal(modalId, page) {
+            closeModal(modalId);
+            // Reset nav to Home
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelector('.nav-link').classList.add('active');
+        }
+
+        // ============================================
+        // COUPON SYSTEM
+        // ============================================
+        let appliedCoupon = null;
+
+        async function applyCoupon() {
+            const code = document.getElementById('couponInput').value.trim().toUpperCase();
+            const msgEl = document.getElementById('couponMsg');
+
+            if (!code) {
+                msgEl.className = 'coupon-msg error';
+                msgEl.textContent = 'Please enter a coupon code.';
+                return;
+            }
+
+            try {
+                const snapshot = await db.collection('coupons').where('code', '==', code).get();
+                if (snapshot.empty) {
+                    msgEl.className = 'coupon-msg error';
+                    msgEl.textContent = '❌ Invalid coupon code.';
+                    appliedCoupon = null;
+                    updateCartUI();
+                    return;
+                }
+
+                snapshot.forEach(doc => { appliedCoupon = { id: doc.id, ...doc.data() }; });
+                msgEl.className = 'coupon-msg success';
+                msgEl.textContent = `✅ Coupon applied! ${appliedCoupon.type === 'percent' ? appliedCoupon.value + '% off' : '₱' + appliedCoupon.value + ' off'}`;
+                updateCartUI();
+            } catch (err) {
+                msgEl.className = 'coupon-msg error';
+                msgEl.textContent = 'Error applying coupon. Try again.';
+            }
+        }
+
+        async function saveCoupon() {
+            const code = document.getElementById('couponCode').value.trim().toUpperCase();
+            const type = document.getElementById('couponType').value;
+            const value = parseFloat(document.getElementById('couponValue').value);
+
+            if (!code || isNaN(value) || value <= 0) {
+                alert('Please fill in all coupon fields!');
+                return;
+            }
+
+            try {
+                await db.collection('coupons').add({ code, type, value, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
+                alert(`Coupon "${code}" saved!`);
+                document.getElementById('couponCode').value = '';
+                document.getElementById('couponValue').value = '';
+                loadCoupons();
+            } catch (err) {
+                alert('Error saving coupon: ' + err.message);
+            }
+        }
+
+        async function loadCoupons() {
+            const listEl = document.getElementById('couponList');
+            if (!listEl) return;
+            try {
+                const snapshot = await db.collection('coupons').orderBy('createdAt', 'desc').get();
+                if (snapshot.empty) {
+                    listEl.innerHTML = '<p style="color:#888; font-size:13px;">No coupons yet.</p>';
+                    return;
+                }
+                listEl.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const c = doc.data();
+                    const row = document.createElement('div');
+                    row.style = 'display:flex; justify-content:space-between; align-items:center; padding:10px; background:#FAF6EE; border-radius:8px; margin-bottom:8px;';
+                    row.innerHTML = `
+                        <div>
+                            <strong style="color:var(--text-purple);">${c.code}</strong>
+                            <span style="font-size:12px; color:#888; margin-left:8px;">${c.type === 'percent' ? c.value + '% off' : '₱' + c.value + ' off'}</span>
+                        </div>
+                        <button onclick="deleteCoupon('${doc.id}')" style="background:#FCE8E6; border:1px solid #F4B4B0; color:#C5221F; padding:4px 10px; border-radius:5px; cursor:pointer; font-size:12px;">🗑️</button>
+                    `;
+                    listEl.appendChild(row);
+                });
+            } catch (err) {
+                listEl.innerHTML = '<p style="color:#e74c3c; font-size:13px;">Error loading coupons.</p>';
+            }
+        }
+
+        async function deleteCoupon(couponId) {
+            if (!confirm('Delete this coupon?')) return;
+            try {
+                await db.collection('coupons').doc(couponId).delete();
+                loadCoupons();
+            } catch (err) {
+                alert('Error deleting coupon: ' + err.message);
+            }
+        }
+
+        // Load coupons when coupon modal opens
+        const origOpenModal = openModal;
+        function openModal(id) {
+            document.getElementById(id).style.display = 'flex';
+            if (id === 'couponModal') loadCoupons();
+        }
 
         let selectedCategoryGlobal = 'all';
 
@@ -788,6 +1173,9 @@
                 cart.push({ id: p.id, name: p.name, price: p.price, quantity: 1, checked: true });
             }
             saveAndSyncCart();
+            // Track AddToCart on Facebook Pixel & GA4
+            if (typeof fbq !== 'undefined') fbq('track', 'AddToCart', { content_name: p.name, value: p.price, currency: 'PHP' });
+            if (typeof gtag !== 'undefined') gtag('event', 'add_to_cart', { currency: 'PHP', value: p.price, items: [{ item_name: p.name, price: p.price }] });
         }
 
         function saveAndSyncCart() {
@@ -799,14 +1187,15 @@
             const countSpan = document.getElementById("cart-count");
             const itemsList = document.getElementById("cartItems");
             const totalSpan = document.getElementById("cartTotal");
+            const subtotalSpan = document.getElementById("cartSubtotal");
             if (!countSpan || !itemsList || !totalSpan) return;
 
             countSpan.innerText = cart.reduce((sum, item) => sum + item.quantity, 0);
             itemsList.innerHTML = "";
-            let grandTotal = 0;
+            let subtotal = 0;
 
             cart.forEach((item, index) => {
-                if (item.checked) grandTotal += (item.price * item.quantity);
+                if (item.checked) subtotal += (item.price * item.quantity);
                 const row = document.createElement("div");
                 row.style = "display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; font-size:14px;";
                 row.innerHTML = `
@@ -822,7 +1211,33 @@
                 itemsList.appendChild(row);
             });
 
+            // Calculate discount
+            let discount = 0;
+            if (appliedCoupon) {
+                if (appliedCoupon.type === 'percent') {
+                    discount = subtotal * (appliedCoupon.value / 100);
+                } else {
+                    discount = Math.min(appliedCoupon.value, subtotal);
+                }
+            }
+
+            const grandTotal = Math.max(0, subtotal - discount);
+
+            if (subtotalSpan) subtotalSpan.innerText = subtotal.toFixed(2);
             totalSpan.innerText = grandTotal.toFixed(2);
+
+            const discountRow = document.getElementById('discountRow');
+            const discountAmountEl = document.getElementById('discountAmount');
+            const couponCodeApplied = document.getElementById('couponCodeApplied');
+            if (discountRow && discountAmountEl) {
+                if (appliedCoupon && discount > 0) {
+                    discountRow.style.display = 'block';
+                    discountAmountEl.innerText = discount.toFixed(2);
+                    if (couponCodeApplied) couponCodeApplied.innerText = appliedCoupon.code;
+                } else {
+                    discountRow.style.display = 'none';
+                }
+            }
         }
 
         function toggleItemCheck(index) {
@@ -846,6 +1261,15 @@
                 alert("Pumili muna ng kahit isang produkto na may CHECK sa iyong cart para makapag-checkout!");
                 return;
             }
+            // Calculate discounted total
+            let subtotal = checkedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            let discount = 0;
+            if (appliedCoupon) {
+                discount = appliedCoupon.type === 'percent' ? subtotal * (appliedCoupon.value / 100) : Math.min(appliedCoupon.value, subtotal);
+            }
+            const totalValue = Math.max(0, subtotal - discount);
+            if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout', { value: totalValue, currency: 'PHP', num_items: checkedItems.length });
+            if (typeof gtag !== 'undefined') gtag('event', 'begin_checkout', { currency: 'PHP', value: totalValue });
 
             const buyerEmail = prompt("Saan namin ipadadala ang iyong digital products? Pakisulat ang iyong active Email Address:");
             if (!buyerEmail) {
@@ -866,9 +1290,10 @@
                     body: JSON.stringify({
                         redirect_url: window.location.origin + '/digitera-storefront/success.html',
                         email: buyerEmail,
-                        items: checkedItems.map(item => ({
+                        items: checkedItems.map((item, index) => ({
                             name: item.name,
-                            price: item.price,
+                            // Apply discount proportionally to first item only
+                            price: index === 0 && appliedCoupon ? Math.max(0.01, item.price - (appliedCoupon.type === 'percent' ? item.price * appliedCoupon.value / 100 : Math.min(appliedCoupon.value, item.price))) : item.price,
                             quantity: item.quantity
                         }))
                     })
