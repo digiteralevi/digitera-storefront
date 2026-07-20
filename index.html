@@ -169,30 +169,34 @@
 
         /* MORE DETAILS BUTTON */
         .more-details-btn {
+            display: block;
+            width: 100%;
             background: var(--gold-shine);
             color: #4A2E80;
             border: none;
-            padding: 12px 20px;
+            padding: 13px 20px;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
             transition: 0.3s;
-            white-space: nowrap;
+            font-size: 15px;
+            text-align: center;
+            letter-spacing: 0.3px;
+            box-shadow: 0 4px 12px rgba(191, 149, 63, 0.25);
+            box-sizing: border-box;
         }
-        .more-details-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+        .more-details-btn:hover { opacity: 0.88; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(191, 149, 63, 0.35); }
 
         /* Modal action buttons row */
         .modal-action-row {
             display: flex;
+            flex-direction: column;
             gap: 10px;
-            align-items: center;
             margin-bottom: 20px;
-            flex-wrap: wrap;
+            width: 100%;
         }
         .modal-action-row .add-to-cart-btn {
-            width: auto;
-            flex: 1;
-            min-width: 140px;
+            width: 100%;
         }
 
         #secretAdminBtn {
@@ -336,7 +340,7 @@
             <!-- ACTION BUTTONS ROW -->
             <div class="modal-action-row">
                 <button class="add-to-cart-btn" id="modalAddToCartBtn">Add to Cart</button>
-                <button class="more-details-btn" id="modalMoreDetailsBtn" style="display:none;">✨ More Details</button>
+                <button class="more-details-btn" id="modalMoreDetailsBtn" style="display:none;">👆 Click here for more details about this product &nbsp;→</button>
             </div>
 
             <hr style="border:0; border-top:1px solid rgba(74,46,128,0.1);">
