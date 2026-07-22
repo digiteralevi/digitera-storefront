@@ -1495,5 +1495,516 @@
             setInterval(updateLiveViewers, 5000);
         });
     </script>
+<!--
+=================================================================
+DIGITERA AI CHAT WIDGET
+I-paste ito bago ang </body> ng iyong shop HTML
+=================================================================
+-->
+
+<!-- WIDGET STYLES -->
+<style>
+#dgt-widget-vars {
+  --dgt-gold: #f5c842;
+  --dgt-gold-grad: linear-gradient(135deg,#f0c860 0%,#c9a84c 40%,#e8b84b 70%,#a07830 100%);
+  --dgt-purple: #6c5ce7;
+  --dgt-purple-dim: #1e1a3a;
+  --dgt-card: #1c1929;
+  --dgt-card2: #221e31;
+  --dgt-border: #2e2940;
+  --dgt-text: #f0eeff;
+  --dgt-text2: #9b96b8;
+  --dgt-green: #4ade80;
+  --dgt-bg-dark: #0e0d18;
+  --dgt-r: 14px;
+}
+
+/* FAB BUTTON */
+#dgt-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: var(--dgt-gold-grad);
+  color: #1a1200;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  box-shadow: 0 6px 24px rgba(245,200,66,.45);
+  transition: all .25s cubic-bezier(.175,.885,.32,1.275);
+  z-index: 99990;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#dgt-fab:hover { transform: scale(1.12) translateY(-3px); box-shadow: 0 10px 32px rgba(245,200,66,.6); }
+
+/* BUBBLE POPUP */
+#dgt-bubble {
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  background: #1c1929;
+  border: 1.5px solid #6c5ce7;
+  border-radius: 16px 16px 4px 16px;
+  padding: 14px 18px 12px;
+  max-width: 250px;
+  box-shadow: 0 8px 32px rgba(108,92,231,.3);
+  z-index: 99989;
+  display: none;
+  animation: dgtBubbleIn .35s cubic-bezier(.175,.885,.32,1.275);
+}
+@keyframes dgtBubbleIn {
+  from { opacity:0; transform: scale(.8) translateY(10px); }
+  to   { opacity:1; transform: scale(1) translateY(0); }
+}
+#dgt-bubble p { font-size: .82rem; color: #f0eeff; line-height: 1.5; margin: 0 0 10px; font-family: 'Segoe UI', sans-serif; }
+#dgt-bubble p strong { color: #f5c842; }
+#dgt-bubble-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.dgt-bchip {
+  background: #2e2940; color: #9b96b8; border: 1px solid #3d3758;
+  font-size: .7rem; padding: 4px 10px; border-radius: 20px;
+  cursor: pointer; transition: all .15s; font-family: 'Segoe UI', sans-serif;
+}
+.dgt-bchip:hover { background: var(--dgt-gold-grad); color: #1a1200; border-color: transparent; font-weight: 700; }
+#dgt-bubble-close {
+  position: absolute; top: 7px; right: 10px;
+  background: none; border: none; color: #5c5878;
+  cursor: pointer; font-size: .9rem; line-height: 1;
+}
+#dgt-bubble-close:hover { color: #f0eeff; }
+
+/* CHAT WINDOW */
+#dgt-window {
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  width: 370px;
+  max-width: calc(100vw - 32px);
+  height: 540px;
+  max-height: calc(100vh - 120px);
+  background: #1c1929;
+  border: 1.5px solid #2e2940;
+  border-radius: 18px;
+  box-shadow: 0 12px 48px rgba(0,0,0,.5);
+  display: flex;
+  flex-direction: column;
+  z-index: 99989;
+  transform: scale(.9) translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all .25s ease;
+  overflow: hidden;
+}
+#dgt-window.open {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  pointer-events: all;
+  border-color: #6c5ce7;
+}
+
+/* CHAT HEADER */
+#dgt-hdr {
+  padding: 14px 16px;
+  background: linear-gradient(135deg,#1e1a3a,#15121f);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid #2e2940;
+  flex-shrink: 0;
+}
+#dgt-hdr-av {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--dgt-gold-grad);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; flex-shrink: 0;
+}
+#dgt-hdr-info h4 { font-size: .88rem; font-weight: 700; color: #f0eeff; margin: 0; font-family: 'Segoe UI', sans-serif; }
+#dgt-hdr-info p  { font-size: .7rem; color: #4ade80; margin: 0; font-family: 'Segoe UI', sans-serif; }
+#dgt-shop-btn {
+  margin-left: auto; margin-right: 6px;
+  background: var(--dgt-gold-grad); color: #1a1200;
+  font-size: .68rem; font-weight: 800;
+  padding: 5px 10px; border-radius: 20px;
+  text-decoration: none; white-space: nowrap;
+  transition: opacity .2s;
+}
+#dgt-shop-btn:hover { opacity: .85; }
+#dgt-close {
+  background: none; border: none; color: #5c5878;
+  font-size: 1.1rem; cursor: pointer; padding: 4px 6px;
+  border-radius: 6px; flex-shrink: 0;
+}
+#dgt-close:hover { background: #2e2940; color: #f0eeff; }
+
+/* MESSAGES */
+#dgt-msgs {
+  flex: 1; overflow-y: auto; padding: 14px;
+  display: flex; flex-direction: column; gap: 12px;
+  background: #0e0d18;
+}
+#dgt-msgs::-webkit-scrollbar { width: 4px; }
+#dgt-msgs::-webkit-scrollbar-thumb { background: #2e2940; border-radius: 4px; }
+.dgt-msg { display: flex; gap: 8px; align-items: flex-end; max-width: 88%; }
+.dgt-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+.dgt-av { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .75rem; flex-shrink: 0; }
+.dgt-bot-av { background: linear-gradient(135deg,#6c5ce7,#1e1a3a); }
+.dgt-user-av { background: var(--dgt-gold-grad); }
+.dgt-bubble-msg {
+  padding: 10px 13px; border-radius: 14px;
+  font-size: .84rem; line-height: 1.6;
+  font-family: 'Segoe UI', sans-serif;
+}
+.dgt-msg.bot .dgt-bubble-msg { background: #221e31; color: #f0eeff; border-bottom-left-radius: 4px; border: 1px solid #2e2940; }
+.dgt-msg.user .dgt-bubble-msg { background: #6c5ce7; color: #fff; border-bottom-right-radius: 4px; }
+.dgt-chat-img { max-width: 190px; border-radius: 9px; margin-top: 6px; display: block; border: 1.5px solid #2e2940; cursor: zoom-in; }
+.dgt-typing { display: flex; gap: 4px; padding: 10px 13px; background: #221e31; border-radius: 14px; border-bottom-left-radius: 4px; width: fit-content; border: 1px solid #2e2940; }
+.dgt-dot { width: 6px; height: 6px; background: #9b8ef8; border-radius: 50%; animation: dgtBounce 1.2s infinite; }
+.dgt-dot:nth-child(2) { animation-delay: .2s; }
+.dgt-dot:nth-child(3) { animation-delay: .4s; }
+@keyframes dgtBounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+
+/* CHIPS */
+#dgt-chips {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 8px 12px; background: #0e0d18;
+  border-top: 1px solid #2e2940;
+  flex-shrink: 0;
+}
+.dgt-chip {
+  background: #221e31; border: 1px solid #2e2940;
+  color: #9b96b8; font-size: .72rem;
+  padding: 5px 11px; border-radius: 20px;
+  cursor: pointer; transition: all .15s;
+  font-family: 'Segoe UI', sans-serif;
+}
+.dgt-chip:hover { background: var(--dgt-gold-grad); border-color: transparent; color: #1a1200; font-weight: 700; }
+#dgt-chip-shop { background: #2a2008; color: #f5c842; border-color: #c9a432; font-weight: 700; }
+#dgt-chip-shop:hover { background: var(--dgt-gold-grad); color: #1a1200; }
+
+/* FOOTER */
+#dgt-foot {
+  padding: 10px 12px; border-top: 1px solid #2e2940;
+  display: flex; gap: 8px; background: #1c1929;
+  flex-shrink: 0;
+}
+#dgt-input {
+  flex: 1; background: #15121f; border: 1.5px solid #2e2940;
+  border-radius: 8px; color: #f0eeff; padding: 9px 12px;
+  font-size: .84rem; font-family: 'Segoe UI', sans-serif;
+  outline: none; resize: none; transition: border-color .2s;
+}
+#dgt-input:focus { border-color: #6c5ce7; }
+#dgt-send {
+  background: var(--dgt-gold-grad); color: #1a1200;
+  border: none; border-radius: 8px; padding: 9px 14px;
+  font-size: .9rem; cursor: pointer; font-weight: 800;
+  transition: opacity .2s;
+}
+#dgt-send:disabled { opacity: .4; cursor: not-allowed; }
+
+/* LIGHTBOX */
+#dgt-lb {
+  position: fixed; inset: 0; background: rgba(0,0,0,.93);
+  display: none; align-items: center; justify-content: center;
+  z-index: 99999; cursor: zoom-out;
+}
+#dgt-lb.show { display: flex; }
+#dgt-lb img { max-width: 90vw; max-height: 90vh; border-radius: 12px; border: 2px solid #c9a432; }
+
+/* NOTIFICATION BADGE */
+#dgt-badge {
+  position: absolute; top: -4px; right: -4px;
+  width: 18px; height: 18px; background: #f87171;
+  border-radius: 50%; font-size: .65rem; font-weight: 800;
+  color: #fff; display: none; align-items: center; justify-content: center;
+  border: 2px solid #fff;
+}
+#dgt-fab-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 99990; }
+</style>
+
+<!-- WIDGET HTML -->
+<div id="dgt-widget-vars"></div>
+
+<div id="dgt-fab-wrap">
+  <button id="dgt-fab" onclick="dgtToggle()">💬</button>
+  <div id="dgt-badge">1</div>
+</div>
+
+<div id="dgt-bubble">
+  <button id="dgt-bubble-close" onclick="dgtCloseBubble()">✕</button>
+  <p>👋 Hi! I'm <strong id="dgt-bubble-name">Digitera AI</strong>. Got questions about our products?</p>
+  <div id="dgt-bubble-chips">
+    <span class="dgt-bchip" onclick="dgtChipSend(this)">💰 Products</span>
+    <span class="dgt-bchip" onclick="dgtChipSend(this)">🛍️ Browse Shop</span>
+    <span class="dgt-bchip" onclick="dgtChipSend(this)">❓ FAQ</span>
+  </div>
+</div>
+
+<div id="dgt-window">
+  <div id="dgt-hdr">
+    <div id="dgt-hdr-av">🤖</div>
+    <div id="dgt-hdr-info">
+      <h4 id="dgt-bot-name">Digitera AI</h4>
+      <p>Online • Ready to help</p>
+    </div>
+    <a id="dgt-shop-btn" href="https://digitera-storefront.vercel.app" target="_blank">🛍️ Shop</a>
+    <button id="dgt-close" onclick="dgtToggle()">✕</button>
+  </div>
+  <div id="dgt-msgs"></div>
+  <div id="dgt-chips">
+    <span class="dgt-chip" onclick="dgtChipSend(this)">💰 Products</span>
+    <span class="dgt-chip" onclick="dgtChipSend(this)">🤖 How it works</span>
+    <span class="dgt-chip" onclick="dgtChipSend(this)">📷 Show samples</span>
+    <span class="dgt-chip" onclick="dgtChipSend(this)">❓ FAQ</span>
+    <span class="dgt-chip" id="dgt-chip-shop" onclick="dgtOpenShop()">🛍️ Browse Shop</span>
+  </div>
+  <div id="dgt-foot">
+    <textarea id="dgt-input" rows="1" placeholder="Ask me anything..." onkeydown="dgtKey(event)"></textarea>
+    <button id="dgt-send" onclick="dgtSend()">➤</button>
+  </div>
+</div>
+
+<div id="dgt-lb" onclick="dgtCloseLB()"><img id="dgt-lb-img" src=""></div>
+
+<!-- WIDGET SCRIPT -->
+<script>
+(function(){
+  // ============================================================
+  //  CONFIG — I-edit ito para sa iyong shop
+  // ============================================================
+  const DGT_CONFIG = {
+    scriptUrl: 'https://script.google.com/macros/s/AKfycby7E0zNgJeq8jHVhzrB8BlTELoZYOlSGAPsXqij9IP3dWR2QG_EU79BYnt85NAj_zc/exec',
+    shopUrl: 'https://digitera-storefront.vercel.app',
+    botName: 'Digitera',
+    openRouterKey: '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',
+    bubbleDelay: 4000, // ms bago mag-appear ang bubble
+    lang: 'en',
+    systemPrompt: `You are Digitera, a friendly and professional AI sales assistant for Digitera Levi Shop — a premium digital products store.
+
+ABOUT THE SHOP:
+Digitera Levi Shop offers high-quality digital products including Canva templates, AI business tools, PLR/MRR products, course workbooks, reels bundles, and more.
+Shop: https://digitera-storefront.vercel.app
+
+PRODUCTS & PRICES:
+1. Business Automation Suite (FunnelCraft™ + AI Business Employee) — ₱2,995
+2. FunnelCraft™ — ₱2,497
+3. VIP ROI Framework & Workbook™ — ₱997
+4. KidzCreator System — ₱997
+5. 30 Million Digital Products (PLR & MRR) — ₱199
+6. 100K Reels Bundle by LUXXE — ₱249
+7. All in One Language Materials — ₱100
+8. 3 Million E-Books Bundle — ₱199
+9. Master Resell Rights Workbook Bundle — ₱299
+10. Blue Aesthetic Workbook + MRR — ₱100
+11. Aesthetic Workbook (Pink) + MRR — ₱100
+12. Free PLR Digital Products — ₱1
+
+HOW TO ORDER: Visit the shop → Add to Cart → Checkout
+PAYMENT: GCash 09231893139 / Maya 09461825985 (Levi Ugaban Mariano)
+After payment, send screenshot to Messenger: https://m.me/118441451362301?ref=2560834
+
+CONTACT: Messenger, Instagram @digiteralevi, TikTok @moneymasterymap, Email digiteralevi@gmail.com
+
+RULES:
+- Keep replies to 2-3 sentences max
+- Always end with a follow-up question
+- When asked about products include shop link
+- If asked for images/samples, include [SHOW_IMAGES]
+- Never say you are an AI unless directly asked
+- Be warm, friendly, professional`
+  };
+
+  // ============================================================
+  //  STATE
+  // ============================================================
+  let dgtOpen = false;
+  let dgtTyping = false;
+  let dgtHistory = [];
+  let dgtImages = [];
+  let dgtBubbleShown = false;
+
+  // ============================================================
+  //  INIT
+  // ============================================================
+  async function dgtInit() {
+    // Set bot name
+    document.getElementById('dgt-bot-name').textContent = DGT_CONFIG.botName;
+    document.getElementById('dgt-bubble-name').textContent = DGT_CONFIG.botName;
+    document.getElementById('dgt-shop-btn').href = DGT_CONFIG.shopUrl;
+
+    // Load product images from Google Sheet
+    try {
+      const r = await fetch(DGT_CONFIG.scriptUrl + '?action=getImages');
+      const d = await r.json();
+      dgtImages = d.images || [];
+    } catch(e) { dgtImages = []; }
+
+    // Init chat history
+    dgtHistory = [{ role: 'system', content: DGT_CONFIG.systemPrompt + `\n\nPRODUCT IMAGES: ${dgtImages.length} available.` }];
+
+    // Greeting message
+    dgtAddBot(`Hi there! 👋 I'm **${DGT_CONFIG.botName}**, your AI shopping assistant at Digitera Levi Shop. How can I help you today? 😊`);
+
+    // Show bubble after delay
+    setTimeout(dgtShowBubble, DGT_CONFIG.bubbleDelay);
+
+    // Show notification badge
+    setTimeout(() => {
+      const badge = document.getElementById('dgt-badge');
+      if(badge && !dgtOpen) { badge.style.display = 'flex'; }
+    }, DGT_CONFIG.bubbleDelay + 500);
+  }
+
+  // ============================================================
+  //  TOGGLE
+  // ============================================================
+  window.dgtToggle = function() {
+    dgtOpen = !dgtOpen;
+    document.getElementById('dgt-window').classList.toggle('open', dgtOpen);
+    document.getElementById('dgt-fab').innerHTML = dgtOpen ? '✕' : '💬';
+
+    // Hide badge
+    document.getElementById('dgt-badge').style.display = 'none';
+
+    if(dgtOpen) {
+      dgtCloseBubble();
+      setTimeout(() => {
+        document.getElementById('dgt-input').focus();
+        dgtScrollMsgs();
+      }, 300);
+    } else {
+      document.getElementById('dgt-fab').innerHTML = '💬';
+      // Re-show bubble after closing
+      setTimeout(() => { if(!dgtOpen) dgtShowBubble(); }, 2000);
+    }
+  };
+
+  // ============================================================
+  //  BUBBLE
+  // ============================================================
+  function dgtShowBubble() {
+    if(dgtOpen || dgtBubbleShown) return;
+    dgtBubbleShown = true;
+    const b = document.getElementById('dgt-bubble');
+    b.style.display = 'block';
+  }
+
+  window.dgtCloseBubble = function() {
+    document.getElementById('dgt-bubble').style.display = 'none';
+  };
+
+  // ============================================================
+  //  MESSAGES
+  // ============================================================
+  function dgtAddBot(text, imgs=[]) {
+    const msgs = document.getElementById('dgt-msgs');
+    const div = document.createElement('div');
+    div.className = 'dgt-msg bot';
+    let html = text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
+    let imgHtml = imgs.map(img =>
+      `<img class="dgt-chat-img" src="${img.data}" alt="${img.name}" onclick="dgtOpenLB('${img.data}')">`
+    ).join('');
+    div.innerHTML = `<div class="dgt-av dgt-bot-av">🤖</div><div><div class="dgt-bubble-msg">${html}</div>${imgHtml}</div>`;
+    msgs.appendChild(div);
+    dgtScrollMsgs();
+  }
+
+  function dgtAddUser(text) {
+    const msgs = document.getElementById('dgt-msgs');
+    const div = document.createElement('div');
+    div.className = 'dgt-msg user';
+    div.innerHTML = `<div class="dgt-av dgt-user-av">👤</div><div class="dgt-bubble-msg">${text.replace(/</g,'&lt;')}</div>`;
+    msgs.appendChild(div);
+    dgtScrollMsgs();
+  }
+
+  function dgtShowTyping() {
+    const msgs = document.getElementById('dgt-msgs');
+    const div = document.createElement('div');
+    div.className = 'dgt-msg bot'; div.id = 'dgt-typing';
+    div.innerHTML = `<div class="dgt-av dgt-bot-av">🤖</div><div class="dgt-typing"><div class="dgt-dot"></div><div class="dgt-dot"></div><div class="dgt-dot"></div></div>`;
+    msgs.appendChild(div); dgtScrollMsgs();
+  }
+  function dgtRemoveTyping() { const t=document.getElementById('dgt-typing'); if(t)t.remove(); }
+  function dgtScrollMsgs() { const m=document.getElementById('dgt-msgs'); setTimeout(()=>m.scrollTop=m.scrollHeight,50); }
+
+  // ============================================================
+  //  SEND MESSAGE
+  // ============================================================
+  window.dgtKey = function(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();dgtSend();} };
+  window.dgtChipSend = function(el) { dgtSendText(el.textContent.trim()); };
+  window.dgtOpenShop = function() { window.open(DGT_CONFIG.shopUrl,'_blank'); };
+
+  window.dgtSend = function() {
+    const input = document.getElementById('dgt-input');
+    const text = input.value.trim();
+    if(!text || dgtTyping) return;
+    input.value = '';
+    dgtSendText(text);
+  };
+
+  async function dgtSendText(text) {
+    dgtAddUser(text);
+    dgtHistory.push({ role:'user', content:text });
+    dgtTyping = true;
+    document.getElementById('dgt-send').disabled = true;
+    dgtShowTyping();
+
+    // Open chat if not open
+    if(!dgtOpen) dgtToggle();
+
+    try {
+      const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + DGT_CONFIG.openRouterKey,
+          'HTTP-Referer': window.location.href,
+          'X-Title': 'Digitera Levi Shop'
+        },
+        body: JSON.stringify({
+          model: 'openrouter/auto',
+          max_tokens: 500,
+          messages: dgtHistory
+        })
+      });
+      const d = await r.json();
+      if(d.error) throw new Error(d.error.message);
+      let reply = d.choices?.[0]?.message?.content || 'Sorry, something went wrong. Please try again!';
+      dgtHistory.push({ role:'assistant', content:reply });
+      dgtRemoveTyping();
+      const showImgs = reply.includes('[SHOW_IMAGES]') && dgtImages.length > 0;
+      dgtAddBot(reply.replace('[SHOW_IMAGES]','').trim(), showImgs ? dgtImages.slice(0,6) : []);
+    } catch(e) {
+      dgtRemoveTyping();
+      dgtAddBot('Sorry, I had a small hiccup! Please try again or visit our shop directly. 😊');
+    }
+
+    dgtTyping = false;
+    document.getElementById('dgt-send').disabled = false;
+    document.getElementById('dgt-input').focus();
+  }
+
+  // ============================================================
+  //  LIGHTBOX
+  // ============================================================
+  window.dgtOpenLB = function(src) { document.getElementById('dgt-lb-img').src=src; document.getElementById('dgt-lb').classList.add('show'); };
+  window.dgtCloseLB = function() { document.getElementById('dgt-lb').classList.remove('show'); };
+
+  // ============================================================
+  //  START
+  // ============================================================
+  if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', dgtInit);
+  } else {
+    dgtInit();
+  }
+})();
+</script>
 </body>
 </html>
