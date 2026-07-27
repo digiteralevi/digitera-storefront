@@ -6,6 +6,10 @@
     <title>Digitera Levi Shop</title>
     
     <!-- SDK NG FIREBASE PARA SA CLOUD STORAGE CONNECTION -->
+    <!-- LUXURY GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Cormorant+Garamond:wght@300;400;600;700&family=Cinzel:wght@400;600;700&family=EB+Garamond:wght@400;500;600&family=Libre+Baskerville:wght@400;700&family=Italiana&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
@@ -355,6 +359,84 @@
     </div>
 
     <!-- CART SLIDE OUT -->
+    <!-- HERO BANNER SETTINGS MODAL -->
+    <div class="modal-overlay" id="heroSettingsModal">
+        <div class="modal-content" style="max-width:650px;">
+            <button class="close-btn" onclick="closeModal('heroSettingsModal')">✕</button>
+            <h2>🖼️ Edit Hero Banner</h2>
+            <div class="admin-form-grid">
+
+                <!-- COVER PHOTO UPLOAD -->
+                <div>
+                    <h4 style="margin:0 0 8px 0;">📸 Cover Photo</h4>
+                    <p style="font-size:12px;color:#888;margin:0 0 10px 0;">
+                        ✅ Recommended size: <strong>1920 x 600px</strong> (landscape)<br>
+                        ✅ Max file size: <strong>5MB</strong><br>
+                        ✅ Format: JPG, PNG, or WebP<br>
+                        ✅ Tip: Use a high-resolution, wide image for best results
+                    </p>
+                    <label class="file-upload-label">
+                        📁 Upload Cover Photo
+                        <input type="file" id="heroCoverInput" accept="image/*" style="display:none;" onchange="previewHeroCover(event)">
+                    </label>
+                    <div id="heroCoverPreview" style="margin-top:10px; display:none;">
+                        <img id="heroCoverPreviewImg" style="width:100%;border-radius:8px;max-height:150px;object-fit:cover;" src="">
+                        <button onclick="removeHeroCover()" style="margin-top:8px;background:#FCE8E6;border:1px solid #F4B4B0;color:#C5221F;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;width:100%;">🗑️ Remove Cover Photo</button>
+                    </div>
+                </div>
+
+                <!-- OVERLAY DARKNESS -->
+                <div>
+                    <h4 style="margin:0 0 8px 0;">🌑 Overlay Darkness</h4>
+                    <input type="range" id="heroOverlayRange" min="0" max="90" value="45" style="width:100%;" oninput="updateOverlayPreview(this.value)">
+                    <p style="font-size:12px;color:#888;margin:4px 0 0 0;">Current: <span id="overlayValue">45</span>% — Higher = darker overlay for better text visibility</p>
+                </div>
+
+                <!-- HEADLINE -->
+                <div>
+                    <h4 style="margin:0 0 8px 0;">✍️ Headline Text</h4>
+                    <input type="text" id="heroHeadlineInput" class="admin-input" value="Premium Digital Business Assets" placeholder="Main headline text">
+                </div>
+
+                <!-- TAGLINE -->
+                <div>
+                    <h4 style="margin:0 0 8px 0;">📝 Tagline Text</h4>
+                    <input type="text" id="heroTaglineInput" class="admin-input" value="Establish your storefront, scale your reach, and automate your sales with high-converting assets." placeholder="Tagline / subtitle text">
+                </div>
+
+                <!-- FONT SELECTOR -->
+                <div>
+                    <h4 style="margin:0 0 8px 0;">🔤 Headline Font</h4>
+                    <select id="heroFontSelect" class="admin-input" style="background:var(--card-bg);" onchange="previewHeroFont(this.value)">
+                        <option value="'Segoe UI', sans-serif">Default (Segoe UI)</option>
+                        <option value="'Playfair Display', serif">Playfair Display — Classic Luxury</option>
+                        <option value="'Cormorant Garamond', serif">Cormorant Garamond — Elegant Editorial</option>
+                        <option value="'Cinzel', serif">Cinzel — Bold Royal</option>
+                        <option value="'EB Garamond', serif">EB Garamond — Timeless Serif</option>
+                        <option value="'Libre Baskerville', serif">Libre Baskerville — Premium Bold</option>
+                        <option value="'Italiana', serif">Italiana — Sleek Italian Style</option>
+                    </select>
+                    <p id="heroFontPreview" style="font-size:22px;margin:10px 0 0 0;color:var(--text-purple);font-family:'Segoe UI',sans-serif;">The quick brown fox</p>
+                </div>
+
+                <!-- TEXT COLOR -->
+                <div>
+                    <h4 style="margin:0 0 8px 0;">🎨 Text Color (when image is set)</h4>
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                        <button onclick="setHeroTextColor('#ffffff',this)" style="background:#333;color:#fff;border:2px solid #BF953F;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px;">⬜ White</button>
+                        <button onclick="setHeroTextColor('#FCF6BA',this)" style="background:#333;color:#FCF6BA;border:1px solid #555;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px;">✨ Gold</button>
+                        <button onclick="setHeroTextColor('#4A2E80',this)" style="background:#F7F3EB;color:#4A2E80;border:1px solid #555;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px;">💜 Purple</button>
+                        <button onclick="setHeroTextColor('#000000',this)" style="background:#fff;color:#000;border:1px solid #555;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px;">⬛ Black</button>
+                    </div>
+                    <input type="hidden" id="heroTextColor" value="#ffffff">
+                </div>
+
+                <!-- SAVE BUTTON -->
+                <button class="add-to-cart-btn" onclick="saveHeroSettings()" style="background:var(--gold-shine);margin-top:10px;">💾 Save Hero Banner Settings</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ORDERS DASHBOARD MODAL -->
     <div class="modal-overlay" id="ordersModal">
         <div class="modal-content" style="max-width:900px;">
