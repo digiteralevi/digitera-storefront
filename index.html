@@ -141,15 +141,74 @@
         .admin-form-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-top:15px;}
         .admin-input,.admin-textarea{width:100%;padding:10px;border:1px solid var(--btn-lilac);border-radius:6px;box-sizing:border-box;}
         .admin-textarea{height:120px;resize:vertical;}
-        .file-upload-label{background-color:#FAF6EE;border:2px dashed var(--btn-lilac);padding:15px;text-align:center;border-radius:6px;cursor:pointer;font-weight:bold;}
+        .file-upload-label{background-color:#FAF6EE;border:2px dashed var(--btn-lilac);padding:15px;text-align:center;border-radius:6px;cursor:pointer;font-weight:bold;display:block;}
         .file-upload-label:hover{border-color:#BF953F;}
         .input-hint{font-size:11px;color:#888;margin-top:-8px;padding-left:4px;}
 
-        /* CART & CHECKOUT */
+        /* COUPON */
+        .coupon-section{margin:15px 0;padding:15px;background:#FAF6EE;border-radius:8px;border:1px dashed #BF953F;}
+        .coupon-section label{font-size:12px;font-weight:bold;color:var(--text-purple);display:block;margin-bottom:6px;}
+        .coupon-input-row{display:flex;gap:8px;}
+        .coupon-input{flex:1;padding:8px 12px;border:1px solid var(--btn-lilac);border-radius:6px;font-size:13px;color:var(--text-purple);outline:none;}
+        .coupon-input:focus{border-color:#BF953F;}
+        .coupon-apply-btn{background:var(--gold-shine);border:none;padding:8px 14px;border-radius:6px;font-weight:bold;cursor:pointer;font-size:12px;color:#4A2E80;white-space:nowrap;}
+        .coupon-msg{font-size:12px;margin-top:6px;}
+        .coupon-msg.success{color:#2ecc71;}
+        .coupon-msg.error{color:#e74c3c;}
+
+        /* CART */
         .cart-modal{position:fixed;top:0;right:-400px;width:350px;height:100%;background-color:var(--card-bg);box-shadow:-5px 0 15px rgba(0,0,0,0.05);transition:0.3s right ease;padding:20px;z-index:1000;display:flex;flex-direction:column;box-sizing:border-box;}
         .cart-modal.open{right:0;}
         .cart-items-list{flex-grow:1;overflow-y:auto;margin-top:20px;}
         .cart-item{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #F0EAE1;}
+        .cart-item-info h4{margin:0;font-size:14px;color:var(--text-purple);}
+        .cart-item-info p{margin:2px 0 0 0;font-size:12px;color:#888;}
+        .remove-cart-item{background:none;border:none;color:#e74c3c;font-size:16px;cursor:pointer;padding:5px;}
+
+        /* ORDERS DASHBOARD */
+        .orders-stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:15px;margin-bottom:25px;}
+        .stat-card{background:var(--card-bg);border-radius:12px;padding:20px;text-align:center;box-shadow:0 4px 15px rgba(0,0,0,0.05);border-top:3px solid transparent;border-image:var(--gold-shine) 1;}
+        .stat-card .stat-value{font-size:26px;font-weight:800;color:var(--text-purple);margin:5px 0;}
+        .stat-card .stat-label{font-size:12px;color:#888;font-weight:600;}
+        .stat-card .stat-icon{font-size:22px;margin-bottom:5px;}
+        .orders-table-wrap{background:var(--card-bg);border-radius:12px;box-shadow:0 4px 15px rgba(0,0,0,0.05);overflow-x:auto;}
+        .orders-table-header{padding:15px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #F0EAE1;}
+        .orders-table-header h3{margin:0;font-size:16px;}
+        .orders-table{width:100%;border-collapse:collapse;font-size:13px;}
+        .orders-table th{background:#FAF6EE;padding:12px 15px;text-align:left;font-weight:700;color:var(--text-purple);border-bottom:1px solid #F0EAE1;}
+        .orders-table td{padding:12px 15px;border-bottom:1px solid #F7F3EB;color:#444;vertical-align:top;}
+        .orders-table tr:last-child td{border-bottom:none;}
+        .orders-table tr:hover td{background:#FDFBF7;}
+        .status-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:bold;}
+        .status-badge.completed{background:#D4EDDA;color:#155724;}
+        .order-items-list{margin:0;padding:0;list-style:none;}
+        .order-items-list li{font-size:12px;color:#666;margin-bottom:2px;}
+        .no-orders{text-align:center;padding:40px;color:#888;}
+
+        /* TESTIMONIALS */
+        .testimonials-section{padding:50px 0;background:#FAF8FE;overflow:hidden;width:100%;}
+        .section-title{text-align:center;margin-bottom:30px;}
+        .section-title h2{color:var(--text-purple);font-size:28px;margin-bottom:5px;font-weight:800;}
+        .section-title p{color:#666;font-size:14px;margin:0;}
+        .marquee-wrapper{display:flex;width:100%;overflow:hidden;position:relative;}
+        .marquee-content{display:flex;gap:20px;animation:marquee-scroll 45s linear infinite;width:max-content;}
+        .marquee-wrapper:hover .marquee-content{animation-play-state:paused;}
+        .testimonial-card{background:var(--card-bg);border:1.5px solid var(--btn-lilac);border-radius:12px;padding:20px;width:320px;box-shadow:0 4px 10px rgba(74,46,128,0.02);flex-shrink:0;display:flex;flex-direction:column;justify-content:space-between;}
+        .stars{color:#BF953F;font-size:16px;margin-bottom:8px;}
+        .review-text{font-size:14px;color:#444;line-height:1.4;margin:0 0 12px 0;font-style:italic;}
+        .reviewer-info{border-top:1px solid #F0EAE1;padding-top:8px;}
+        .reviewer-name{font-weight:700;font-size:13px;color:var(--text-purple);margin:0;}
+        .reviewer-tag{font-size:11px;color:#888;margin:2px 0 0 0;}
+        @keyframes marquee-scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+        /* SOCIAL PROOF POPUP */
+        .social-proof-container{position:fixed;bottom:20px;left:-400px;background:var(--card-bg);border:1.5px solid var(--btn-lilac);border-radius:12px;box-shadow:0 4px 15px rgba(74,46,128,0.1);display:flex;align-items:center;padding:12px 15px;z-index:9999;max-width:300px;transition:all 0.5s cubic-bezier(0.175,0.885,0.32,1.275);}
+        .social-proof-container.show{left:20px;}
+        .social-proof-content{font-size:13px;color:#333;}
+        .social-proof-content p{margin:0;line-height:1.3;}
+        .buyer-text strong{color:var(--text-purple);}
+        .product-text strong{background:var(--gold-shine);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:bold;}
+        .time-ago{font-size:11px;color:#888;display:block;margin-top:3px;}
 
         /* FOOTER */
         footer{background-color:var(--card-bg);padding:30px 20px;text-align:center;border-top:1px solid rgba(74,46,128,0.1);margin-top:auto;}
@@ -162,7 +221,7 @@
 
 <header>
     <div class="brand-profile">
-        <img src="https://res.cloudinary.com/dqo0bc4u/image/upload/v1784271943/Digitera_profile_gif_logo_jd7njm.gif" class="brand-logo" alt="Logo">
+        <img src="https://res.cloudinary.com/dqo0bc4u/image/upload/v1784271943/Digitera_profile_gif_logo_jd7njm.gif" class="brand-logo" alt="Digitera Levi Logo">
         <div class="brand-name"><h1>Digitera Levi</h1></div>
     </div>
     <div class="header-right">
@@ -261,30 +320,17 @@
     <div class="modal-content">
         <button class="close-btn" id="modalCloseBtn" onclick="closeModal('productDetailModal')">✕</button>
         <div class="gallery-container">
-            <img src="" id="modalMainImg" class="main-gallery-img" alt="Product Image">
+            <img src="" id="modalMainImg" class="main-gallery-img">
             <div class="thumbnails-row" id="modalThumbsRow"></div>
         </div>
         <h2 id="modalTitle" style="margin-top:20px;font-size:28px;"></h2>
         <h3 id="modalPrice" style="color:#BF953F;font-size:24px;margin:5px 0;"></h3>
         <div class="modal-action-row">
             <button class="add-to-cart-btn" id="modalAddToCartBtn">Add to Cart</button>
-            <a class="more-details-btn" id="modalMoreDetailsBtn" href="#" target="_blank" style="display:none; text-decoration:none;">👆 Click here for more details about this product &nbsp;→</a>
+            <a class="more-details-btn" id="modalMoreDetailsBtn" href="#" target="_blank" style="display:none;">👆 Click here for more details about this product &nbsp;→</a>
         </div>
         <hr style="border:0;border-top:1px solid rgba(74,46,128,0.1);">
         <div class="sales-copy-area" id="modalSalesCopy"></div>
-    </div>
-</div>
-
-<!-- CART SIDEBAR -->
-<div class="cart-modal" id="cartModal">
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-        <h2>🛒 Your Cart</h2>
-        <button class="close-btn" onclick="toggleCart()">✕</button>
-    </div>
-    <div class="cart-items-list" id="cartItemsContainer"></div>
-    <div style="margin-top:auto;padding-top:15px;border-top:1px solid #F0EAE1;">
-        <h3>Total: ₱<span id="cartTotal">0</span></h3>
-        <button class="add-to-cart-btn" style="background:var(--gold-shine);color:#4A2E80;" onclick="alert('Checkout process initiated!')">Checkout Now</button>
     </div>
 </div>
 
@@ -315,247 +361,633 @@
             <label class="file-upload-label">📁 Click here to choose files<input type="file" id="adminImages" accept="image/*" multiple style="display:none;" onchange="handleImageSelection()"></label>
             <div id="uploadPreview" style="display:flex;gap:5px;margin-top:5px;justify-content:center;flex-wrap:wrap;font-size:14px;color:#666;">No images selected yet (Max 10).</div>
             <button class="add-to-cart-btn" id="adminSubmitBtn" onclick="saveAdminProduct()" style="background:var(--gold-shine);margin-top:10px;">Create & Publish Product</button>
+            <button class="add-to-cart-btn" onclick="openModal('heroSettingsModal')" style="background:#EFEAF4;color:var(--text-purple);margin-top:5px;">🖼️ Edit Hero Banner</button>
+            <button class="add-to-cart-btn" onclick="openModal('couponModal')" style="background:#EFEAF4;color:var(--text-purple);margin-top:5px;">🎟️ Manage Coupons</button>
+            <button class="add-to-cart-btn" onclick="openModal('ordersModal')" style="background:#EFEAF4;color:var(--text-purple);margin-top:5px;">📊 View Orders Dashboard</button>
         </div>
+    </div>
+</div>
+
+<!-- HERO SETTINGS MODAL -->
+<div class="modal-overlay" id="heroSettingsModal">
+    <div class="modal-content" style="max-width:650px;">
+        <button class="close-btn" onclick="closeModal('heroSettingsModal')">✕</button>
+        <h2>🖼️ Edit Hero Banner</h2>
+        <div class="admin-form-grid">
+            <div>
+                <h4 style="margin:0 0 8px 0;">📸 Cover Photo</h4>
+                <p style="font-size:12px;color:#888;margin:0 0 10px 0;">✅ Recommended: <strong>1920 x 600px</strong> landscape<br>✅ Max file size: <strong>5MB</strong><br>✅ Format: JPG, PNG, or WebP</p>
+                <label class="file-upload-label">📁 Choose Cover Image
+                    <input type="file" id="heroImageInput" accept="image/*" style="display:none;" onchange="previewHeroImage(this)">
+                </label>
+                <div id="heroImagePreview" style="margin-top:10px;text-align:center;"></div>
+            </div>
+            <input type="text" id="heroHeadlineInput" class="admin-input" placeholder="Headline text">
+            <input type="text" id="heroTaglineInput" class="admin-input" placeholder="Tagline text">
+            <button class="add-to-cart-btn" onclick="saveHeroSettings()" style="background:var(--gold-shine);margin-top:10px;">Save Banner Settings</button>
+        </div>
+    </div>
+</div>
+
+<!-- COUPONS MODAL -->
+<div class="modal-overlay" id="couponModal">
+    <div class="modal-content" style="max-width:500px;">
+        <button class="close-btn" onclick="closeModal('couponModal')">✕</button>
+        <h2>🎟️ Manage Coupons</h2>
+        <div class="admin-form-grid">
+            <input type="text" id="couponCodeInput" class="admin-input" placeholder="Coupon Code (e.g. DIGITERA20)">
+            <input type="number" id="couponDiscountInput" class="admin-input" placeholder="Discount Percentage (e.g. 20)">
+            <button class="add-to-cart-btn" onclick="addCoupon()" style="background:var(--gold-shine);">Add Coupon Code</button>
+            <div id="couponList" style="margin-top:15px;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ORDERS DASHBOARD MODAL -->
+<div class="modal-overlay" id="ordersModal">
+    <div class="modal-content" style="max-width:900px;">
+        <button class="close-btn" onclick="closeModal('ordersModal')">✕</button>
+        <h2>📊 Orders Dashboard</h2>
+        <div class="orders-stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-value" id="statRevenue">₱0</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📦</div>
+                <div class="stat-value" id="statOrders">0</div>
+                <div class="stat-label">Completed Orders</div>
+            </div>
+        </div>
+        <div class="orders-table-wrap">
+            <div class="orders-table-header">
+                <h3>Recent Sales</h3>
+            </div>
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                    <tr><td colspan="5" class="no-orders">No sales recorded yet.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- CART MODAL -->
+<div class="cart-modal" id="cartModal">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #F0EAE1;padding-bottom:10px;">
+        <h3 style="margin:0;">🛒 Your Cart</h3>
+        <button class="close-btn" onclick="toggleCart()" style="position:static;">✕</button>
+    </div>
+    <div class="cart-items-list" id="cartItemsList"></div>
+    <div class="coupon-section">
+        <label>Have a coupon?</label>
+        <div class="coupon-input-row">
+            <input type="text" id="cartCouponInput" class="coupon-input" placeholder="Enter code">
+            <button class="coupon-apply-btn" onclick="applyCartCoupon()">Apply</button>
+        </div>
+        <div id="couponMsg" class="coupon-msg"></div>
+    </div>
+    <div style="border-top:1px solid #F0EAE1;padding-top:15px;margin-top:10px;">
+        <div style="display:flex;justify-content:space-between;font-weight:bold;margin-bottom:15px;">
+            <span>Total:</span>
+            <span id="cartTotal">₱0</span>
+        </div>
+        <button class="add-to-cart-btn" onclick="checkout()" style="background:var(--gold-shine);">Proceed to Checkout</button>
+    </div>
+</div>
+
+<!-- TESTIMONIALS SECTION -->
+<div class="testimonials-section">
+    <div class="section-title">
+        <h2>What Our Clients Say</h2>
+        <p>Trusted by digital entrepreneurs and creators worldwide</p>
+    </div>
+    <div class="marquee-wrapper">
+        <div class="marquee-content">
+            <div class="testimonial-card">
+                <div>
+                    <div class="stars">★★★★★</div>
+                    <p class="review-text">" Sobrang ganda ng shop system! Na-setup ko agad ang sarili kong digital products store in less than an hour. Very easy to use."</p>
+                </div>
+                <div class="reviewer-info">
+                    <p class="reviewer-name">Maria C.</p>
+                    <p class="reviewer-tag">Verified Buyer</p>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div>
+                    <div class="stars">★★★★★</div>
+                    <p class="review-text">"The Canva templates and Reels vaults saved me hundreds of hours of design time. High quality and super professional!"</p>
+                </div>
+                <div class="reviewer-info">
+                    <p class="reviewer-name">Jason K.</p>
+                    <p class="reviewer-tag">Digital Marketer</p>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div>
+                    <div class="stars">★★★★★</div>
+                    <p class="review-text">" Instant delivery at napaka-responsive ni sir Levi sa inquiries. 10/10 service!"</p>
+                </div>
+                <div class="reviewer-info">
+                    <p class="reviewer-name">Rhea S.</p>
+                    <p class="reviewer-tag">Online Seller</p>
+                </div>
+            </div>
+            <!-- Duplicated for seamless marquee loop -->
+            <div class="testimonial-card">
+                <div>
+                    <div class="stars">★★★★★</div>
+                    <p class="review-text">" Sobrang ganda ng shop system! Na-setup ko agad ang sarili kong digital products store in less than an hour. Very easy to use."</p>
+                </div>
+                <div class="reviewer-info">
+                    <p class="reviewer-name">Maria C.</p>
+                    <p class="reviewer-tag">Verified Buyer</p>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div>
+                    <div class="stars">★★★★★</div>
+                    <p class="review-text">"The Canva templates and Reels vaults saved me hundreds of hours of design time. High quality and super professional!"</p>
+                </div>
+                <div class="reviewer-info">
+                    <p class="reviewer-name">Jason K.</p>
+                    <p class="reviewer-tag">Digital Marketer</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SOCIAL PROOF POPUP -->
+<div class="social-proof-container" id="socialProofPopup">
+    <div class="social-proof-content">
+        <p class="buyer-text"><strong id="spBuyer">Someone</strong> from <span id="spLocation">Manila</span></p>
+        <p class="product-text">just purchased <strong id="spProduct">Digital Asset</strong></p>
+        <span class="time-ago" id="spTime">2 minutes ago</span>
     </div>
 </div>
 
 <footer>
     <div class="footer-links">
+        <a onclick="showPage('home',event)">Home</a>
         <a onclick="showPage('about',event)">About Us</a>
         <a onclick="showPage('faqs',event)">FAQs</a>
         <a onclick="showPage('contact',event)">Contact</a>
     </div>
-    <p>&copy; 2026 Digitera Levi Shop. All rights reserved.</p>
+    <p>© <script>document.write(new Date().getFullYear())</script> Digitera Levi Shop. All rights reserved.</p>
 </footer>
 
 <script>
-// JULY 27 PRODUCTS RESTORED
-let products = [
-    {
-        id: "prod_1",
-        title: "Business Automation Suite™ – FunnelCraft™ AI - AI Business Employee™",
-        price: 2995,
-        category: "Software",
-        shortDesc: "Build Your Sales Funnel. Hire Your AI Sales Employee. Grow Your Business — Without Monthly Software Fees. What if Your Business Could Sell Even While You Sleep?",
-        images: [
-            "https://res.cloudinary.com/dqo0bc4u/image/upload/v1722055000/business_automation_suite.png"
-        ],
-        salesCopy: "Build Your Sales Funnel. Hire Your AI Sales Employee. Grow Your Business — Without Monthly Software Fees.\n\nWhat if Your Business Could Sell Even While You Sleep?",
-        salesPageUrl: "https://digitera-storefront.vercel.app/"
-    },
-    {
-        id: "prod_2",
-        title: "FunnelCraft™",
-        price: 2497,
-        category: "Software",
-        shortDesc: "Your AI Funnel Builder, Copywriter & Conversion Expert — Working 24/7.",
-        images: [
-            "https://res.cloudinary.com/dqo0bc4u/image/upload/v1722055000/funnel_craft.png"
-        ],
-        salesCopy: "Your AI Funnel Builder, Copywriter & Conversion Expert — Working 24/7.",
-        salesPageUrl: ""
-    },
-    {
-        id: "prod_3",
-        title: "VIP ROI Framework & Workbook™",
-        price: 997,
-        category: "Workbook",
-        shortDesc: "VIP ROI Framework™: The Complete AI-Powered Digital Business Operating System",
-        images: [
-            "https://res.cloudinary.com/dqo0bc4u/image/upload/v1722055000/vip_roi_framework.png"
-        ],
-        salesCopy: "VIP ROI Framework™: The Complete AI-Powered Digital Business Operating System",
-        salesPageUrl: ""
-    },
-    {
-        id: "prod_4",
-        title: "AI Business Employee™",
-        price: 1497,
-        category: "Software",
-        shortDesc: "The AI Sales Agent That Never Sleeps",
-        images: [
-            "https://res.cloudinary.com/dqo0bc4u/image/upload/v1722055000/ai_business_employee.png"
-        ],
-        salesCopy: "The AI Sales Agent That Never Sleeps",
-        salesPageUrl: ""
-    },
-    {
-        id: "prod_5",
-        title: "Premium SaaS Sales Inventory",
-        price: 1997,
-        category: "Software",
-        shortDesc: "Stop Guessing Your Profits. Take Total Control of Your Business Financially with ZERO Monthly Subscriptions.",
-        images: [
-            "https://res.cloudinary.com/dqo0bc4u/image/upload/v1722055000/saas_inventory.png"
-        ],
-        salesCopy: "Stop Guessing Your Profits. Take Total Control of Your Business Financially with ZERO Monthly Subscriptions.",
-        salesPageUrl: ""
-    },
-    {
-        id: "prod_6",
-        title: "KidzCreator System",
-        price: 499,
-        category: "Education",
-        shortDesc: "Help Kids Learn While You Earn — Earn as a Beginner",
-        images: [
-            "https://res.cloudinary.com/dqo0bc4u/image/upload/v1722055000/kidzcreator_system.png"
-        ],
-        salesCopy: "Help Kids Learn While You Earn — Earn as a Beginner",
-        salesPageUrl: ""
+    // --- FIREBASE CONFIGURATION ---
+    const firebaseConfig = {
+        apiKey: "AIzaSyDummyKeyReplaceIfNecessary",
+        authDomain: "digiteralevi.firebaseapp.com",
+        projectId: "digiteralevi",
+        storageBucket: "digiteralevi.appspot.com",
+        messagingSenderId: "123456789",
+        appId: "1:123456789:web:abcdef"
+    };
+    
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
     }
-];
+    const db = firebase.firestore();
 
-let cart = [];
-let currentCategory = 'all';
+    // --- APP STATE ---
+    let products = [];
+    let cart = [];
+    let coupons = { 'DIGITERA20': 20 };
+    let appliedDiscount = 0;
+    let selectedCategory = 'all';
+    let isAdmin = false;
+    let selectedFiles = [];
 
-// RENDER PRODUCTS
-function renderProducts() {
-    const grid = document.getElementById('shopProductsGrid');
-    const searchVal = document.getElementById('shopSearchInput').value.toLowerCase();
-    
-    grid.innerHTML = '';
-    
-    const filtered = products.filter(p => {
-        const matchesCategory = currentCategory === 'all' || p.category === currentCategory;
-        const matchesSearch = p.title.toLowerCase().includes(searchVal) || p.shortDesc.toLowerCase().includes(searchVal);
-        return matchesCategory && matchesSearch;
+    // --- SECRET ADMIN TRIGGER ---
+    let keySequence = '';
+    document.addEventListener('keydown', (e) => {
+        keySequence += e.key.toLowerCase();
+        if (keySequence.length > 10) keySequence = keySequence.slice(-10);
+        if (keySequence.includes('digitera')) {
+            isAdmin = true;
+            document.body.classList.add('admin-mode');
+            document.getElementById('secretAdminBtn').style.display = 'inline-block';
+        }
     });
 
-    filtered.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
-        card.onclick = () => openProductModal(p.id);
-        
-        card.innerHTML = `
-            <img class="product-thumbnail" src="${p.images[0] || 'https://via.placeholder.com/300x225'}" alt="${p.title}">
-            <h3>${p.title}</h3>
-            <div class="short-desc">${p.shortDesc}</div>
-            <div class="product-price">₱${p.price.toLocaleString()}</div>
-            <button class="add-to-cart-btn" onclick="addToCart(event, '${p.id}')">Add to Cart</button>
-            ${p.salesPageUrl ? `<a href="${p.salesPageUrl}" target="_blank" class="card-more-details-btn" onclick="event.stopPropagation()">👆 Click here for more details →</a>` : ''}
-        `;
-        grid.appendChild(card);
+    // --- INITIALIZATION ---
+    window.addEventListener('DOMContentLoaded', () => {
+        loadProducts();
+        loadCoupons();
+        initLiveViewerCounter();
+        initSocialProof();
     });
-}
 
-// CATEGORY FILTER
-function selectCategory(cat, btn) {
-    currentCategory = cat;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    renderProducts();
-}
-
-function filterShopProducts() {
-    renderProducts();
-}
-
-// MODAL CONTROLS
-function openProductModal(id) {
-    const prod = products.find(p => p.id === id);
-    if(!prod) return;
-
-    document.getElementById('modalTitle').innerText = prod.title;
-    document.getElementById('modalPrice').innerText = '₱' + prod.price.toLocaleString();
-    document.getElementById('modalSalesCopy').innerText = prod.salesCopy || prod.shortDesc;
-    document.getElementById('modalMainImg').src = prod.images[0] || 'https://via.placeholder.com/600x450';
-    
-    const moreBtn = document.getElementById('modalMoreDetailsBtn');
-    if (prod.salesPageUrl) {
-        moreBtn.href = prod.salesPageUrl;
-        moreBtn.style.display = 'block';
-    } else {
-        moreBtn.style.display = 'none';
-    }
-
-    const thumbsRow = document.getElementById('modalThumbsRow');
-    thumbsRow.innerHTML = '';
-    if(prod.images.length > 1) {
-        prod.images.forEach((img, idx) => {
-            const t = document.createElement('img');
-            t.className = `thumb-nav ${idx === 0 ? 'active' : ''}`;
-            t.src = img;
-            t.onclick = (e) => {
-                e.stopPropagation();
-                document.getElementById('modalMainImg').src = img;
-                document.querySelectorAll('.thumb-nav').forEach(el => el.classList.remove('active'));
-                t.classList.add('active');
-            };
-            thumbsRow.appendChild(t);
+    function loadProducts() {
+        db.collection('products').orderBy('order', 'asc').onSnapshot(snapshot => {
+            products = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            renderProducts();
+        }, () => {
+            // Fallback sample product if DB empty
+            if (products.length === 0) {
+                products = [{
+                    id: 'sample-1',
+                    name: 'All-In-One Digital Shop System',
+                    price: 299,
+                    shortDesc: 'Complete automated storefront system for selling digital assets.',
+                    category: 'Software',
+                    salesCopy: 'Build your storefront in minutes!',
+                    images: ['https://res.cloudinary.com/dqo0bc4u/image/upload/v1784271943/Digitera_profile_gif_logo_jd7njm.gif'],
+                    order: 0
+                }];
+                renderProducts();
+            }
         });
     }
 
-    document.getElementById('modalAddToCartBtn').onclick = (e) => addToCart(e, prod.id);
-    document.getElementById('productDetailModal').style.display = 'flex';
-}
+    function renderProducts() {
+        const grid = document.getElementById('shopProductsGrid');
+        const searchTerm = document.getElementById('shopSearchInput').value.toLowerCase();
+        grid.innerHTML = '';
 
-function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
-}
+        const filtered = products.filter(p => {
+            const matchesCat = (selectedCategory === 'all' || p.category === selectedCategory);
+            const matchesSearch = p.name.toLowerCase().includes(searchTerm) || (p.shortDesc && p.shortDesc.toLowerCase().includes(searchTerm));
+            return matchesCat && matchesSearch;
+        });
 
-function showPage(page, e) {
-    if(e) e.preventDefault();
-    if(page === 'about') openPageModal('aboutModal');
-    if(page === 'faqs') openPageModal('faqsModal');
-    if(page === 'contact') openPageModal('contactModal');
-}
+        filtered.forEach((p, idx) => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.setAttribute('draggable', isAdmin ? 'true' : 'false');
+            card.dataset.id = p.id;
+            card.dataset.index = idx;
 
-function openPageModal(id) { document.getElementById(id).style.display = 'flex'; }
-function closePageModal(id) { document.getElementById(id).style.display = 'none'; }
+            const mainImg = (p.images && p.images.length > 0) ? p.images[0] : 'https://via.placeholder.com/300x225?text=No+Image';
 
-// CART SYSTEM
-function addToCart(e, id) {
-    if(e) e.stopPropagation();
-    const prod = products.find(p => p.id === id);
-    if(prod) {
-        cart.push(prod);
-        updateCart();
-        alert(`Added "${prod.title}" to cart!`);
+            card.innerHTML = `
+                <div class="drag-handle">⋮⋮ Drag to reorder</div>
+                <img src="${mainImg}" class="product-thumbnail" alt="${p.name}">
+                <h3>${p.name}</h3>
+                <div class="short-desc">${p.shortDesc || ''}</div>
+                <div class="product-price">₱${p.price}</div>
+                <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart('${p.id}')">Add to Cart</button>
+                ${p.salesPageUrl ? `<a href="${p.salesPageUrl}" target="_blank" class="card-more-details-btn" onclick="event.stopPropagation()">More Details</a>` : ''}
+                ${isAdmin ? `
+                    <div class="admin-card-actions">
+                        <button class="edit-card-btn" onclick="event.stopPropagation(); editProduct('${p.id}')">Edit</button>
+                        <button class="delete-card-btn" onclick="event.stopPropagation(); deleteProduct('${p.id}')">Delete</button>
+                    </div>
+                ` : ''}
+            `;
+
+            card.addEventListener('click', () => openProductModal(p.id));
+
+            if (isAdmin) {
+                card.addEventListener('dragstart', handleDragStart);
+                card.addEventListener('dragover', handleDragOver);
+                card.addEventListener('drop', handleDrop);
+                card.addEventListener('dragend', handleDragEnd);
+            }
+
+            grid.appendChild(card);
+        });
     }
-}
 
-function updateCart() {
-    document.getElementById('cart-count').innerText = cart.length;
-    const list = document.getElementById('cartItemsContainer');
-    list.innerHTML = '';
-    let total = 0;
+    // --- DRAG AND DROP REORDERING ---
+    let dragSrcEl = null;
+    function handleDragStart(e) {
+        dragSrcEl = this;
+        this.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+    }
+    function handleDragOver(e) {
+        if (e.preventDefault) e.preventDefault();
+        this.classList.add('drag-over');
+        return false;
+    }
+    function handleDrop(e) {
+        if (e.stopPropagation) e.stopPropagation();
+        if (dragSrcEl !== this) {
+            const srcIdx = parseInt(dragSrcEl.dataset.index);
+            const targetIdx = parseInt(this.dataset.index);
+            const movedItem = products.splice(srcIdx, 1)[0];
+            products.splice(targetIdx, 0, movedItem);
+            
+            products.forEach((prod, index) => {
+                prod.order = index;
+                db.collection('products').doc(prod.id).update({ order: index }).catch(()=>{});
+            });
+            renderProducts();
+        }
+        return false;
+    }
+    function handleDragEnd() {
+        this.classList.remove('dragging');
+        document.querySelectorAll('.product-card').forEach(c => c.classList.remove('drag-over'));
+    }
 
-    cart.forEach((item, index) => {
-        total += item.price;
-        const div = document.createElement('div');
-        div.className = 'cart-item';
-        div.innerHTML = `
-            <div>
-                <strong>${item.title}</strong><br>
-                <small>₱${item.price.toLocaleString()}</small>
-            </div>
-            <button onclick="removeFromCart(${index})" style="background:none;border:none;color:red;cursor:pointer;">✕</button>
-        `;
-        list.appendChild(div);
-    });
+    // --- NAVIGATION & PAGES ---
+    function showPage(pageId, e) {
+        if (e) e.preventDefault();
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        if (e && e.target) e.target.classList.add('active');
 
-    document.getElementById('cartTotal').innerText = total.toLocaleString();
-}
+        if (pageId === 'about') openPageModal('aboutModal');
+        else if (pageId === 'faqs') openPageModal('faqsModal');
+        else if (pageId === 'contact') openPageModal('contactModal');
+    }
+    function openPageModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closePageModal(id) { document.getElementById(id).style.display = 'none'; }
 
-function removeFromCart(index) {
-    cart.splice(index, 1);
-    updateCart();
-}
+    // --- CATEGORIES & SEARCH ---
+    function selectCategory(cat, btn) {
+        selectedCategory = cat;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderProducts();
+    }
+    function filterShopProducts() { renderProducts(); }
 
-function toggleCart(e) {
-    if(e) e.stopPropagation();
-    document.getElementById('cartModal').classList.toggle('open');
-}
+    // --- PRODUCT DETAIL MODAL ---
+    function openProductModal(id) {
+        const p = products.find(prod => prod.id === id);
+        if (!p) return;
 
-// ADMIN MODE DETECT (?mode=admin)
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get('mode') === 'admin') {
-    document.getElementById('secretAdminBtn').style.display = 'block';
-    document.body.classList.add('admin-mode');
-}
+        document.getElementById('modalTitle').innerText = p.name;
+        document.getElementById('modalPrice').innerText = `₱${p.price}`;
+        document.getElementById('modalSalesCopy').innerText = p.salesCopy || '';
 
-// INITIAL RENDER
-renderProducts();
+        const mainImg = document.getElementById('modalMainImg');
+        const thumbsRow = document.getElementById('modalThumbsRow');
+        thumbsRow.innerHTML = '';
+
+        if (p.images && p.images.length > 0) {
+            mainImg.src = p.images[0];
+            p.images.forEach((imgUrl, i) => {
+                const thumb = document.createElement('img');
+                thumb.src = imgUrl;
+                thumb.className = `thumb-nav ${i === 0 ? 'active' : ''}`;
+                thumb.onclick = () => {
+                    mainImg.src = imgUrl;
+                    document.querySelectorAll('.thumb-nav').forEach(t => t.classList.remove('active'));
+                    thumb.classList.add('active');
+                };
+                thumbsRow.appendChild(thumb);
+            });
+        } else {
+            mainImg.src = 'https://via.placeholder.com/600x450?text=No+Image';
+        }
+
+        const addBtn = document.getElementById('modalAddToCartBtn');
+        addBtn.onclick = () => { addToCart(p.id); closeModal('productDetailModal'); };
+
+        const moreBtn = document.getElementById('modalMoreDetailsBtn');
+        if (p.salesPageUrl) {
+            moreBtn.href = p.salesPageUrl;
+            moreBtn.style.display = 'block';
+        } else {
+            moreBtn.style.display = 'none';
+        }
+
+        openModal('productDetailModal');
+    }
+
+    // --- CART SYSTEM ---
+    function toggleCart() {
+        document.getElementById('cartModal').classList.toggle('open');
+    }
+    function addToCart(id) {
+        const p = products.find(prod => prod.id === id);
+        if (p) {
+            cart.push(p);
+            updateCartUI();
+            toggleCart();
+        }
+    }
+    function removeFromCart(index) {
+        cart.splice(index, 1);
+        updateCartUI();
+    }
+    function updateCartUI() {
+        document.getElementById('cart-count').innerText = cart.length;
+        const list = document.getElementById('cartItemsList');
+        list.innerHTML = '';
+
+        let subtotal = 0;
+        cart.forEach((item, index) => {
+            subtotal += parseFloat(item.price);
+            const div = document.createElement('div');
+            div.className = 'cart-item';
+            div.innerHTML = `
+                <div class="cart-item-info">
+                    <h4>${item.name}</h4>
+                    <p>₱${item.price}</p>
+                </div>
+                <button class="remove-cart-item" onclick="removeFromCart(${index})">✕</button>
+            `;
+            list.appendChild(div);
+        });
+
+        const total = subtotal * (1 - appliedDiscount / 100);
+        document.getElementById('cartTotal').innerText = `₱${total.toFixed(2)}`;
+    }
+
+    function applyCartCoupon() {
+        const code = document.getElementById('cartCouponInput').value.trim().toUpperCase();
+        const msg = document.getElementById('couponMsg');
+        if (coupons[code]) {
+            appliedDiscount = coupons[code];
+            msg.className = 'coupon-msg success';
+            msg.innerText = `Coupon applied! ${appliedDiscount}% off.`;
+            updateCartUI();
+        } else {
+            msg.className = 'coupon-msg error';
+            msg.innerText = 'Invalid coupon code.';
+        }
+    }
+
+    function checkout() {
+        if (cart.length === 0) {
+            alert('Your cart is empty!');
+            return;
+        }
+        alert('Redirecting to PayMongo secure checkout...');
+        // PayMongo integration point
+    }
+
+    // --- GENERAL MODAL CONTROL ---
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    // --- ADMIN PRODUCT CREATION & EDITING ---
+    function handleImageSelection() {
+        const input = document.getElementById('adminImages');
+        selectedFiles = Array.from(input.files).slice(0, 10);
+        const preview = document.getElementById('uploadPreview');
+        preview.innerText = `${selectedFiles.length} file(s) selected`;
+    }
+
+    function saveAdminProduct() {
+        const id = document.getElementById('adminEditProductId').value;
+        const name = document.getElementById('adminName').value.trim();
+        const price = parseFloat(document.getElementById('adminPrice').value);
+        const shortDesc = document.getElementById('adminShortDesc').value.trim();
+        const category = document.getElementById('adminCategory').value;
+        const salesCopy = document.getElementById('adminSalesCopy').value.trim();
+        const accessLink = document.getElementById('adminAccessLink').value.trim();
+        const salesPageUrl = document.getElementById('adminSalesPageUrl').value.trim();
+
+        if (!name || isNaN(price)) {
+            alert('Please enter a product name and valid price.');
+            return;
+        }
+
+        const productData = {
+            name,
+            price,
+            shortDesc,
+            category,
+            salesCopy,
+            accessLink,
+            salesPageUrl,
+            images: ['https://res.cloudinary.com/dqo0bc4u/image/upload/v1784271943/Digitera_profile_gif_logo_jd7njm.gif'], // Default placeholder
+            order: products.length
+        };
+
+        if (id) {
+            db.collection('products').doc(id).update(productData).then(() => {
+                closeModal('adminModal');
+                resetAdminForm();
+            });
+        } else {
+            db.collection('products').add(productData).then(() => {
+                closeModal('adminModal');
+                resetAdminForm();
+            });
+        }
+    }
+
+    function editProduct(id) {
+        const p = products.find(prod => prod.id === id);
+        if (!p) return;
+        document.getElementById('adminEditProductId').value = p.id;
+        document.getElementById('adminName').value = p.name;
+        document.getElementById('adminPrice').value = p.price;
+        document.getElementById('adminShortDesc').value = p.shortDesc || '';
+        document.getElementById('adminCategory').value = p.category || 'all';
+        document.getElementById('adminSalesCopy').value = p.salesCopy || '';
+        document.getElementById('adminAccessLink').value = p.accessLink || '';
+        document.getElementById('adminSalesPageUrl').value = p.salesPageUrl || '';
+        document.getElementById('adminModalTitle').innerText = 'Edit Digital Asset';
+        openModal('adminModal');
+    }
+
+    function deleteProduct(id) {
+        if (confirm('Are you sure you want to delete this product?')) {
+            db.collection('products').doc(id).delete();
+        }
+    }
+
+    function resetAdminForm() {
+        document.getElementById('adminEditProductId').value = '';
+        document.getElementById('adminName').value = '';
+        document.getElementById('adminPrice').value = '';
+        document.getElementById('adminShortDesc').value = '';
+        document.getElementById('adminSalesCopy').value = '';
+        document.getElementById('adminAccessLink').value = '';
+        document.getElementById('adminSalesPageUrl').value = '';
+        document.getElementById('adminModalTitle').innerText = 'Add New Digital Asset';
+    }
+
+    // --- HERO SETTINGS ---
+    function previewHeroImage(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('heroImagePreview').innerHTML = `<img src="${e.target.result}" style="max-width:100%;height:120px;object-fit:cover;border-radius:8px;">`;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function saveHeroSettings() {
+        const headline = document.getElementById('heroHeadlineInput').value;
+        const tagline = document.getElementById('heroTaglineInput').value;
+        if (headline) document.getElementById('heroHeadline').innerText = headline;
+        if (tagline) document.getElementById('heroTagline').innerText = tagline;
+        closeModal('heroSettingsModal');
+    }
+
+    // --- COUPON MANAGEMENT ---
+    function loadCoupons() {
+        db.collection('coupons').onSnapshot(snapshot => {
+            snapshot.docs.forEach(doc => {
+                coupons[doc.id] = doc.data().discount;
+            });
+            renderCouponList();
+        }, ()=>{});
+    }
+
+    function addCoupon() {
+        const code = document.getElementById('couponCodeInput').value.trim().toUpperCase();
+        const discount = parseFloat(document.getElementById('couponDiscountInput').value);
+        if (code && !isNaN(discount)) {
+            coupons[code] = discount;
+            db.collection('coupons').doc(code).set({ discount });
+            document.getElementById('couponCodeInput').value = '';
+            document.getElementById('couponDiscountInput').value = '';
+            renderCouponList();
+        }
+    }
+
+    function renderCouponList() {
+        const container = document.getElementById('couponList');
+        if (!container) return;
+        container.innerHTML = '<h4>Active Coupons:</h4>';
+        for (let code in coupons) {
+            container.innerHTML += `<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;"><span><strong>${code}</strong> (${coupons[code]}% OFF)</span></div>`;
+        }
+    }
+
+    // --- LIVE VIEWER & SOCIAL PROOF WIDGETS ---
+    function initLiveViewerCounter() {
+        const countEl = document.getElementById('live-viewer-count');
+        setInterval(() => {
+            let current = parseInt(countEl.innerText);
+            let change = Math.floor(Math.random() * 5) - 2;
+            let next = Math.max(12, current + change);
+            countEl.innerText = next;
+        }, 4000);
+    }
+
+    function initSocialProof() {
+        const popup = document.getElementById('socialProofPopup');
+        const locations = ['Manila', 'Quezon City', 'Cebu', 'Davao', 'Pangasinan', 'Cavite', 'Iloilo'];
+        const buyers = ['Anna', 'Mark', 'Clarisse', 'Dave', 'Sonia', 'Paolo'];
+
+        setInterval(() => {
+            if (products.length === 0) return;
+            const randomProd = products[Math.floor(Math.random() * products.length)];
+            document.getElementById('spBuyer').innerText = buyers[Math.floor(Math.random() * buyers.length)];
+            document.getElementById('spLocation').innerText = locations[Math.floor(Math.random() * locations.length)];
+            document.getElementById('spProduct').innerText = randomProd.name;
+            document.getElementById('spTime').innerText = `${Math.floor(Math.random() * 10) + 1} minutes ago`;
+
+            popup.classList.add('show');
+            setTimeout(() => popup.classList.remove('show'), 4000);
+        }, 15000);
+    }
 </script>
 
 </body>
