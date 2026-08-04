@@ -378,602 +378,196 @@
             <div>
                 <h4 style="margin:0 0 8px 0;">📸 Cover Photo</h4>
                 <p style="font-size:12px;color:#888;margin:0 0 10px 0;">✅ Recommended: <strong>1920 x 600px</strong> landscape<br>✅ Max file size: <strong>5MB</strong><br>✅ Format: JPG, PNG, or WebP</p>
-                <label class="file-upload-label">📁 Upload Cover Photo<input type="file" id="heroCoverInput" accept="image/*" style="display:none;" onchange="previewHeroCover(event)"></label>
-                <div id="heroCoverPreview" style="margin-top:10px;display:none;">
-                    <img id="heroCoverPreviewImg" style="width:100%;border-radius:8px;max-height:150px;object-fit:cover;" src="">
-                    <button onclick="removeHeroCover()" style="margin-top:8px;background:#FCE8E6;border:1px solid #F4B4B0;color:#C5221F;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;width:100%;">🗑️ Remove Cover Photo</button>
-                </div>
+                <label class="file-upload-label">📁 Choose Cover Image<input type="file" id="heroImageInput" accept="image/*" style="display:none;" onchange="handleHeroImageSelection()"></label>
+                <div id="heroImagePreview" style="margin-top:8px;font-size:13px;color:#666;text-align:center;">No new file selected.</div>
             </div>
             <div>
-                <h4 style="margin:0 0 8px 0;">🌑 Overlay Darkness</h4>
-                <input type="range" id="heroOverlayRange" min="0" max="90" value="45" style="width:100%;" oninput="document.getElementById('overlayValue').textContent=this.value">
-                <p style="font-size:12px;color:#888;margin:4px 0 0 0;">Current: <span id="overlayValue">45</span>%</p>
+                <h4 style="margin:10px 0 5px 0;">✍️ Headline Title</h4>
+                <input type="text" id="heroHeadlineInput" class="admin-input" placeholder="e.g. Premium Digital Business Assets">
             </div>
             <div>
-                <h4 style="margin:0 0 8px 0;">✍️ Headline Text</h4>
-                <input type="text" id="heroHeadlineInput" class="admin-input" value="Premium Digital Business Assets">
+                <h4 style="margin:10px 0 5px 0;">📝 Tagline / Subtitle</h4>
+                <textarea id="heroTaglineInput" class="admin-textarea" style="height:70px;" placeholder="e.g. Establish your storefront..."></textarea>
             </div>
-            <div>
-                <h4 style="margin:0 0 8px 0;">📝 Tagline Text</h4>
-                <input type="text" id="heroTaglineInput" class="admin-input" value="Establish your storefront, scale your reach, and automate your sales with high-converting assets.">
-            </div>
-            <div>
-                <h4 style="margin:0 0 8px 0;">🔤 Headline Font</h4>
-                <select id="heroFontSelect" class="admin-input" style="background:var(--card-bg);" onchange="document.getElementById('heroFontPreview').style.fontFamily=this.value">
-                    <option value="'Segoe UI',sans-serif">Default (Segoe UI)</option>
-                    <option value="'Playfair Display',serif">Playfair Display — Classic Luxury</option>
-                    <option value="'Cormorant Garamond',serif">Cormorant Garamond — Elegant Editorial</option>
-                    <option value="'Cinzel',serif">Cinzel — Bold Royal</option>
-                    <option value="'EB Garamond',serif">EB Garamond — Timeless Serif</option>
-                    <option value="'Libre Baskerville',serif">Libre Baskerville — Premium Bold</option>
-                    <option value="'Italiana',serif">Italiana — Sleek Italian Style</option>
-                </select>
-                <p id="heroFontPreview" style="font-size:22px;margin:10px 0 0 0;color:var(--text-purple);">The quick brown fox jumps over the lazy dog</p>
-            </div>
-            <div>
-                <h4 style="margin:0 0 8px 0;">🎨 Text Color (when image is set)</h4>
-                <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                    <button onclick="setHeroTextColor('#ffffff',this)" style="background:#333;color:#fff;border:2px solid #BF953F;padding:8px 16px;border-radius:6px;cursor:pointer;">⬜ White</button>
-                    <button onclick="setHeroTextColor('#FCF6BA',this)" style="background:#333;color:#FCF6BA;border:1px solid #555;padding:8px 16px;border-radius:6px;cursor:pointer;">✨ Gold</button>
-                    <button onclick="setHeroTextColor('#4A2E80',this)" style="background:#F7F3EB;color:#4A2E80;border:1px solid #555;padding:8px 16px;border-radius:6px;cursor:pointer;">💜 Purple</button>
-                    <button onclick="setHeroTextColor('#000000',this)" style="background:#fff;color:#000;border:1px solid #555;padding:8px 16px;border-radius:6px;cursor:pointer;">⬛ Black</button>
-                </div>
-                <input type="hidden" id="heroTextColor" value="#ffffff">
-            </div>
-            <button class="add-to-cart-btn" onclick="saveHeroSettings()" style="background:var(--gold-shine);margin-top:10px;">💾 Save Hero Banner Settings</button>
+            <button class="add-to-cart-btn" id="saveHeroBtn" onclick="saveHeroSettings()" style="background:var(--gold-shine);margin-top:10px;">💾 Save Banner Settings</button>
         </div>
     </div>
 </div>
 
-<!-- COUPON MODAL -->
-<div class="modal-overlay" id="couponModal">
-    <div class="modal-content">
-        <button class="close-btn" onclick="closeModal('couponModal')">✕</button>
-        <h2>🎟️ Coupon Manager</h2>
-        <div class="admin-form-grid">
-            <input type="text" id="couponCode" class="admin-input" placeholder="Coupon Code (e.g. SAVE200, LEVI20)">
-            <select id="couponType" class="admin-input" style="background:var(--card-bg);">
-                <option value="fixed">Fixed Amount (₱)</option>
-                <option value="percent">Percentage (%)</option>
-            </select>
-            <input type="number" id="couponValue" class="admin-input" placeholder="Discount Value (e.g. 200 or 20)">
-            <button class="add-to-cart-btn" onclick="saveCoupon()" style="background:var(--gold-shine);">Save Coupon</button>
-        </div>
-        <hr style="margin:20px 0;border:0;border-top:1px solid #F0EAE1;">
-        <h3 style="margin-bottom:10px;">Active Coupons</h3>
-        <div id="couponList"></div>
-    </div>
-</div>
-
-<!-- ORDERS DASHBOARD MODAL -->
+<!-- ORDERS MODAL -->
 <div class="modal-overlay" id="ordersModal">
     <div class="modal-content" style="max-width:900px;">
         <button class="close-btn" onclick="closeModal('ordersModal')">✕</button>
         <h2>📊 Orders Dashboard</h2>
-        <div style="padding:10px 0;">
-            <div class="orders-stats-grid">
-                <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-value" id="statTotalRevenue">₱0</div><div class="stat-label">Total Revenue</div></div>
-                <div class="stat-card"><div class="stat-icon">📦</div><div class="stat-value" id="statTotalOrders">0</div><div class="stat-label">Total Orders</div></div>
-                <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-value" id="statUniqueCustomers">0</div><div class="stat-label">Unique Customers</div></div>
-                <div class="stat-card"><div class="stat-icon">⭐</div><div class="stat-value" id="statAvgOrder">₱0</div><div class="stat-label">Avg Order Value</div></div>
+        
+        <div class="orders-stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-value" id="totalRevenue">₱0.00</div>
+                <div class="stat-label">Total Revenue</div>
             </div>
-            <div class="orders-table-wrap">
-                <div class="orders-table-header"><h3>📋 Recent Orders</h3><span id="ordersCount" style="font-size:12px;color:#888;"></span></div>
-                <div style="overflow-x:auto;">
-                    <table class="orders-table">
-                        <thead><tr><th>Date</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th></tr></thead>
-                        <tbody id="ordersTableBody"><tr><td colspan="6" class="no-orders">Loading orders...</td></tr></tbody>
-                    </table>
-                </div>
+            <div class="stat-card">
+                <div class="stat-icon">📦</div>
+                <div class="stat-value" id="totalOrders">0</div>
+                <div class="stat-label">Total Orders</div>
             </div>
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-value" id="uniqueCustomers">0</div>
+                <div class="stat-label">Unique Customers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⭐</div>
+                <div class="stat-value" id="avgOrderValue">₱0.00</div>
+                <div class="stat-label">Avg Order Value</div>
+            </div>
+        </div>
+
+        <div class="orders-table-wrap">
+            <div class="orders-table-header">
+                <h3>📋 Recent Orders</h3>
+            </div>
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Customer</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="ordersTableBody">
+                    <tr>
+                        <td colspan="5" class="no-orders">👎 No orders yet!</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
-<!-- CART -->
+<!-- CART SLIDE-OUT -->
 <div class="cart-modal" id="cartModal">
     <div style="display:flex;justify-content:space-between;align-items:center;">
-        <h2>Your Cart</h2>
-        <button onclick="toggleCart(event)" style="background:none;border:none;font-size:20px;cursor:pointer;">✕</button>
+        <h3>🛒 Your Cart</h3>
+        <button class="close-btn" onclick="toggleCart(event)" style="position:static;">✕</button>
     </div>
-    <div class="cart-items-list" id="cartItems"></div>
-    <div style="border-top:2px solid var(--btn-lilac);padding-top:20px;">
-        <div class="coupon-section">
-            <label>🎟️ Have a coupon?</label>
-            <div class="coupon-input-row">
-                <input type="text" id="couponInput" class="coupon-input" placeholder="Enter coupon code">
-                <button class="coupon-apply-btn" onclick="applyCoupon()">Apply</button>
-            </div>
-            <div id="couponMsg" class="coupon-msg"></div>
+    <div class="cart-items-list" id="cartItemsContainer"></div>
+    <div class="coupon-section">
+        <label>🎟️ Have a Coupon Code?</label>
+        <div class="coupon-input-row">
+            <input type="text" id="cartCouponInput" class="coupon-input" placeholder="ENTER CODE">
+            <button class="coupon-apply-btn" onclick="applyCartCoupon()">Apply</button>
         </div>
-        <h3>Subtotal: ₱<span id="cartSubtotal">0.00</span></h3>
-        <h3 id="discountRow" style="display:none;color:#2ecc71;font-size:15px;">Discount: -₱<span id="discountAmount">0.00</span> (<span id="couponCodeApplied"></span>)</h3>
-        <h3>Total: ₱<span id="cartTotal">0.00</span></h3>
-        <button style="background:var(--gold-shine);border:none;padding:15px;border-radius:8px;font-weight:bold;width:100%;cursor:pointer;" onclick="processCheckout()">Proceed to Checkout</button>
+        <div id="cartCouponMsg" class="coupon-msg"></div>
+    </div>
+    <div style="border-top:1px solid #eee;padding-top:15px;margin-top:10px;">
+        <h4>Total: <span id="cartTotal">₱0.00</span></h4>
+        <button class="add-to-cart-btn" onclick="checkoutCart()" style="background:var(--gold-shine);color:#4A2E80;">Checkout Now</button>
     </div>
 </div>
 
-<!-- LEGAL MODALS -->
-<div class="legal-modal-overlay" id="termsModal"><div class="legal-modal-content"><button class="close-legal-btn" onclick="closeModal('termsModal')">✕</button><h2>Terms & Conditions</h2><p>All products sold on this platform are digital business assets.</p></div></div>
-<div class="legal-modal-overlay" id="privacyModal"><div class="legal-modal-content"><button class="close-legal-btn" onclick="closeModal('privacyModal')">✕</button><h2>Privacy Policy</h2><p>We collect basic transaction information solely for deployment processing.</p></div></div>
-<div class="legal-modal-overlay" id="refundModal"><div class="legal-modal-content"><button class="close-legal-btn" onclick="closeModal('refundModal')">✕</button><h2>Refund & Fulfillment Policy</h2><p>Digital downloads are delivered instantly upon validation check.</p></div></div>
-
 <!-- TESTIMONIALS -->
-<section class="testimonials-section">
-    <div class="section-title"><h2>What Our Creators Say</h2><p>Real experiences from people who launched with Digitera</p></div>
-    <div class="marquee-wrapper"><div class="marquee-content" id="marquee-track"></div></div>
-</section>
+<div class="testimonials-section">
+    <div class="section-title">
+        <h2>What Our Customers Say</h2>
+        <p>Real feedback from creators and digital entrepreneurs</p>
+    </div>
+    <div class="marquee-wrapper">
+        <div class="marquee-content">
+            <div class="testimonial-card">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p class="review-text">" Sobrang ganda ng Canva templates! Integrated seamlessly with my brand in minutes."</p>
+                <div class="reviewer-info"><p class="reviewer-name">Maria Santos</p><p class="reviewer-tag">Verified Buyer</p></div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p class="review-text">" The Reels vault saved me weeks of content creation effort. Highly recommended!"</p>
+                <div class="reviewer-info"><p class="reviewer-name">John D.</p><p class="reviewer-tag">Digital Marketer</p></div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p class="review-text">" Outstanding support and top tier quality digital products. Digitera Levi is legit!"</p>
+                <div class="reviewer-info"><p class="reviewer-name">Sarah K.</p><p class="reviewer-tag">Content Creator</p></div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">⭐⭐⭐⭐⭐</div>
+                <p class="review-text">" Instant delivery, clear guides. Will definitely buy more tools soon."</p>
+                <div class="reviewer-info"><p class="reviewer-name">Alex M.</p><p class="reviewer-tag">Shop Owner</p></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SOCIAL PROOF POPUP -->
+<div class="social-proof-container" id="socialProofPopup">
+    <div class="social-proof-content">
+        <p class="buyer-text"><strong id="spBuyer">Anna P.</strong> from Manila</p>
+        <p class="product-text">just purchased <strong id="spProduct">Digital Empire Bible</strong></p>
+        <span class="time-ago" id="spTime">2 minutes ago</span>
+    </div>
+</div>
 
 <footer>
     <div class="footer-links">
-        <a onclick="openModal('termsModal')">Terms & Conditions</a>
-        <a onclick="openModal('privacyModal')">Privacy Policy</a>
-        <a onclick="openModal('refundModal')">Refund Policy</a>
+        <a onclick="showPage('about',event)">About Us</a>
+        <a onclick="showPage('faqs',event)">FAQs</a>
+        <a onclick="showPage('contact',event)">Contact</a>
     </div>
-    <p>&copy; 2026 Digitera Levi. All Rights Reserved.</p>
+    <p>© 2026 Digitera Levi Shop. All rights reserved.</p>
 </footer>
 
 <script>
-    // ============================================
-    // CORE FUNCTIONS
-    // ============================================
-    function openModal(id){document.getElementById(id).style.display='flex';if(id==='couponModal')loadCoupons();if(id==='ordersModal')loadOrders();}
-    function closeModal(id){document.getElementById(id).style.display='none';}
-    function showPage(page,e){document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));if(e&&e.target)e.target.classList.add('active');if(page==='home')return;const modals={about:'aboutModal',faqs:'faqsModal',contact:'contactModal'};if(modals[page])openModal(modals[page]);}
-    function closePageModal(id){closeModal(id);document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));document.querySelector('.nav-link').classList.add('active');}
-
-    // ============================================
-    // FIREBASE CONFIG
-    // ============================================
-    const CLOUDINARY_URL="https://api.cloudinary.com/v1_1/dqo0bc4u/image/upload";
-    const CLOUDINARY_PRESET="hetpqj8w";
-    const firebaseConfig={apiKey:"AIzaSyDFQcwCJxIkTX0CCz8kaF7Sp2_hZNE1dIs",authDomain:"digitera-levi-shop.firebaseapp.com",projectId:"digitera-levi-shop",storageBucket:"digitera-levi-shop.firebasestorage.app",messagingSenderId:"63166329156",appId:"1:63166329156:web:0b797f9438a98c84e46711",measurementId:"G-NX45XW9X8Q"};
-    firebase.initializeApp(firebaseConfig);
-    const db=firebase.firestore();
-
-    // ============================================
-    // STATE
-    // ============================================
-    let cart=JSON.parse(localStorage.getItem('digitera_cart'))||[];
-    let products=[];
-    let selectedFiles=[];
-    let isAdminMode=false;
-    let selectedCategoryGlobal='all';
-    let appliedCoupon=null;
-    let dragSrcId=null;
-    let heroCoverFile=null;
-
-    // ============================================
-    // INIT
-    // ============================================
-    document.addEventListener("DOMContentLoaded",()=>{
-        checkAdminMode();
-        fetchCloudProducts();
-        updateCartUI();
-        checkProductUrlParam();
-        loadHeroSettings();
-    });
-
-    function checkAdminMode(){
-        const urlParams=new URLSearchParams(window.location.search);
-        if(urlParams.get('mode')==='admin'){isAdminMode=true;document.getElementById("secretAdminBtn").style.display="block";document.body.classList.add('admin-mode');}
+  // Global Storefront Initialization Script
+  function dgtInit() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('mode') === 'admin') {
+      const adminBtn = document.getElementById('secretAdminBtn');
+      if (adminBtn) adminBtn.style.display = 'block';
     }
+  }
 
-    // ============================================
-    // FILTERING
-    // ============================================
-    function selectCategory(category,btn){selectedCategoryGlobal=category;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');filterShopProducts();}
-    function filterShopProducts(){const q=document.getElementById('shopSearchInput').value.toLowerCase().trim();document.querySelectorAll('.product-card').forEach(card=>{const title=card.querySelector('h3').textContent.toLowerCase();const desc=card.querySelector('.short-desc').textContent.toLowerCase();const cat=card.getAttribute('data-category')||'all';card.style.display=((title.includes(q)||desc.includes(q))&&(selectedCategoryGlobal==='all'||cat===selectedCategoryGlobal))?'flex':'none';});}
+  if (document.readyState === "loading") {
+    document.addEventListener('DOMContentLoaded', dgtInit);
+  } else {
+    dgtInit();
+  }
 
-    // ============================================
-    // URL SLUG / PRODUCT PARAM
-    // ============================================
-    function makeSlug(text){return text.toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-');}
-    document.addEventListener('click',(e)=>{const card=e.target.closest('.product-card');if(card){const t=card.querySelector('h3');if(t)window.location.hash=makeSlug(t.textContent);}if(e.target.closest('#modalCloseBtn')||(e.target.classList.contains('modal-overlay')&&e.target.id==='productDetailModal')){setTimeout(()=>{const m=document.getElementById('productDetailModal');if(m&&m.style.display==='none')history.replaceState(null,null,' ');},150);}});
-    function checkURLHashAndOpenProduct(){const hash=window.location.hash.replace('#','');if(hash){const ci=setInterval(()=>{const cards=document.querySelectorAll('.product-card');if(cards.length>0){clearInterval(ci);cards.forEach(card=>{const t=card.querySelector('h3');if(t&&makeSlug(t.textContent)===hash)card.click();});}},400);setTimeout(()=>clearInterval(ci),6000);}}
-    function checkProductUrlParam(){const urlParams=new URLSearchParams(window.location.search);const pid=urlParams.get('product');if(pid){const ci=setInterval(()=>{if(products.length>0){clearInterval(ci);openProductModal(pid);}},400);setTimeout(()=>clearInterval(ci),6000);}}
-    window.addEventListener('hashchange',checkURLHashAndOpenProduct);
-    window.addEventListener('DOMContentLoaded',checkURLHashAndOpenProduct);
-
-    // ============================================
-    // PRODUCTS FETCH & RENDER
-    // ============================================
-    function fetchCloudProducts(){db.collection("products").onSnapshot((snapshot)=>{products=[];snapshot.forEach((doc)=>{products.push({id:doc.id,...doc.data()});});products.sort((a,b)=>{if(a.sortOrder!==undefined&&b.sortOrder!==undefined)return a.sortOrder-b.sortOrder;if(a.sortOrder!==undefined)return -1;if(b.sortOrder!==undefined)return 1;return(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0);});renderShopProducts();});}
-
-    function renderShopProducts(){
-        const grid=document.getElementById("shopProductsGrid");
-        if(!grid)return;grid.innerHTML="";
-        if(products.length===0){grid.innerHTML=`<p style="text-align:center;color:#888;width:100%;">No assets active in your store.</p>`;return;}
-        products.forEach(p=>{
-            const card=document.createElement("div");
-            card.className="product-card";card.setAttribute('data-id',p.id);
-            if(p.category)card.setAttribute('data-category',p.category);
-            card.onclick=(e)=>{if(!e.target.classList.contains('add-to-cart-btn')&&!e.target.classList.contains('edit-card-btn')&&!e.target.classList.contains('delete-card-btn')&&!e.target.classList.contains('card-more-details-btn')&&!e.target.classList.contains('drag-handle')){openProductModal(p.id);}};
-            if(isAdminMode){
-                card.draggable=true;
-                card.addEventListener('dragstart',(e)=>{dragSrcId=p.id;card.classList.add('dragging');e.dataTransfer.effectAllowed='move';});
-                card.addEventListener('dragend',()=>{card.classList.remove('dragging');document.querySelectorAll('.product-card').forEach(c=>c.classList.remove('drag-over'));});
-                card.addEventListener('dragover',(e)=>{e.preventDefault();if(dragSrcId!==p.id)card.classList.add('drag-over');});
-                card.addEventListener('dragleave',()=>card.classList.remove('drag-over'));
-                card.addEventListener('drop',(e)=>{e.preventDefault();card.classList.remove('drag-over');if(dragSrcId&&dragSrcId!==p.id)reorderProducts(dragSrcId,p.id);});
-            }
-            let adminHTML="";
-            if(isAdminMode){adminHTML=`<div class="drag-handle">☰ Drag to reorder</div><div class="admin-card-actions"><button class="edit-card-btn" onclick="editProduct('${p.id}',event)">✏️ Edit</button><button class="delete-card-btn" onclick="deleteProduct('${p.id}',event)">🗑️</button></div>`;}
-            const moreBtn=(p.salesPageUrl&&p.salesPageUrl.trim()!=='')?`<a href="${p.salesPageUrl}" target="_blank" class="card-more-details-btn">👆 Click here for more details &nbsp;→</a>`:'';
-            const imgSrc=(p.images&&p.images.length>0)?p.images[0]:'https://via.placeholder.com/300';
-            card.innerHTML=`<img src="${imgSrc}" class="product-thumbnail" alt="${p.name}"><h3>${p.name}</h3><p class="short-desc">${p.shortDesc}</p><div class="product-price">₱${p.price.toFixed(2)}</div><button class="add-to-cart-btn" onclick="addToCart(event,'${p.id}')">Add to Cart</button>${moreBtn}${adminHTML}`;
-            grid.appendChild(card);
-        });
-        filterShopProducts();
+  function openModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) {
+      modal.style.display = 'flex';
+      if (id === 'ordersModal') {
+        loadOrdersDashboard();
+      }
     }
+  }
 
-    async function reorderProducts(draggedId,targetId){
-        const di=products.findIndex(p=>p.id===draggedId);const ti=products.findIndex(p=>p.id===targetId);
-        if(di===-1||ti===-1)return;
-        const[dp]=products.splice(di,1);products.splice(ti,0,dp);
-        const batch=db.batch();products.forEach((p,i)=>batch.update(db.collection('products').doc(p.id),{sortOrder:i}));
-        try{await batch.commit();renderShopProducts();}catch(err){console.error('Reorder error:',err);}
-    }
+  function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) modal.style.display = 'none';
+  }
 
-    // ============================================
-    // PRODUCT MODAL
-    // ============================================
-    function openProductModal(pid){
-        const p=products.find(prod=>prod.id===pid);if(!p)return;
-        document.getElementById("modalTitle").innerText=p.name;
-        document.getElementById("modalPrice").innerText=`₱${p.price.toFixed(2)}`;
-        document.getElementById("modalSalesCopy").innerText=p.salesCopy;
-        const mainImg=document.getElementById("modalMainImg");mainImg.src=p.images[0];
-        const thumbsRow=document.getElementById("modalThumbsRow");thumbsRow.innerHTML="";
-        p.images.forEach((url,i)=>{const thumb=document.createElement("img");thumb.src=url;thumb.className=`thumb-nav ${i===0?'active':''}`;thumb.onclick=()=>{mainImg.src=url;document.querySelectorAll(".thumb-nav").forEach(t=>t.classList.remove("active"));thumb.classList.add("active");};thumbsRow.appendChild(thumb);});
-        document.getElementById("modalAddToCartBtn").onclick=(e)=>addToCart(e,p.id);
-        const mdb=document.getElementById("modalMoreDetailsBtn");
-        if(p.salesPageUrl&&p.salesPageUrl.trim()!==''){mdb.style.display="inline-block";mdb.onclick=()=>window.open(p.salesPageUrl,'_blank');}else{mdb.style.display="none";}
-        openModal("productDetailModal");
-    }
+  function showPage(page, event) {
+    if (event) event.preventDefault();
+    if (page === 'home') return;
+    openModal(page + 'Modal');
+  }
 
-    // ============================================
-    // ADMIN - PRODUCTS
-    // ============================================
-    function handleImageSelection(){const fi=document.getElementById("adminImages");const pc=document.getElementById("uploadPreview");if(fi.files.length>10){alert("Max 10 images!");fi.value="";return;}selectedFiles=Array.from(fi.files);pc.innerHTML=selectedFiles.length>0?`Selected ${selectedFiles.length} images ready.`:"No images selected yet (Max 10).";}
+  function closePageModal(id) {
+    closeModal(id);
+  }
 
-    async function saveAdminProduct(){
-        const pid=document.getElementById("adminEditProductId").value;
-        const name=document.getElementById("adminName").value;
-        const price=parseFloat(document.getElementById("adminPrice").value);
-        const shortDesc=document.getElementById("adminShortDesc").value;
-        const salesCopy=document.getElementById("adminSalesCopy").value;
-        const accessLink=document.getElementById("adminAccessLink").value;
-        const category=document.getElementById("adminCategory").value;
-        const salesPageUrl=document.getElementById("adminSalesPageUrl").value.trim();
-        if(!name||isNaN(price)||!shortDesc||!salesCopy||!accessLink){alert("Paki-kumpleto ang lahat ng fields!");return;}
-        let urls=[];
-        if(selectedFiles.length>0){
-            alert(`Uploading ${selectedFiles.length} images... Please wait.`);
-            for(let file of selectedFiles){const fd=new FormData();fd.append("file",file);fd.append("upload_preset",CLOUDINARY_PRESET);try{const r=await fetch(CLOUDINARY_URL,{method:"POST",body:fd});const d=await r.json();if(d.secure_url)urls.push(d.secure_url);}catch(err){console.error(err);}}
-        }
-        const data={name,price,shortDesc,salesCopy,accessLink,category,salesPageUrl};
-        try{
-            if(pid){if(urls.length>0)data.images=urls;await db.collection("products").doc(pid).update(data);alert("Product updated!");}
-            else{data.images=urls.length>0?urls:["https://via.placeholder.com/300"];data.createdAt=firebase.firestore.FieldValue.serverTimestamp();await db.collection("products").add(data);alert("Product published!");}
-            closeModal('adminModal');resetAdminForm();
-        }catch(e){alert("Error: "+e.message);}
-    }
-
-    function editProduct(pid,event){if(event)event.stopPropagation();const p=products.find(prod=>prod.id===pid);if(!p)return;document.getElementById("adminModalTitle").innerText="Edit Digital Asset";document.getElementById("adminSubmitBtn").innerText="Update Product";document.getElementById("adminEditProductId").value=p.id;document.getElementById("adminName").value=p.name;document.getElementById("adminPrice").value=p.price;document.getElementById("adminShortDesc").value=p.shortDesc;document.getElementById("adminSalesCopy").value=p.salesCopy;document.getElementById("adminAccessLink").value=p.accessLink;document.getElementById("adminCategory").value=p.category||'all';document.getElementById("adminSalesPageUrl").value=p.salesPageUrl||'';document.getElementById("editImageNotice").style.display="block";openModal('adminModal');}
-
-    async function deleteProduct(pid,event){if(event)event.stopPropagation();if(!confirm("Delete this product permanently?"))return;try{await db.collection("products").doc(pid).delete();alert("Product deleted.");}catch(e){alert("Error: "+e.message);}}
-
-    function resetAdminForm(){document.getElementById("adminModalTitle").innerText="Add New Digital Asset";document.getElementById("adminSubmitBtn").innerText="Create & Publish Product";["adminEditProductId","adminName","adminPrice","adminShortDesc","adminSalesCopy","adminAccessLink","adminSalesPageUrl"].forEach(id=>document.getElementById(id).value="");document.getElementById("adminCategory").value="all";document.getElementById("editImageNotice").style.display="none";selectedFiles=[];document.getElementById("uploadPreview").innerHTML="No images selected yet (Max 10).";}
-
-    // ============================================
-    // HERO BANNER SETTINGS
-    // ============================================
-    function previewHeroCover(event){const file=event.target.files[0];if(!file)return;heroCoverFile=file;const reader=new FileReader();reader.onload=(e)=>{document.getElementById('heroCoverPreviewImg').src=e.target.result;document.getElementById('heroCoverPreview').style.display='block';};reader.readAsDataURL(file);}
-    function removeHeroCover(){heroCoverFile=null;document.getElementById('heroCoverInput').value='';document.getElementById('heroCoverPreview').style.display='none';}
-    function setHeroTextColor(color,btn){document.getElementById('heroTextColor').value=color;document.querySelectorAll('#heroSettingsModal button[onclick^="setHeroTextColor"]').forEach(b=>b.style.outline='none');btn.style.outline='3px solid #BF953F';}
-
-    async function saveHeroSettings(){
-        const headline=document.getElementById('heroHeadlineInput').value.trim();
-        const tagline=document.getElementById('heroTaglineInput').value.trim();
-        const font=document.getElementById('heroFontSelect').value;
-        const overlayOpacity=document.getElementById('heroOverlayRange').value;
-        const textColor=document.getElementById('heroTextColor').value||'#ffffff';
-        let coverUrl=null;
-        if(heroCoverFile){try{const fd=new FormData();fd.append('file',heroCoverFile);fd.append('upload_preset',CLOUDINARY_PRESET);const r=await fetch(CLOUDINARY_URL,{method:'POST',body:fd});const d=await r.json();coverUrl=d.secure_url;}catch(err){alert('Upload error: '+err.message);return;}}
-        const heroData={headline,tagline,font,overlayOpacity,textColor};
-        if(coverUrl)heroData.coverUrl=coverUrl;
-        try{await db.collection('settings').doc('hero').set(heroData,{merge:true});alert('✅ Hero banner saved!');applyHeroSettings(heroData);closeModal('heroSettingsModal');}catch(err){alert('Error: '+err.message);}
-    }
-
-    function applyHeroSettings(data){
-        const banner=document.getElementById('heroBanner');
-        const bgImg=document.getElementById('heroBgImage');
-        const overlay=document.getElementById('heroOverlay');
-        const headline=document.getElementById('heroHeadline');
-        const tagline=document.getElementById('heroTagline');
-        if(data.headline)headline.textContent=data.headline;
-        if(data.tagline)tagline.textContent=data.tagline;
-        if(data.font)headline.style.fontFamily=data.font;
-        if(data.coverUrl){bgImg.src=data.coverUrl;bgImg.style.display='block';overlay.style.display='block';overlay.style.background=`rgba(0,0,0,${(data.overlayOpacity||45)/100})`;banner.classList.add('has-image');headline.style.color=data.textColor||'#ffffff';tagline.style.color=data.textColor==='#000000'?'rgba(0,0,0,0.8)':'rgba(255,255,255,0.9)';}
-        else{bgImg.style.display='none';overlay.style.display='none';banner.classList.remove('has-image');headline.style.color='';tagline.style.color='';}
-    }
-
-    async function loadHeroSettings(){
-        try{const doc=await db.collection('settings').doc('hero').get();if(doc.exists){const data=doc.data();applyHeroSettings(data);if(data.headline)document.getElementById('heroHeadlineInput').value=data.headline;if(data.tagline)document.getElementById('heroTaglineInput').value=data.tagline;if(data.font){document.getElementById('heroFontSelect').value=data.font;document.getElementById('heroFontPreview').style.fontFamily=data.font;}if(data.overlayOpacity){document.getElementById('heroOverlayRange').value=data.overlayOpacity;document.getElementById('overlayValue').textContent=data.overlayOpacity;}if(data.textColor)document.getElementById('heroTextColor').value=data.textColor;}}catch(err){console.log('No hero settings');}
-    }
-
-    // ============================================
-    // COUPON SYSTEM
-    // ============================================
-    async function applyCoupon(){const code=document.getElementById('couponInput').value.trim().toUpperCase();const msgEl=document.getElementById('couponMsg');if(!code){msgEl.className='coupon-msg error';msgEl.textContent='Please enter a coupon code.';return;}try{const snap=await db.collection('coupons').where('code','==',code).get();if(snap.empty){msgEl.className='coupon-msg error';msgEl.textContent='❌ Invalid coupon code.';appliedCoupon=null;updateCartUI();return;}snap.forEach(doc=>{appliedCoupon={id:doc.id,...doc.data()};});msgEl.className='coupon-msg success';msgEl.textContent=`✅ Applied! ${appliedCoupon.type==='percent'?appliedCoupon.value+'% off':'₱'+appliedCoupon.value+' off'}`;updateCartUI();}catch(err){msgEl.className='coupon-msg error';msgEl.textContent='Error. Try again.';}}
-
-    async function saveCoupon(){const code=document.getElementById('couponCode').value.trim().toUpperCase();const type=document.getElementById('couponType').value;const value=parseFloat(document.getElementById('couponValue').value);if(!code||isNaN(value)||value<=0){alert('Fill in all fields!');return;}try{await db.collection('coupons').add({code,type,value,createdAt:firebase.firestore.FieldValue.serverTimestamp()});alert(`Coupon "${code}" saved!`);document.getElementById('couponCode').value='';document.getElementById('couponValue').value='';loadCoupons();}catch(err){alert('Error: '+err.message);}}
-
-    async function loadCoupons(){const listEl=document.getElementById('couponList');if(!listEl)return;try{const snap=await db.collection('coupons').orderBy('createdAt','desc').get();if(snap.empty){listEl.innerHTML='<p style="color:#888;font-size:13px;">No coupons yet.</p>';return;}listEl.innerHTML='';snap.forEach(doc=>{const c=doc.data();const row=document.createElement('div');row.style='display:flex;justify-content:space-between;align-items:center;padding:10px;background:#FAF6EE;border-radius:8px;margin-bottom:8px;';row.innerHTML=`<div><strong style="color:var(--text-purple);">${c.code}</strong><span style="font-size:12px;color:#888;margin-left:8px;">${c.type==='percent'?c.value+'% off':'₱'+c.value+' off'}</span></div><button onclick="deleteCoupon('${doc.id}')" style="background:#FCE8E6;border:1px solid #F4B4B0;color:#C5221F;padding:4px 10px;border-radius:5px;cursor:pointer;font-size:12px;">🗑️</button>`;listEl.appendChild(row);});}catch(err){listEl.innerHTML='<p style="color:#e74c3c;font-size:13px;">Error loading coupons.</p>';}}
-
-    async function deleteCoupon(id){if(!confirm('Delete this coupon?'))return;try{await db.collection('coupons').doc(id).delete();loadCoupons();}catch(err){alert('Error: '+err.message);}}
-
-    // ============================================
-    // ORDERS DASHBOARD
-    // ============================================
-    async function loadOrders(){
-        const tbody=document.getElementById('ordersTableBody');if(!tbody)return;
-        tbody.innerHTML='<tr><td colspan="6" class="no-orders">Loading orders...</td></tr>';
-        try{
-            const snap=await db.collection('orders').orderBy('paidAt','desc').limit(100).get();
-            if(snap.empty){tbody.innerHTML='<tr><td colspan="6" class="no-orders">📭 No orders yet!</td></tr>';updateOrderStats(0,0,0,0);return;}
-            let orders=[];snap.forEach(doc=>orders.push({id:doc.id,...doc.data()}));
-            const totalRevenue=orders.reduce((s,o)=>s+(o.totalAmount||0),0);
-            const uniqueEmails=new Set(orders.map(o=>o.customerEmail)).size;
-            const avgOrder=orders.length>0?totalRevenue/orders.length:0;
-            updateOrderStats(totalRevenue,orders.length,uniqueEmails,avgOrder);
-            document.getElementById('ordersCount').textContent=`${orders.length} order${orders.length!==1?'s':''} total`;
-            tbody.innerHTML='';
-            orders.forEach(order=>{
-                const date=order.paidAt?.toDate?order.paidAt.toDate().toLocaleDateString('en-PH',{year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}):'N/A';
-                const itemsList=Array.isArray(order.items)?order.items.map(i=>`<li>• ${typeof i==='string'?i:`${i.name} x${i.quantity||1}`}</li>`).join(''):'<li>Unknown</li>';
-                const pm={gcash:'💚 GCash',paymaya:'💜 Maya',card:'💳 Card',qrph:'📱 QR Ph'};
-                const tr=document.createElement('tr');
-                tr.innerHTML=`<td style="white-space:nowrap;font-size:11px;">${date}</td><td><strong>${order.customerName||'Customer'}</strong><br><span style="font-size:11px;color:#888;">${order.customerEmail||''}</span></td><td><ul class="order-items-list">${itemsList}</ul></td><td style="font-weight:bold;color:var(--text-purple);">₱${(order.totalAmount||0).toFixed(2)}</td><td style="font-size:12px;">${pm[order.paymentMethod]||'💳 '+order.paymentMethod}</td><td><span class="status-badge completed">${order.status||'completed'}</span></td>`;
-                tbody.appendChild(tr);
-            });
-        }catch(err){tbody.innerHTML=`<tr><td colspan="6" class="no-orders" style="color:#e74c3c;">Error: ${err.message}</td></tr>`;}
-    }
-
-    function updateOrderStats(rev,total,unique,avg){
-        const el=id=>document.getElementById(id);
-        if(el('statTotalRevenue'))el('statTotalRevenue').textContent='₱'+(rev||0).toLocaleString('en-PH',{minimumFractionDigits:2});
-        if(el('statTotalOrders'))el('statTotalOrders').textContent=total||0;
-        if(el('statUniqueCustomers'))el('statUniqueCustomers').textContent=unique||0;
-        if(el('statAvgOrder'))el('statAvgOrder').textContent='₱'+(avg||0).toFixed(2);
-    }
-
-    // ============================================
-    // CART
-    // ============================================
-    function addToCart(e,pid){if(e)e.stopPropagation();const p=products.find(prod=>prod.id===pid);if(!p)return;const ex=cart.find(i=>i.id===pid);if(ex){ex.quantity+=1;}else{cart.push({id:p.id,name:p.name,price:p.price,quantity:1,checked:true});}saveAndSyncCart();if(typeof fbq!=='undefined')fbq('track','AddToCart',{content_name:p.name,value:p.price,currency:'PHP'});if(typeof gtag!=='undefined')gtag('event','add_to_cart',{currency:'PHP',value:p.price});}
-
-    function saveAndSyncCart(){localStorage.setItem('digitera_cart',JSON.stringify(cart));updateCartUI();}
-
-    function updateCartUI(){
-        const countSpan=document.getElementById("cart-count");const itemsList=document.getElementById("cartItems");const totalSpan=document.getElementById("cartTotal");const subtotalSpan=document.getElementById("cartSubtotal");
-        if(!countSpan||!itemsList||!totalSpan)return;
-        countSpan.innerText=cart.reduce((s,i)=>s+i.quantity,0);itemsList.innerHTML="";let subtotal=0;
-        cart.forEach((item,index)=>{if(item.checked)subtotal+=(item.price*item.quantity);const row=document.createElement("div");row.style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;font-size:14px;";row.innerHTML=`<div style="display:flex;align-items:center;gap:8px;"><input type="checkbox" ${item.checked?'checked':''} onchange="toggleItemCheck(${index})"><div><strong>${item.name}</strong><br><span style="color:#888;">₱${item.price} x ${item.quantity}</span></div></div><button onclick="removeFromCart(${index})" style="background:none;border:none;color:red;cursor:pointer;">🗑️</button>`;itemsList.appendChild(row);});
-        let discount=0;if(appliedCoupon){discount=appliedCoupon.type==='percent'?subtotal*(appliedCoupon.value/100):Math.min(appliedCoupon.value,subtotal);}
-        const grandTotal=Math.max(0,subtotal-discount);
-        if(subtotalSpan)subtotalSpan.innerText=subtotal.toFixed(2);totalSpan.innerText=grandTotal.toFixed(2);
-        const dr=document.getElementById('discountRow');if(dr){if(appliedCoupon&&discount>0){dr.style.display='block';document.getElementById('discountAmount').innerText=discount.toFixed(2);document.getElementById('couponCodeApplied').innerText=appliedCoupon.code;}else{dr.style.display='none';}}
-    }
-
-    function toggleItemCheck(i){cart[i].checked=!cart[i].checked;saveAndSyncCart();}
-    function removeFromCart(i){cart.splice(i,1);saveAndSyncCart();}
-    function toggleCart(e){if(e)e.stopPropagation();document.getElementById("cartModal").classList.toggle("open");}
-
-    async function processCheckout(){
-        const checkedItems=cart.filter(i=>i.checked);
-        if(checkedItems.length===0){alert("Pumili muna ng produkto!");return;}
-        let subtotal=checkedItems.reduce((s,i)=>s+(i.price*i.quantity),0);
-        let discount=0;if(appliedCoupon){discount=appliedCoupon.type==='percent'?subtotal*(appliedCoupon.value/100):Math.min(appliedCoupon.value,subtotal);}
-        const totalValue=Math.max(0,subtotal-discount);
-        if(typeof fbq!=='undefined')fbq('track','InitiateCheckout',{value:totalValue,currency:'PHP',num_items:checkedItems.length});
-        if(typeof gtag!=='undefined')gtag('event','begin_checkout',{currency:'PHP',value:totalValue});
-        const buyerEmail=prompt("Saan namin ipadadala ang iyong digital products? I-enter ang iyong Email Address:");
-        if(!buyerEmail){alert("Kailangan ng email address.");return;}
-        if(!buyerEmail.includes("@")||!buyerEmail.includes(".")){alert("Paki-check ang email format.");return;}
-        localStorage.setItem("buyer_email",buyerEmail);
-        try{
-            const response=await fetch('https://digitera-shop-backend.vercel.app/api/webhook',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({redirect_url:window.location.origin+'/digitera-storefront/success.html',email:buyerEmail,items:checkedItems.map((item,idx)=>({name:item.name,price:idx===0&&appliedCoupon?Math.max(0.01,item.price-(appliedCoupon.type==='percent'?item.price*appliedCoupon.value/100:Math.min(appliedCoupon.value,item.price))):item.price,quantity:item.quantity}))})});
-            const data=await response.json();
-            if(data.checkout_url){window.location.href=data.checkout_url;}else{alert("Error: "+JSON.stringify(data.error));}
-        }catch(error){alert("Hindi makakonekta sa server: "+error.message);}
-    }
-
-    // ============================================
-    // SOCIAL PROOF & LIVE VIEWERS
-    // ============================================
-    const reviews=[{name:"Angela M.",tag:"Verified Creator",text:"Highly recommended, very helpful and accommodating talaga! Sobrang haba ng pasensya magturo sa katulad kong beginner na walang alam sa digital products."},{name:"Mark Santos",tag:"Side Hustler",text:"Sulit na sulit yung ROI Framework Vault! Akala ko mahihirapan ako mag-set up pero sobrang daling sundan."},{name:"Coach Jayson",tag:"Course Creator",text:"Sobrang game changer nung Aesthetic Workbook bundle po. Ginamit ko agad para sa lead magnet ko at ang daming nag-enrol."},{name:"Trisha Cruz",tag:"Digital Marketer",text:"Sobrang instant ng access tapos ready to resell talaga. Ang laking tipid sa oras kesa gumawa ako from scratch."},{name:"Dave_Digital",tag:"Verified Reseller",text:"Legit guys, ang bilis kausap ni admin at guided talaga. Yung Reels Vault gamit na gamit ko ngayon."},{name:"Mommy Elaine",tag:"Home Preneur",text:"Nagustuhan ng anak ko yung Kids Whys Flipbook, dinownload ko agad at pinrint. Sobrang worth it."},{name:"Kevin R.",tag:"Funnel Designer",text:"Ganda ng lines ng Funnelcraft at active lahat ng links. Hindi ka mahihirapan mag-scale."},{name:"Nica Rivera",tag:"E-book Publisher",text:"Ang daming choices sa 3Million E-Books bundle! Perfect para sa mga gustong magsimula ng digital business."},{name:"Reynald_99",tag:"Store Owner",text:"Fast delivery of assets at ang lilinis ng codes nung mga apps and mini games. Napaka-smooth gamitin."},{name:"Chadi F.",tag:"Social Media Manager",text:"Yung Dental at Real Estate templates ang nagligtas sa mga clients ko ngayong linggo. Super thumbs up!"}];
-    const buyerNames=["Maria","John","Sarah","Dave","Kylie","Mark","Princess","James","Rowena","Alvin"];
-    const buyerLocations=["Manila","Cebu","Davao","Quezon City","Ilocos Norte","Pampanga","Cavite","Bulacan","Laguna","Baguio"];
-    const trendingProducts=["KIDZCREATOR SYSTEM","Digital Product ROI Framework Vault","$1.99 System Kit","DENTAL Social Media Marketing Templates","LUXE GIRL VAULT REELS BUNDLE","Funnelcraft","Ai Business Employee"];
-
-    function createSocialProofPopupHTML(){if(document.getElementById('social-proof-pop'))return;const pop=document.createElement('div');pop.id='social-proof-pop';pop.className='social-proof-container';pop.innerHTML=`<div class="social-proof-content"><p class="buyer-text"><span style="font-size:16px;">🛍️</span> <strong id="buyer-name"></strong> from <span id="buyer-location"></span></p><p class="product-text">just purchased <strong id="bought-product"></strong></p><span class="time-ago" id="buy-time"></span></div>`;document.body.appendChild(pop);}
-    function showSocialProof(){const c=document.getElementById('social-proof-pop');if(!c)return;document.getElementById('buyer-name').textContent=buyerNames[Math.floor(Math.random()*buyerNames.length)];document.getElementById('buyer-location').textContent=buyerLocations[Math.floor(Math.random()*buyerLocations.length)];document.getElementById('bought-product').textContent=trendingProducts[Math.floor(Math.random()*trendingProducts.length)];const t=Math.floor(Math.random()*4)+1;document.getElementById('buy-time').textContent=`${t} minute${t>1?'s':''} ago`;c.classList.add('show');setTimeout(()=>c.classList.remove('show'),5000);}
-    function updateLiveViewers(){const el=document.getElementById('live-viewer-count');if(!el)return;let v=parseInt(el.textContent)||47;v+=Math.floor(Math.random()*7)-3;if(v<30)v=34;if(v>85)v=78;el.textContent=v;}
-
-    window.addEventListener('load',()=>{
-        const track=document.getElementById('marquee-track');
-        if(track){const dr=[...reviews,...reviews];track.innerHTML=dr.map(r=>`<div class="testimonial-card"><div><div class="stars">⭐⭐⭐⭐•</div><p class="review-text">"${r.text}"</p></div><div class="reviewer-info"><p class="reviewer-name">${r.name}</p><p class="reviewer-tag">${r.tag}</p></div></div>`).join('');}
-        createSocialProofPopupHTML();
-        setTimeout(()=>{showSocialProof();setInterval(showSocialProof,18000);},4000);
-        setInterval(updateLiveViewers,5000);
-    });
+  function toggleCart(e) {
+    if (e) e.preventDefault();
+    const cart = document.getElementById('cartModal');
+    if (cart) cart.classList.toggle('open');
+  }
 </script>
 
-<!-- AI CHAT WIDGET -->
-<style>
-#dgt-widget-vars{--dgt-gold:#f5c842;--dgt-gold-grad:linear-gradient(135deg,#f0c860 0%,#c9a84c 40%,#e8b84b 70%,#a07830 100%);--dgt-purple:#6c5ce7;--dgt-card:#1c1929;--dgt-border:#2e2940;--dgt-text:#f0eeff;--dgt-bg-dark:#0e0d18;}
-#dgt-fab{position:fixed;bottom:24px;right:24px;width:auto;height:auto;border-radius:50px;background:var(--dgt-gold-grad);color:#1a1200;border:none;cursor:pointer;font-size:.8rem;font-weight:800;font-family:'Segoe UI',sans-serif;padding:10px 18px;box-shadow:0 4px 18px rgba(245,200,66,.45);transition:all .25s cubic-bezier(.175,.885,.32,1.275);z-index:99990;display:flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap;}
-#dgt-fab:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(245,200,66,.6);}
-#dgt-window{position:fixed;bottom:100px;right:24px;width:370px;max-width:calc(100vw - 32px);height:540px;max-height:calc(100vh - 120px);background:#1c1929;border:1.5px solid #2e2940;border-radius:18px;box-shadow:0 12px 48px rgba(0,0,0,.5);display:flex;flex-direction:column;z-index:99989;transform:scale(.9) translateY(20px);opacity:0;pointer-events:none;transition:all .25s ease;overflow:hidden;}
-#dgt-window.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all;border-color:#6c5ce7;}
-#dgt-hdr{padding:14px 16px;background:linear-gradient(135deg,#1e1a3a,#15121f);display:flex;align-items:center;gap:10px;border-bottom:1px solid #2e2940;flex-shrink:0;}
-#dgt-hdr-av{width:36px;height:36px;border-radius:50%;background:var(--dgt-gold-grad);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
-#dgt-hdr-info h4{font-size:.88rem;font-weight:700;color:#f0eeff;margin:0;font-family:'Segoe UI',sans-serif;}
-#dgt-hdr-info p{font-size:.7rem;color:#4ade80;margin:0;font-family:'Segoe UI',sans-serif;}
-#dgt-shop-btn{margin-left:auto;margin-right:6px;background:var(--dgt-gold-grad);color:#1a1200;font-size:.68rem;font-weight:800;padding:5px 10px;border-radius:20px;text-decoration:none;white-space:nowrap;}
-#dgt-close{background:none;border:none;color:#5c5878;font-size:1.1rem;cursor:pointer;padding:4px 6px;border-radius:6px;flex-shrink:0;}
-#dgt-close:hover{background:#2e2940;color:#f0eeff;}
-#dgt-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px;background:#0e0d18;}
-#dgt-msgs::-webkit-scrollbar{width:4px;}
-#dgt-msgs::-webkit-scrollbar-thumb{background:#2e2940;border-radius:4px;}
-.dgt-msg{display:flex;gap:8px;align-items:flex-end;max-width:88%;}
-.dgt-msg.user{align-self:flex-end;flex-direction:row-reverse;}
-.dgt-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;flex-shrink:0;}
-.dgt-bot-av{background:linear-gradient(135deg,#6c5ce7,#1e1a3a);}
-.dgt-user-av{background:var(--dgt-gold-grad);}
-.dgt-bubble-msg{padding:10px 13px;border-radius:14px;font-size:.84rem;line-height:1.6;font-family:'Segoe UI',sans-serif;}
-.dgt-msg.bot .dgt-bubble-msg{background:#221e31;color:#f0eeff;border-bottom-left-radius:4px;border:1px solid #2e2940;}
-.dgt-msg.user .dgt-bubble-msg{background:#6c5ce7;color:#fff;border-bottom-right-radius:4px;}
-.dgt-typing{display:flex;gap:4px;padding:10px 13px;background:#221e31;border-radius:14px;border-bottom-left-radius:4px;width:fit-content;border:1px solid #2e2940;}
-.dgt-dot{width:6px;height:6px;background:#9b8ef8;border-radius:50%;animation:dgtBounce 1.2s infinite;}
-.dgt-dot:nth-child(2){animation-delay:.2s;}
-.dgt-dot:nth-child(3){animation-delay:.4s;}
-@keyframes dgtBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
-#dgt-chips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;background:#0e0d18;border-top:1px solid #2e2940;flex-shrink:0;}
-.dgt-chip{background:#221e31;border:1px solid #2e2940;color:#9b96b8;font-size:.72rem;padding:5px 11px;border-radius:20px;cursor:pointer;transition:all .15s;font-family:'Segoe UI',sans-serif;}
-.dgt-chip:hover{background:var(--dgt-gold-grad);border-color:transparent;color:#1a1200;font-weight:700;}
-#dgt-foot{padding:10px 12px;border-top:1px solid #2e2940;display:flex;gap:8px;background:#1c1929;flex-shrink:0;}
-#dgt-input{flex:1;background:#15121f;border:1.5px solid #2e2940;border-radius:8px;color:#f0eeff;padding:9px 12px;font-size:.84rem;font-family:'Segoe UI',sans-serif;outline:none;resize:none;transition:border-color .2s;}
-#dgt-input:focus{border-color:#6c5ce7;}
-#dgt-send{background:var(--dgt-gold-grad);color:#1a1200;border:none;border-radius:8px;padding:9px 14px;font-size:.9rem;cursor:pointer;font-weight:800;}
-#dgt-send:disabled{opacity:.4;cursor:not-allowed;}
-#dgt-badge{position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:#f87171;border-radius:50%;font-size:.65rem;font-weight:800;color:#fff;display:none;align-items:center;justify-content:center;border:2px solid #fff;}
-#dgt-fab-wrap{position:fixed;bottom:24px;right:24px;z-index:99990;}
-</style>
-
-<div id="dgt-widget-vars"></div>
-<div id="dgt-fab-wrap">
-    <button id="dgt-fab" onclick="dgtToggle()"><span id="dgt-fab-icon">💬</span> <span id="dgt-fab-text">Ask Digitera</span></button>
-    <div id="dgt-badge">1</div>
-</div>
-<div id="dgt-window">
-    <div id="dgt-hdr">
-        <div id="dgt-hdr-av">🤖</div>
-        <div id="dgt-hdr-info"><h4 id="dgt-bot-name">Digitera AI</h4><p>Online • Ready to help</p></div>
-        <a id="dgt-shop-btn" href="https://digiteralevi.github.io/digitera-storefront/" target="_blank">🛍️ Shop</a>
-        <button id="dgt-close" onclick="dgtToggle()">✕</button>
-    </div>
-    <div id="dgt-msgs"></div>
-    <div id="dgt-chips">
-        <span class="dgt-chip" onclick="dgtChipSend(this)">💰 Products</span>
-        <span class="dgt-chip" onclick="dgtChipSend(this)">🤖 How it works</span>
-        <span class="dgt-chip" onclick="dgtChipSend(this)">📷 Show samples</span>
-        <span class="dgt-chip" onclick="dgtChipSend(this)">❓ FAQ</span>
-    </div>
-    <div id="dgt-foot">
-        <textarea id="dgt-input" rows="1" placeholder="Ask me anything..." onkeydown="dgtKey(event)"></textarea>
-        <button id="dgt-send" onclick="dgtSend()">➤</button>
-    </div>
-</div>
-
 <script>
-(function(){
-    const DGT_CONFIG={
-        shopUrl:'https://digiteralevi.github.io/digitera-storefront/',
-        botName:'Digitera',
-        openRouterKey:'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',
-        systemPrompt:`You are Digitera, a friendly and professional AI sales assistant for Digitera Levi Shop — a premium digital products store.
-
-ABOUT THE SHOP: Digitera Levi Shop offers high-quality digital products including Canva templates, AI business tools, PLR/MRR products, course workbooks, reels bundles, and more.
-
-PRODUCTS & PRICES:
-1. Business Automation Suite (FunnelCraft + AI Business Employee) — ₱2,995
-2. FunnelCraft — ₱2,497
-3. VIP ROI Framework & Workbook — ₱997
-4. KidzCreator System — ₱997
-5. 30 Million Digital Products (PLR & MRR) — ₱199
-6. 100K Reels Bundle — ₱249
-7. Master Resell Rights Workbook Bundle — ₱299
-8. Aesthetic Workbook (Pink) + MRR — ₱100
-9. Free PLR Digital Products — ₱1
-
-HOW TO ORDER: Visit the shop → Add to Cart → Checkout → Pay via GCash, Maya, Card, or QR Ph
-CONTACT: Messenger https://m.me/digiteralevi, Instagram @digiteralevi
-
-RULES:
-- Keep replies to 2-3 sentences max
-- Always end with a follow-up question
-- Be warm, friendly, professional
-- Never say you are an AI unless directly asked`
-    };
-
-    let dgtOpen=false,dgtTyping=false,dgtHistory=[];
-
-    async function dgtInit(){
-        document.getElementById('dgt-bot-name').textContent=DGT_CONFIG.botName;
-        dgtHistory=[{role:'system',content:DGT_CONFIG.systemPrompt}];
-        dgtAddBot(`Hi there! 👋 I'm **${DGT_CONFIG.botName}**, your AI shopping assistant at Digitera Levi Shop. How can I help you today? 😊`);
-    }
-
-    window.dgtToggle=function(){
-        dgtOpen=!dgtOpen;
-        document.getElementById('dgt-window').classList.toggle('open',dgtOpen);
-        document.getElementById('dgt-fab-icon').textContent=dgtOpen?'✕':'💬';
-        document.getElementById('dgt-fab-text').textContent=dgtOpen?'Close':'Ask Digitera';
-        document.getElementById('dgt-badge').style.display='none';
-        if(dgtOpen){setTimeout(()=>{document.getElementById('dgt-input').focus();dgtScrollMsgs();},300);}
-    };
-
-    function dgtAddBot(text){
-        const msgs=document.getElementById('dgt-msgs');
-        const div=document.createElement('div');div.className='dgt-msg bot';
-        const html=text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
-        div.innerHTML=`<div class="dgt-av dgt-bot-av">🤖</div><div class="dgt-bubble-msg">${html}</div>`;
-        msgs.appendChild(div);dgtScrollMsgs();
-    }
-
-    function dgtAddUser(text){
-        const msgs=document.getElementById('dgt-msgs');
-        const div=document.createElement('div');div.className='dgt-msg user';
-        div.innerHTML=`<div class="dgt-av dgt-user-av">👤</div><div class="dgt-bubble-msg">${text.replace(/</g,'&lt;')}</div>`;
-        msgs.appendChild(div);dgtScrollMsgs();
-    }
-
-    function dgtShowTyping(){const msgs=document.getElementById('dgt-msgs');const div=document.createElement('div');div.className='dgt-msg bot';div.id='dgt-typing';div.innerHTML=`<div class="dgt-av dgt-bot-av">🤖</div><div class="dgt-typing"><div class="dgt-dot"></div><div class="dgt-dot"></div><div class="dgt-dot"></div></div>`;msgs.appendChild(div);dgtScrollMsgs();}
-    function dgtRemoveTyping(){const t=document.getElementById('dgt-typing');if(t)t.remove();}
-    function dgtScrollMsgs(){const m=document.getElementById('dgt-msgs');setTimeout(()=>m.scrollTop=m.scrollHeight,50);}
-
-    window.dgtKey=function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();dgtSend();}};
-    window.dgtChipSend=function(el){dgtSendText(el.textContent.trim());};
-
-    window.dgtSend=function(){
-        const input=document.getElementById('dgt-input');
-        const text=input.value.trim();
-        if(!text||dgtTyping)return;
-        input.value='';dgtSendText(text);
-    };
-
-    async function dgtSendText(text){
-        dgtAddUser(text);dgtHistory.push({role:'user',content:text});
-        dgtTyping=true;document.getElementById('dgt-send').disabled=true;dgtShowTyping();
-        if(!dgtOpen)dgtToggle();
-        try{
-            const r=await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+DGT_CONFIG.openRouterKey,'HTTP-Referer':window.location.href,'X-Title':'Digitera Levi Shop'},body:JSON.stringify({model:'openrouter/auto',max_tokens:500,messages:dgtHistory})});
-            const d=await r.json();
-            if(d.error)throw new Error(d.error.message);
-            const reply=d.choices?.[0]?.message?.content||'Sorry, something went wrong. Please try again!';
-            dgtHistory.push({role:'assistant',content:reply});
-            dgtRemoveTyping();dgtAddBot(reply);
-        }catch(e){dgtRemoveTyping();dgtAddBot('Sorry, I had a small hiccup! Please try again or visit our shop directly. 😊');}
-        dgtTyping=false;document.getElementById('dgt-send').disabled=false;document.getElementById('dgt-input').focus();
-    }
-
-    if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',dgtInit);}else{dgtInit();}
-})();
-<script>
-  // Initialize Firebase Firestore gamit ang umiiral na app instance
+  // Initialize Firebase Firestore
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   }
@@ -1057,6 +651,6 @@ RULES:
       });
   }
 </script>
-    
+
 </body>
 </html>
