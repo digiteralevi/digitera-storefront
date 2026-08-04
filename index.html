@@ -45,7 +45,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Cormorant+Garamond:wght@300;400;600;700&family=Cinzel:wght@400;600;700&family=EB+Garamond:wght@400;500;600&family=Libre+Baskerville:wght@400;700&family=Italiana&display=swap" rel="stylesheet">
 
-    <!-- FIREBASE -->
+    <!-- FIREBASE SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
@@ -378,23 +378,44 @@
             <div>
                 <h4 style="margin:0 0 8px 0;">📸 Cover Photo</h4>
                 <p style="font-size:12px;color:#888;margin:0 0 10px 0;">✅ Recommended: <strong>1920 x 600px</strong> landscape<br>✅ Max file size: <strong>5MB</strong><br>✅ Format: JPG, PNG, or WebP</p>
-                <label class="file-upload-label">📁 Choose Cover Image<input type="file" id="heroImageInput" accept="image/*" style="display:none;" onchange="handleHeroImageSelection()"></label>
-                <div id="heroImagePreview" style="margin-top:8px;font-size:13px;color:#666;text-align:center;">No new file selected.</div>
+                <label class="file-upload-label">📁 Choose Banner Image<input type="file" id="heroImageInput" accept="image/*" style="display:none;" onchange="handleHeroImageSelection()"></label>
+                <div id="heroImagePreview" style="margin-top:10px;text-align:center;"></div>
             </div>
             <div>
-                <h4 style="margin:10px 0 5px 0;">✍️ Headline Title</h4>
-                <input type="text" id="heroHeadlineInput" class="admin-input" placeholder="e.g. Premium Digital Business Assets">
+                <h4 style="margin:10px 0 5px 0;">✏️ Headline</h4>
+                <input type="text" id="heroHeadlineInput" class="admin-input" placeholder="Premium Digital Business Assets">
             </div>
             <div>
-                <h4 style="margin:10px 0 5px 0;">📝 Tagline / Subtitle</h4>
-                <textarea id="heroTaglineInput" class="admin-textarea" style="height:70px;" placeholder="e.g. Establish your storefront..."></textarea>
+                <h4 style="margin:10px 0 5px 0;">✏️ Tagline</h4>
+                <textarea id="heroTaglineInput" class="admin-textarea" style="height:70px;" placeholder="Establish your storefront, scale your reach, and automate your sales with high-converting assets."></textarea>
             </div>
-            <button class="add-to-cart-btn" id="saveHeroBtn" onclick="saveHeroSettings()" style="background:var(--gold-shine);margin-top:10px;">💾 Save Banner Settings</button>
+            <button class="add-to-cart-btn" onclick="saveHeroSettings()" style="background:var(--gold-shine);margin-top:10px;">💾 Save Hero Banner</button>
+            <button class="add-to-cart-btn" onclick="resetHeroSettings()" style="background:#FCE8E6;color:#C5221F;margin-top:5px;">🗑️ Reset to Default</button>
         </div>
     </div>
 </div>
 
-<!-- ORDERS MODAL -->
+<!-- COUPONS MODAL -->
+<div class="modal-overlay" id="couponModal">
+    <div class="modal-content" style="max-width:600px;">
+        <button class="close-btn" onclick="closeModal('couponModal')">✕</button>
+        <h2>🎟️ Coupon Manager</h2>
+        <div class="admin-form-grid">
+            <input type="text" id="couponCodeInput" class="admin-input" placeholder="Coupon Code (e.g. SAVE20)" style="text-transform:uppercase;">
+            <select id="couponTypeSelect" class="admin-input" style="background:var(--card-bg);">
+                <option value="percent">Percentage Off (%)</option>
+                <option value="fixed">Fixed Amount Off (PHP)</option>
+            </select>
+            <input type="number" id="couponValueInput" class="admin-input" placeholder="Discount Value (e.g. 20 for 20% or 100 for ₱100)">
+            <button class="add-to-cart-btn" onclick="addCoupon()" style="background:var(--gold-shine);">➕ Add Coupon</button>
+        </div>
+        <hr style="margin:20px 0;border:0;border-top:1px solid rgba(74,46,128,0.1);">
+        <h4 style="margin:0 0 10px 0;">Active Coupons:</h4>
+        <div id="couponsList" style="display:flex;flex-direction:column;gap:8px;"></div>
+    </div>
+</div>
+
+<!-- ORDERS DASHBOARD MODAL -->
 <div class="modal-overlay" id="ordersModal">
     <div class="modal-content" style="max-width:900px;">
         <button class="close-btn" onclick="closeModal('ordersModal')">✕</button>
@@ -427,48 +448,53 @@
             <div class="orders-table-header">
                 <h3>📋 Recent Orders</h3>
             </div>
-            <table class="orders-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Customer</th>
-                        <th>Items</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody id="ordersTableBody">
-                    <tr>
-                        <td colspan="5" class="no-orders">👎 No orders yet!</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div style="overflow-x:auto;">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <tr><td colspan="5" style="text-align:center; padding:20px;">🔄 Loading orders...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- CART SLIDE-OUT -->
+<!-- CART MODAL SLIDE-OVER -->
 <div class="cart-modal" id="cartModal">
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-        <h3>🛒 Your Cart</h3>
-        <button class="close-btn" onclick="toggleCart(event)" style="position:static;">✕</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #FAF6EE;padding-bottom:10px;">
+        <h3 style="margin:0;">🛒 Your Cart</h3>
+        <button class="close-btn" style="position:static;" onclick="toggleCart(event)">✕</button>
     </div>
-    <div class="cart-items-list" id="cartItemsContainer"></div>
+    <div class="cart-items-list" id="cartItemsList"></div>
+    
     <div class="coupon-section">
         <label>🎟️ Have a Coupon Code?</label>
         <div class="coupon-input-row">
-            <input type="text" id="cartCouponInput" class="coupon-input" placeholder="ENTER CODE">
+            <input type="text" id="cartCouponInput" class="coupon-input" placeholder="Enter code" style="text-transform:uppercase;">
             <button class="coupon-apply-btn" onclick="applyCartCoupon()">Apply</button>
         </div>
-        <div id="cartCouponMsg" class="coupon-msg"></div>
+        <div class="coupon-msg" id="cartCouponMsg"></div>
     </div>
-    <div style="border-top:1px solid #eee;padding-top:15px;margin-top:10px;">
-        <h4>Total: <span id="cartTotal">₱0.00</span></h4>
-        <button class="add-to-cart-btn" onclick="checkoutCart()" style="background:var(--gold-shine);color:#4A2E80;">Checkout Now</button>
+
+    <div style="border-top:1px solid #FAF6EE;padding-top:15px;margin-top:auto;">
+        <div style="display:flex;justify-content:space-between;font-weight:bold;font-size:18px;margin-bottom:15px;">
+            <span>Total:</span>
+            <span id="cartTotalDisplay">₱0.00</span>
+        </div>
+        <button class="add-to-cart-btn" style="background:var(--gold-shine);width:100%;" onclick="checkoutCart()">Proceed to Checkout 🚀</button>
     </div>
 </div>
 
-<!-- TESTIMONIALS -->
+<!-- TESTIMONIALS SECTION -->
 <div class="testimonials-section">
     <div class="section-title">
         <h2>What Our Customers Say</h2>
@@ -476,26 +502,10 @@
     </div>
     <div class="marquee-wrapper">
         <div class="marquee-content">
-            <div class="testimonial-card">
-                <div class="stars">⭐⭐⭐⭐⭐</div>
-                <p class="review-text">" Sobrang ganda ng Canva templates! Integrated seamlessly with my brand in minutes."</p>
-                <div class="reviewer-info"><p class="reviewer-name">Maria Santos</p><p class="reviewer-tag">Verified Buyer</p></div>
-            </div>
-            <div class="testimonial-card">
-                <div class="stars">⭐⭐⭐⭐⭐</div>
-                <p class="review-text">" The Reels vault saved me weeks of content creation effort. Highly recommended!"</p>
-                <div class="reviewer-info"><p class="reviewer-name">John D.</p><p class="reviewer-tag">Digital Marketer</p></div>
-            </div>
-            <div class="testimonial-card">
-                <div class="stars">⭐⭐⭐⭐⭐</div>
-                <p class="review-text">" Outstanding support and top tier quality digital products. Digitera Levi is legit!"</p>
-                <div class="reviewer-info"><p class="reviewer-name">Sarah K.</p><p class="reviewer-tag">Content Creator</p></div>
-            </div>
-            <div class="testimonial-card">
-                <div class="stars">⭐⭐⭐⭐⭐</div>
-                <p class="review-text">" Instant delivery, clear guides. Will definitely buy more tools soon."</p>
-                <div class="reviewer-info"><p class="reviewer-name">Alex M.</p><p class="reviewer-tag">Shop Owner</p></div>
-            </div>
+            <div class="testimonial-card"><div class="stars">★★★★★</div><p class="review-text">"Ganda ng Canva templates! Integrated with my brand in minutes."</p><div class="reviewer-info"><p class="reviewer-name">Maria S.</p><p class="reviewer-tag">Digital Creator</p></div></div>
+            <div class="testimonial-card"><div class="stars">★★★★★</div><p class="review-text">"The Reels vault saved me weeks of content creation effort. Highly recommended!"</p><div class="reviewer-info"><p class="reviewer-name">John D.</p><p class="reviewer-tag">Social Media Manager</p></div></div>
+            <div class="testimonial-card"><div class="stars">★★★★★</div><p class="review-text">"Outstanding support and top tier quality digital products. Digitera Levi is legit!"</p><div class="reviewer-info"><p class="reviewer-name">Sarah K.</p><p class="reviewer-tag">E-commerce Owner</p></div></div>
+            <div class="testimonial-card"><div class="stars">★★★★★</div><p class="review-text">"Instant delivery, clear guides. Will definitely buy more tools soon."</p><div class="reviewer-info"><p class="reviewer-name">Alex M.</p><p class="reviewer-tag">Online Entrepreneur</p></div></div>
         </div>
     </div>
 </div>
@@ -503,9 +513,9 @@
 <!-- SOCIAL PROOF POPUP -->
 <div class="social-proof-container" id="socialProofPopup">
     <div class="social-proof-content">
-        <p class="buyer-text"><strong id="spBuyer">Anna P.</strong> from Manila</p>
-        <p class="product-text">just purchased <strong id="spProduct">Digital Empire Bible</strong></p>
-        <span class="time-ago" id="spTime">2 minutes ago</span>
+        <p class="buyer-text"><strong id="spBuyer">Someone</strong> just purchased</p>
+        <p class="product-text"><strong id="spProduct">Digital Product</strong></p>
+        <span class="time-ago" id="spTime">A few minutes ago</span>
     </div>
 </div>
 
@@ -518,22 +528,235 @@
     <p>© 2026 Digitera Levi Shop. All rights reserved.</p>
 </footer>
 
+<!-- MAIN JAVASCRIPT & FIREBASE LOGIC -->
 <script>
-  // Global Storefront Initialization Script
-  function dgtInit() {
+  // 1. FIREBASE CONFIGURATION
+  const firebaseConfig = {
+    apiKey: "AIzaSyDFQcwCJxIkTX0CCz8kaF7Sp2_hZNE1dIs",
+    authDomain: "digitera-levi-shop.firebaseapp.com",
+    projectId: "digitera-levi-shop",
+    storageBucket: "digitera-levi-shop.appspot.com",
+    messagingSenderId: "63166329156",
+    appId: "1:63166329156:web:0b797f9438a98c84e46711"
+  };
+
+  // INITIALIZE FIREBASE & FIRESTORE
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const db = firebase.firestore();
+
+  // 2. INITIAL PRODUCTS DATA
+  let products = [
+    {
+      id: 1,
+      name: "Free PLR Digital Products",
+      price: 0,
+      category: "Education",
+      shortDesc: "Get started with free Private Label Rights digital assets ready to rebrand.",
+      images: ["https://res.cloudinary.com/dqo0bc4u/image/upload/v1784271943/Digitera_profile_gif_logo_jd7njm.gif"],
+      salesCopy: "Start your digital product business with zero risk. Rebrand and sell these high-quality digital assets as your own!"
+    }
+  ];
+
+  let cart = [];
+  let appliedCoupon = null;
+  let activeCategory = 'all';
+
+  // INITIAL LOAD
+  window.addEventListener('DOMContentLoaded', () => {
+    checkAdminMode();
+    renderProducts();
+    updateCartCount();
+    loadHeroSettings();
+  });
+
+  // CHECK ADMIN MODE VIA URL PARAMETER (?mode=admin)
+  function checkAdminMode() {
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('mode') === 'admin') {
+      document.body.classList.add('admin-mode');
       const adminBtn = document.getElementById('secretAdminBtn');
-      if (adminBtn) adminBtn.style.display = 'block';
+      if (adminBtn) adminBtn.style.display = 'inline-block';
     }
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener('DOMContentLoaded', dgtInit);
-  } else {
-    dgtInit();
+  // RENDER PRODUCTS GRID
+  function renderProducts() {
+    const grid = document.getElementById('shopProductsGrid');
+    if (!grid) return;
+
+    let filtered = products;
+    if (activeCategory !== 'all') {
+      filtered = products.filter(p => p.category === activeCategory);
+    }
+
+    const searchVal = document.getElementById('shopSearchInput')?.value.toLowerCase();
+    if (searchVal) {
+      filtered = filtered.filter(p => p.name.toLowerCase().includes(searchVal) || (p.shortDesc && p.shortDesc.toLowerCase().includes(searchVal)));
+    }
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #888; padding: 40px;">No digital assets found in this category.</p>`;
+      return;
+    }
+
+    let html = '';
+    filtered.forEach((p) => {
+      const imgUrl = p.images && p.images.length > 0 ? p.images[0] : 'https://via.placeholder.com/300';
+      const priceText = p.price === 0 ? 'FREE' : `₱${Number(p.price).toFixed(2)}`;
+
+      html += `
+        <div class="product-card" onclick="openProductDetail(${p.id})">
+          <span class="drag-handle">⋮⋮ Drag to reorder</span>
+          <img src="${imgUrl}" class="product-thumbnail" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <div class="short-desc">${p.shortDesc || ''}</div>
+          <div class="product-price">${priceText}</div>
+          <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${p.id})">Add to Cart</button>
+          ${p.salesPageUrl ? `<a href="${p.salesPageUrl}" target="_blank" class="card-more-details-btn" onclick="event.stopPropagation()">More Details →</a>` : ''}
+          ${document.body.classList.contains('admin-mode') ? `
+            <div class="admin-card-actions" onclick="event.stopPropagation()">
+              <button class="edit-card-btn" onclick="editProduct(${p.id})">✏️ Edit</button>
+              <button class="delete-card-btn" onclick="deleteProduct(${p.id})">🗑️ Delete</button>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    });
+
+    grid.innerHTML = html;
   }
 
+  // CATEGORY & SEARCH FILTERS
+  function selectCategory(cat, btn) {
+    activeCategory = cat;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    renderProducts();
+  }
+
+  function filterShopProducts() {
+    renderProducts();
+  }
+
+  // PRODUCT DETAIL MODAL
+  function openProductDetail(id) {
+    const product = products.find(p => p.id === id);
+    if (!product) return;
+
+    document.getElementById('modalTitle').innerText = product.name;
+    document.getElementById('modalPrice').innerText = product.price === 0 ? 'FREE' : `₱${Number(product.price).toFixed(2)}`;
+    document.getElementById('modalSalesCopy').innerText = product.salesCopy || '';
+
+    const mainImg = document.getElementById('modalMainImg');
+    const thumbsRow = document.getElementById('modalThumbsRow');
+
+    if (product.images && product.images.length > 0) {
+      mainImg.src = product.images[0];
+      let thumbsHtml = '';
+      product.images.forEach((img, idx) => {
+        thumbsHtml += `<img src="${img}" class="thumb-nav ${idx === 0 ? 'active' : ''}" onclick="switchModalImage('${img}', this)">`;
+      });
+      thumbsRow.innerHTML = thumbsHtml;
+    } else {
+      mainImg.src = 'https://via.placeholder.com/600';
+      thumbsRow.innerHTML = '';
+    }
+
+    const addBtn = document.getElementById('modalAddToCartBtn');
+    addBtn.onclick = () => {
+      addToCart(product.id);
+      closeModal('productDetailModal');
+    };
+
+    const moreBtn = document.getElementById('modalMoreDetailsBtn');
+    if (product.salesPageUrl) {
+      moreBtn.style.display = 'block';
+      moreBtn.onclick = () => window.open(product.salesPageUrl, '_blank');
+    } else {
+      moreBtn.style.display = 'none';
+    }
+
+    openModal('productDetailModal');
+  }
+
+  function switchModalImage(src, thumbEl) {
+    document.getElementById('modalMainImg').src = src;
+    document.querySelectorAll('.thumb-nav').forEach(t => t.classList.remove('active'));
+    if (thumbEl) thumbEl.classList.add('active');
+  }
+
+  // CART OPERATIONS
+  function addToCart(id) {
+    const product = products.find(p => p.id === id);
+    if (!product) return;
+
+    cart.push(product);
+    updateCartCount();
+    alert(`Added "${product.name}" to cart!`);
+  }
+
+  function updateCartCount() {
+    const countEl = document.getElementById('cart-count');
+    if (countEl) countEl.innerText = cart.length;
+  }
+
+  function toggleCart(e) {
+    if (e) e.preventDefault();
+    const cartModal = document.getElementById('cartModal');
+    if (cartModal) {
+      cartModal.classList.toggle('open');
+      renderCartItems();
+    }
+  }
+
+  function renderCartItems() {
+    const list = document.getElementById('cartItemsList');
+    const totalEl = document.getElementById('cartTotalDisplay');
+    if (!list) return;
+
+    if (cart.length === 0) {
+      list.innerHTML = `<p style="text-align:center; color:#888; margin-top:40px;">Your cart is empty.</p>`;
+      if (totalEl) totalEl.innerText = '₱0.00';
+      return;
+    }
+
+    let html = '';
+    let total = 0;
+
+    cart.forEach((item, index) => {
+      total += Number(item.price || 0);
+      html += `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid #FAF6EE; padding-bottom:8px;">
+          <div>
+            <strong style="font-size:14px;">${item.name}</strong><br>
+            <small style="color:#BF953F;">₱${Number(item.price).toFixed(2)}</small>
+          </div>
+          <button onclick="removeFromCart(${index})" style="background:none; border:none; color:red; cursor:pointer;">✕</button>
+        </div>
+      `;
+    });
+
+    if (appliedCoupon) {
+      if (appliedCoupon.type === 'percent') {
+        total = total * (1 - appliedCoupon.value / 100);
+      } else {
+        total = Math.max(0, total - appliedCoupon.value);
+      }
+    }
+
+    list.innerHTML = html;
+    if (totalEl) totalEl.innerText = `₱${total.toFixed(2)}`;
+  }
+
+  function removeFromCart(index) {
+    cart.splice(index, 1);
+    updateCartCount();
+    renderCartItems();
+  }
+
+  // MODAL NAVIGATION HELPERS
   function openModal(id) {
     const modal = document.getElementById(id);
     if (modal) {
@@ -549,39 +772,23 @@
     if (modal) modal.style.display = 'none';
   }
 
-  function showPage(page, event) {
+  function showPage(pageId, event) {
     if (event) event.preventDefault();
-    if (page === 'home') return;
-    openModal(page + 'Modal');
+    if (pageId === 'home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      const modalMap = { 'about': 'aboutModal', 'faqs': 'faqsModal', 'contact': 'contactModal' };
+      if (modalMap[pageId]) {
+        document.getElementById(modalMap[pageId]).style.display = 'flex';
+      }
+    }
   }
 
   function closePageModal(id) {
-    closeModal(id);
+    document.getElementById(id).style.display = 'none';
   }
 
-  function toggleCart(e) {
-    if (e) e.preventDefault();
-    const cart = document.getElementById('cartModal');
-    if (cart) cart.classList.toggle('open');
-  }
-</script>
-
-<script>
-    const firebaseConfig = {
-    apiKey: "AIzaSyDFQcwCJxIkTX0CCz8kaF7Sp2_hZNE1dIs",
-    authDomain: "digitera-levi-shop.firebaseapp.com",
-    projectId: "digitera-levi-shop",
-    storageBucket: "digitera-levi-shop.appspot.com",
-    messagingSenderId: "63166329156",
-    appId: "1:63166329156:web:0b797f9438a98c84e46711"
-  };
-  // Initialize Firebase Firestore
-  if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  const db = firebase.firestore();
-
-  // Function para I-fetch at I-render ang Orders Dashboard
+  // 3. LOAD ORDERS DASHBOARD FROM FIRESTORE
   function loadOrdersDashboard() {
     const tableBody = document.getElementById('ordersTableBody');
     const totalRevenueEl = document.getElementById('totalRevenue');
@@ -598,7 +805,7 @@
       .get()
       .then((snapshot) => {
         if (snapshot.empty) {
-          tableBody.innerHTML = '<tr><td colspan="5" class="no-orders">👎 No orders yet!</td></tr>';
+          tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">👎 No orders found.</td></tr>';
           if (totalRevenueEl) totalRevenueEl.innerText = '₱0.00';
           if (totalOrdersEl) totalOrdersEl.innerText = '0';
           if (uniqueCustomersEl) uniqueCustomersEl.innerText = '0';
