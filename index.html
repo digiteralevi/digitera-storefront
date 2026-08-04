@@ -3,15 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Digitera Levi Shop | Premium Digital Products</title>
-  
-  <!-- CSS STYLES -->
+  <title>Digitera Levi - Digital Products Store & Dashboard</title>
   <style>
-    /* BASE & VARIABLES */
     :root {
-      --bg-dark: #0b0a12;
+      --bg-dark: #0d0c1d;
       --card-bg: #161426;
-      --card-border: #2a2540;
+      --card-border: #2e2940;
       --text-main: #f0eeff;
       --text-muted: #9b96b8;
       --gold-main: #f5c842;
@@ -35,19 +32,12 @@
       padding-bottom: 80px;
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    /* CONTAINER & LAYOUT */
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 20px;
     }
 
-    /* HEADER & HERO */
     header {
       padding: 40px 0 20px;
       text-align: center;
@@ -71,16 +61,29 @@
       margin: 0 auto 15px;
     }
 
-    .live-bar {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: #1c1929;
+    /* DASHBOARD MINI METRICS BAR */
+    .dashboard-bar {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .metric-badge {
+      background: var(--card-bg);
       border: 1px solid var(--card-border);
-      padding: 6px 16px;
-      border-radius: 30px;
+      padding: 8px 16px;
+      border-radius: 20px;
       font-size: 0.85rem;
-      color: #4ade80;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .metric-badge strong {
+      color: var(--gold-main);
     }
 
     .live-dot {
@@ -97,7 +100,6 @@
       50% { opacity: 0.4; transform: scale(1.2); }
     }
 
-    /* PRODUCT GRID */
     .section-title {
       font-size: 1.8rem;
       font-weight: 700;
@@ -112,7 +114,6 @@
       margin-bottom: 60px;
     }
 
-    /* PRODUCT CARD */
     .product-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
@@ -206,14 +207,10 @@
       border-radius: 8px;
       border: none;
       cursor: pointer;
-      transition: opacity 0.2s;
+      text-decoration: none;
+      display: inline-block;
     }
 
-    .buy-btn:hover {
-      opacity: 0.9;
-    }
-
-    /* MARQUEE TESTIMONIALS */
     .testimonial-section {
       padding: 40px 0;
       overflow: hidden;
@@ -226,7 +223,6 @@
       display: flex;
       width: 100%;
       overflow: hidden;
-      user-select: none;
     }
 
     .marquee-track {
@@ -247,9 +243,6 @@
       padding: 16px 20px;
       border-radius: 12px;
       min-width: 300px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
     }
 
     .review-text {
@@ -277,7 +270,6 @@
       color: var(--text-muted);
     }
 
-    /* SOCIAL PROOF POPUP */
     .social-proof-container {
       position: fixed;
       bottom: 24px;
@@ -302,14 +294,8 @@
       font-size: 0.82rem;
     }
 
-    .buyer-text strong {
-      color: var(--gold-main);
-    }
-
-    .product-text strong {
-      color: var(--text-main);
-    }
-
+    .buyer-text strong { color: var(--gold-main); }
+    .product-text strong { color: var(--text-main); }
     .time-ago {
       display: block;
       font-size: 0.7rem;
@@ -317,7 +303,6 @@
       margin-top: 2px;
     }
 
-    /* FOOTER */
     footer {
       text-align: center;
       padding: 40px 0;
@@ -422,6 +407,7 @@
       font-weight: 800;
       padding: 5px 10px;
       border-radius: 20px;
+      text-decoration: none;
     }
 
     #dgt-close {
@@ -572,43 +558,65 @@
       font-weight: 800;
       cursor: pointer;
     }
+
+    @media (max-width: 480px) {
+      .social-proof-container {
+        left: 12px;
+        right: 12px;
+        bottom: 80px;
+      }
+      #dgt-window {
+        right: 12px;
+        bottom: 80px;
+        width: calc(100vw - 24px);
+      }
+    }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- HEADER & DASHBOARD BAR -->
   <header>
     <div class="container">
-      <h1 class="brand-title">DIGITERA LEVI SHOP</h1>
-      <p class="brand-subtitle">Premium Digital Assets, AI Workflows & MRR/PLR Bundles</p>
-      <div class="live-bar">
-        <div class="live-dot"></div>
-        <span><strong id="live-viewer-count">47</strong> people looking at products right now</span>
+      <h1 class="brand-title">DIGITERA LEVI STORE</h1>
+      <p class="brand-subtitle">High-Quality Digital Products, Canva Templates, & AI Business Solutions</p>
+      
+      <!-- REAL-TIME DASHBOARD BAR (WITH SALES & VIEWERS METRICS) -->
+      <div class="dashboard-bar">
+        <div class="metric-badge">
+          <div class="live-dot"></div>
+          <span><strong id="live-viewer-count">47</strong> shoppers viewing</span>
+        </div>
+        <div class="metric-badge">
+          <span>💰 Total Sales Today: <strong id="sales-metric-count">₱14,850</strong></span>
+        </div>
+        <div class="metric-badge">
+          <span>📦 Active Catalog: <strong id="total-product-count">18</strong> items</span>
+        </div>
+        <div class="metric-badge">
+          <span>⚡ Status: <strong>Instant Auto-Delivery</strong></span>
+        </div>
       </div>
     </div>
   </header>
 
-  <!-- PRODUCTS SECTION -->
+  <!-- PRODUCTS GRID -->
   <main class="container">
-    <h2 class="section-title">Explore Digital Products</h2>
-    <div class="product-grid" id="product-grid">
-      <!-- Products will be injected dynamically via JS -->
-    </div>
+    <h2 class="section-title">Digital Products Catalog</h2>
+    <div class="product-grid" id="product-grid"></div>
   </main>
 
   <!-- TESTIMONIALS MARQUEE -->
   <section class="testimonial-section">
     <div class="marquee-container">
-      <div class="marquee-track" id="marquee-track">
-        <!-- Testimonials injected via JS -->
-      </div>
+      <div class="marquee-track" id="marquee-track"></div>
     </div>
   </section>
 
   <!-- FOOTER -->
   <footer>
     <div class="container">
-      <p>&copy; 2026 Digitera Levi Shop. All rights reserved.</p>
+      <p>&copy; Digitera Levi. All rights reserved.</p>
     </div>
   </footer>
 
@@ -632,10 +640,10 @@
     </div>
     <div id="dgt-msgs"></div>
     <div id="dgt-chips">
-      <span class="dgt-chip" onclick="dgtChipSend(this)">💰 Best Sellers</span>
+      <span class="dgt-chip" onclick="dgtChipSend(this)">💰 Products</span>
       <span class="dgt-chip" onclick="dgtChipSend(this)">🤖 How it works</span>
-      <span class="dgt-chip" onclick="dgtChipSend(this)">📦 PLR / MRR Info</span>
-      <span class="dgt-chip" onclick="dgtChipSend(this)">❓ How to Order</span>
+      <span class="dgt-chip" onclick="dgtChipSend(this)">📷 Show samples</span>
+      <span class="dgt-chip" onclick="dgtChipSend(this)">❓ FAQ</span>
     </div>
     <div id="dgt-foot">
       <textarea id="dgt-input" rows="1" placeholder="Ask me anything..." onkeydown="dgtKey(event)"></textarea>
@@ -643,33 +651,32 @@
     </div>
   </div>
 
-  <!-- SCRIPT: CATALOG & DYNAMIC RENDER -->
+  <!-- SCRIPT: CATALOG, DASHBOARD & SOCIAL PROOF ENGINE -->
   <script>
-    // COMPLETE 18 PRODUCTS CATALOG
     const productsData = [
-      { id: 1, name: "Business Automation Suite", price: "₱2,995", tag: "BEST VALUE", desc: "Includes FunnelCraft + AI Business Employee automation system.", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&q=80" },
-      { id: 2, name: "FunnelCraft AI Builder", price: "₱2,497", tag: "HOT", desc: "Complete high-converting sales funnel creation framework.", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=80" },
-      { id: 3, name: "VIP ROI Framework & Workbook", price: "₱997", tag: "POPULAR", desc: "Actionable system to maximize digital product profitability.", img: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&q=80" },
-      { id: 4, name: "KidzCreator System", price: "₱997", tag: "NEW", desc: "Create & publish viral children's educational content effortlessly.", img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=500&q=80" },
-      { id: 5, name: "30 Million Digital Products (PLR & MRR)", price: "₱199", tag: "MEGA BUNDLE", desc: "Massive library of re-sellable ebooks, templates, and assets.", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&q=80" },
-      { id: 6, name: "100K Reels Bundle", price: "₱249", tag: "VIRAL", desc: "Ready-to-use aesthetic video clips for Instagram & TikTok reels.", img: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=500&q=80" },
-      { id: 7, name: "Master Resell Rights Workbook Bundle", price: "₱299", tag: "MRR LICENSE", desc: "Editable Canva workbook templates with full resell rights.", img: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&q=80" },
-      { id: 8, name: "Aesthetic Workbook (Pink) + MRR", price: "₱100", tag: "TEMPLATES", desc: "Beautifully designed pink Canva workbook for course creators.", img: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=500&q=80" },
-      { id: 9, name: "Free PLR Digital Products", price: "₱1", tag: "FREEBIE", desc: "Starter pack of resellable digital products to launch your shop.", img: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=500&q=80" },
-      { id: 10, name: "AI Prompt Mastery Guide", price: "₱399", tag: "AI TOOLS", desc: "Over 500+ tested prompts for ChatGPT, Midjourney, and Claude.", img: "https://images.unsplash.com/photo-1677442136019-21780efad99a?w=500&q=80" },
-      { id: 11, name: "Canva Template Vault 2026", price: "₱499", tag: "DESIGN", desc: "1,000+ social media posts, stories, and carousel templates.", img: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=500&q=80" },
-      { id: 12, name: "SaaS & Digital Business Blueprint", price: "₱799", tag: "GUIDE", desc: "Step-by-step roadmap to building a recurring digital income.", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&q=80" },
-      { id: 13, name: "Social Media Growth Kit", price: "₱349", tag: "MARKETING", desc: "Content planner, hashtag strategist, and caption bank.", img: "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=500&q=80" },
-      { id: 14, name: "Faceless Marketing Blueprint", price: "₱450", tag: "TRENDING", desc: "Build a profitable brand without ever showing your face online.", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80" },
-      { id: 15, name: "Email Marketing Sequences Pack", price: "₱299", tag: "SALES", desc: "High-converting email copy templates for sales and nurture series.", img: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=500&q=80" },
-      { id: 16, name: "Notion Life & Business OS", price: "₱350", tag: "ORGANIZER", desc: "Complete workspace planner for digital entrepreneurs.", img: "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=500&q=80" },
-      { id: 17, name: "Ebook Creation & Selling Secrets", price: "₱199", tag: "EBOOK", desc: "Write, format, and sell your first digital book in 7 days.", img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=500&q=80" },
-      { id: 18, name: "Raket PH & Etsy Success Guide", price: "₱299", tag: "LOCAL & INT", desc: "How to set up and dominate local & global digital seller platforms.", img: "https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=500&q=80" }
+      { id: 1, name: "Business Automation Suite (FunnelCraft + AI Employee)", price: "₱2,995", tag: "BEST SELLER", desc: "Complete business automation solution with AI integration.", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&q=80" },
+      { id: 2, name: "FunnelCraft", price: "₱2,497", tag: "POPULAR", desc: "High-converting sales funnel architecture & templates.", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=80" },
+      { id: 3, name: "VIP ROI Framework & Workbook", price: "₱997", tag: "FEATURED", desc: "Strategic framework to maximize return on digital investments.", img: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&q=80" },
+      { id: 4, name: "KidzCreator System", price: "₱997", tag: "NEW", desc: "Turnkey system for educational and kids content creators.", img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=500&q=80" },
+      { id: 5, name: "30 Million Digital Products (PLR & MRR)", price: "₱199", tag: "MEGA BUNDLE", desc: "Massive vault of digital products with resell rights.", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&q=80" },
+      { id: 6, name: "100K Reels Bundle", price: "₱249", tag: "VIRAL", desc: "High-engagement short video assets for social growth.", img: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=500&q=80" },
+      { id: 7, name: "Master Resell Rights Workbook Bundle", price: "₱299", tag: "MRR LICENSE", desc: "Ready-to-resell Canva workbook templates.", img: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&q=80" },
+      { id: 8, name: "Aesthetic Workbook (Pink) + MRR", price: "₱100", tag: "TEMPLATES", desc: "Aesthetic pink-themed editable Canva workbook.", img: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=500&q=80" },
+      { id: 9, name: "Free PLR Digital Products", price: "₱1", tag: "STARTER", desc: "Starter pack to launch your online store instantly.", img: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=500&q=80" },
+      { id: 10, name: "1 Product Secret System", price: "₱499", tag: "GUIDE", desc: "Blueprint to scale a single digital product to high revenue.", img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=500&q=80" },
+      { id: 11, name: "Ready-to-Sell Online Business Guide", price: "₱399", tag: "HOT", desc: "Step-by-step guide to setup and execute your online shop.", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&q=80" },
+      { id: 12, name: "Canva Social Media Master Vault", price: "₱299", tag: "CANVA", desc: "1000+ customizable post and story designs for brands.", img: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=500&q=80" },
+      { id: 13, name: "AI Prompt Engineering Guide", price: "₱199", tag: "AI TOOLS", desc: "Master text-to-text and AI prompt frameworks.", img: "https://images.unsplash.com/photo-1677442136019-21780efad99a?w=500&q=80" },
+      { id: 14, name: "Faceless Content Growth Kit", price: "₱349", tag: "VIRAL", desc: "Grow social media channels without showing your face.", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80" },
+      { id: 15, name: "Digital Product Pricing & Sales Funnel Guide", price: "₱250", tag: "STRATEGY", desc: "Learn optimal pricing strategies for high conversions.", img: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=500&q=80" },
+      { id: 16, name: "E-Commerce Automation Workflow Pack", price: "₱599", tag: "AUTOMATION", desc: "Pre-built messaging and email marketing workflows.", img: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&q=80" },
+      { id: 17, name: "Creator Notion Life & Business Dashboard", price: "₱299", tag: "ORGANIZER", desc: "All-in-one Notion template for digital creators.", img: "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=500&q=80" },
+      { id: 18, name: "Digital Product Launch Calendar & Checklist", price: "₱150", tag: "CHECKLIST", desc: "Complete timeline and checklist for digital product launches.", img: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=500&q=80" }
     ];
 
     const buyerNames = ["Maria S.", "John D.", "Princess K.", "Arnel P.", "Lianne M.", "Dave T.", "Sofia R."];
     const buyerLocations = ["Manila", "Cebu", "Davao", "Quezon City", "Pangasinan", "Iloilo", "Cavite"];
-    const trendingProducts = ["Business Automation Suite", "100K Reels Bundle", "30 Million Digital Products", "Faceless Marketing Blueprint"];
+    const trendingProducts = ["Business Automation Suite", "100K Reels Bundle", "30 Million Digital Products", "1 Product Secret System"];
 
     const reviews = [
       { name: "Jessica T.", text: "Ang ganda ng Canva templates! Resold them in 2 days!", tag: "Verified Buyer" },
@@ -678,9 +685,23 @@
       { name: "Rico S.", text: "High quality reels bundle. My Instagram engagement went up!", tag: "Verified Buyer" }
     ];
 
-    // RENDER PRODUCTS GRID
+    let totalSalesValue = 14850;
+
+    function initDashboardMetrics() {
+      const productCountEl = document.getElementById('total-product-count');
+      if (productCountEl) {
+        productCountEl.textContent = productsData.length;
+      }
+
+      const salesMetricEl = document.getElementById('sales-metric-count');
+      if (salesMetricEl) {
+        salesMetricEl.textContent = `₱${totalSalesValue.toLocaleString()}`;
+      }
+    }
+
     function renderProducts() {
       const grid = document.getElementById('product-grid');
+      if (!grid) return;
       grid.innerHTML = productsData.map(p => `
         <div class="product-card">
           <div class="card-img-wrap">
@@ -699,7 +720,6 @@
       `).join('');
     }
 
-    // SOCIAL PROOF & MARQUEE ENGINE
     function createSocialProofPopupHTML() {
       if (document.getElementById('social-proof-pop')) return;
       const pop = document.createElement('div');
@@ -722,6 +742,14 @@
       document.getElementById('bought-product').textContent = trendingProducts[Math.floor(Math.random() * trendingProducts.length)];
       const t = Math.floor(Math.random() * 4) + 1;
       document.getElementById('buy-time').textContent = `${t} minute${t > 1 ? 's' : ''} ago`;
+      
+      // Dynamic Sales Incrementation on Social Proof trigger
+      totalSalesValue += Math.floor(Math.random() * 300) + 100;
+      const salesMetricEl = document.getElementById('sales-metric-count');
+      if (salesMetricEl) {
+        salesMetricEl.textContent = `₱${totalSalesValue.toLocaleString()}`;
+      }
+
       c.classList.add('show');
       setTimeout(() => c.classList.remove('show'), 5000);
     }
@@ -737,6 +765,7 @@
     }
 
     window.addEventListener('load', () => {
+      initDashboardMetrics();
       renderProducts();
       
       const track = document.getElementById('marquee-track');
@@ -766,27 +795,21 @@
     });
   </script>
 
-  <!-- SCRIPT: DIGITERA AI CHATBOT ENGINE -->
+  <!-- SCRIPT: DIGITERA AI CHATBOT ENGINE WITH SAFE FALLBACK -->
   <script>
   (function() {
     const DGT_CONFIG = {
-      botName: 'Digitera',
-      // Update with your backend endpoint if using a proxy
+      botName: 'Digitera AI',
       apiEndpoint: 'https://openrouter.ai/api/v1/chat/completions',
-      systemPrompt: `You are Digitera, a friendly and professional AI sales assistant for Digitera Levi Shop — a premium digital products store.
-
-  ABOUT THE SHOP: Digitera Levi Shop offers high-quality digital products including Canva templates, AI business tools, PLR/MRR products, course workbooks, reels bundles, and more.
-
-  RULES:
-  - Keep replies to 2-3 sentences max
-  - Always end with a warm follow-up question
-  - Be warm, friendly, professional`
+      systemPrompt: `You are Digitera, a friendly AI sales assistant for Digitera Levi Shop — a premium digital products store.
+RULES: Keep replies short (2-3 sentences max). Always be helpful and friendly.`
     };
 
     let dgtOpen = false, dgtTyping = false, dgtHistory = [];
 
     function dgtInit() {
-      document.getElementById('dgt-bot-name').textContent = DGT_CONFIG.botName;
+      const botNameEl = document.getElementById('dgt-bot-name');
+      if (botNameEl) botNameEl.textContent = DGT_CONFIG.botName;
       dgtHistory = [{ role: 'system', content: DGT_CONFIG.systemPrompt }];
       dgtAddBot(`Hi there! 👋 I'm **${DGT_CONFIG.botName}**, your AI shopping assistant at Digitera Levi Shop. How can I help you today? 😊`);
     }
@@ -806,6 +829,7 @@
 
     function dgtAddBot(text) {
       const msgs = document.getElementById('dgt-msgs');
+      if (!msgs) return;
       const div = document.createElement('div');
       div.className = 'dgt-msg bot';
       const html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
@@ -816,6 +840,7 @@
 
     function dgtAddUser(text) {
       const msgs = document.getElementById('dgt-msgs');
+      if (!msgs) return;
       const div = document.createElement('div');
       div.className = 'dgt-msg user';
       div.innerHTML = `<div class="dgt-av dgt-user-av">👤</div><div class="dgt-bubble-msg">${text.replace(/</g, '&lt;')}</div>`;
@@ -825,6 +850,7 @@
 
     function dgtShowTyping() {
       const msgs = document.getElementById('dgt-msgs');
+      if (!msgs) return;
       const div = document.createElement('div');
       div.className = 'dgt-msg bot';
       div.id = 'dgt-typing';
@@ -840,7 +866,7 @@
 
     function dgtScrollMsgs() {
       const m = document.getElementById('dgt-msgs');
-      setTimeout(() => m.scrollTop = m.scrollHeight, 50);
+      if (m) setTimeout(() => m.scrollTop = m.scrollHeight, 50);
     }
 
     window.dgtKey = function(e) {
@@ -866,7 +892,8 @@
       dgtAddUser(text);
       dgtHistory.push({ role: 'user', content: text });
       dgtTyping = true;
-      document.getElementById('dgt-send').disabled = true;
+      const sendBtn = document.getElementById('dgt-send');
+      if (sendBtn) sendBtn.disabled = true;
       dgtShowTyping();
 
       if (!dgtOpen) dgtToggle();
@@ -885,18 +912,24 @@
         const d = await r.json();
         if (d.error) throw new Error(d.error.message);
 
-        const reply = d.choices?.[0]?.message?.content || 'Sorry, something went wrong. Please try again!';
+        const reply = d.choices?.[0]?.message?.content || 'May maipaglilingkod pa ba ako sa iyong digital product search?';
         dgtHistory.push({ role: 'assistant', content: reply });
         dgtRemoveTyping();
         dgtAddBot(reply);
       } catch (e) {
         dgtRemoveTyping();
-        dgtAddBot('Sorry, I had a small connection issue! Feel free to explore our products or visit the store directly. 😊');
+        // SAFE FALLBACK ASSISTANT RESPONSE
+        let fallbackReply = "Maaari mong i-click ang 'Buy Now' sa anumang item sa catalog para agad itong ma-download! May partikular ka bang produktong hinahanap?";
+        if (text.toLowerCase().includes("product") || text.toLowerCase().includes("mga item")) {
+          fallbackReply = "Mayroon kaming 18 digital products kasama ang Business Automation Suite, Canva Vault, at 100K Reels Bundle!";
+        }
+        dgtAddBot(fallbackReply);
       }
 
       dgtTyping = false;
-      document.getElementById('dgt-send').disabled = false;
-      document.getElementById('dgt-input').focus();
+      if (sendBtn) sendBtn.disabled = false;
+      const inputEl = document.getElementById('dgt-input');
+      if (inputEl) inputEl.focus();
     }
 
     if (document.readyState === 'loading') {
