@@ -973,6 +973,109 @@ RULES:
     if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',dgtInit);}else{dgtInit();}
 })();
 </script>
+<!-- FIREBASE INIT & ORDERS DASHBOARD SCRIPT -->
+<script>
+  // 1. Siguraduhing tama ang iyong Firebase Configuration
+  const firebaseConfig = {
+    apiKey: "YOUR_FIREBASE_API_KEY",
+    authDomain: "digitera-levi-shop.firebaseapp.com",
+    projectId: "digitera-levi-shop",
+    storageBucket: "digitera-levi-shop.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
 
+  // Initialize Firebase (i-check kung hindi pa na-initialize)
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const db = firebase.firestore();
+
+  // 2. Function para I-fetch at I-render ang Orders Dashboard
+  function loadOrdersDashboard() {
+    const tableBody = document.getElementById('ordersTableBody');
+    const totalRevenueEl = document.getElementById('totalRevenue');
+    const totalOrdersEl = document.getElementById('totalOrders');
+    const uniqueCustomersEl = document.getElementById('uniqueCustomers');
+    const avgOrderValueEl = document.getElementById('avgOrderValue');
+
+    if (!tableBody) return;
+
+    // Maglagay ng Loading state
+    tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">🔄 Loading latest orders...</td></tr>';
+
+    // Kunin ang mga orders mula sa Firestore (Naka-order by latest date)
+    db.collection('orders')
+      .orderBy('createdAt', 'desc')
+      .get()
+      .then((snapshot) => {
+        if (snapshot.empty) {
+          tableBody.innerHTML = '<tr><td colspan="6" class="no-orders">👎 No orders yet!</td></tr>';
+          if (totalRevenueEl) totalRevenueEl.innerText = '₱0.00';
+          if (totalOrdersEl) totalOrdersEl.innerText = '0';
+          if (uniqueCustomersEl) uniqueCustomersEl.innerText = '0';
+          if (avgOrderValueEl) avgOrderValueEl.innerText = '₱0.00';
+          return;
+        }
+
+        let html = '';
+        let totalRevenue = 0;
+        let totalOrders = 0;
+        let customerEmails = new Set();
+
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          const amount = Number(data.total || data.amount || 0);
+          const customerName = data.customer || 'Customer';
+          const email = data.email || 'N/A';
+          const items = data.items || 'Digital Product';
+          const status = data.status || 'Paid';
+          
+          // Format ng Petsa
+          let dateStr = 'Recent';
+          if (data.createdAt && data.createdAt.toDate) {
+            dateStr = data.createdAt.toDate().toLocaleDateString('en-PH', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric'
+            });
+          }
+
+          // Compute Stats
+          totalRevenue += amount;
+          totalOrders += 1;
+          if (email !== 'N/A') customerEmails.add(email);
+
+          // Build Table Rows
+          html += `
+            <tr>
+              <td>${dateStr}</td>
+              <td><strong>${customerName}</strong><br><small style="color:#888;">${email}</small></td>
+              <td>${items}</td>
+              <td><strong>₱${amount.toFixed(2)}</strong></td>
+              <td><span class="status-badge completed">${status}</span></td>
+            </tr>
+          `;
+        });
+
+        // I-update ang Table HTML
+        tableBody.innerHTML = html;
+
+        // I-update ang Stats Metrics Cards
+        if (totalRevenueEl) totalRevenueEl.innerText = `₱${totalRevenue.toFixed(2)}`;
+        if (totalOrdersEl) totalOrdersEl.innerText = totalOrders;
+        if (uniqueCustomersEl) uniqueCustomersEl.innerText = customerEmails.size;
+        if (avgOrderValueEl) {
+          const avg = totalOrders > 0 ? (totalRevenue / totalOrders) : 0;
+          avgOrderValueEl.innerText = `₱${avg.toFixed(2)}`;
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching orders:", error);
+        tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red; padding:20px;">❌ Failed to load orders: ${error.message}</td></tr>`;
+      });
+  }
+</script>
+    
 </body>
 </html>
