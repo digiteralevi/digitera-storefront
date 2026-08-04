@@ -972,26 +972,14 @@ RULES:
 
     if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',dgtInit);}else{dgtInit();}
 })();
-</script>
-<!-- FIREBASE INIT & ORDERS DASHBOARD SCRIPT -->
 <script>
-  // 1. Siguraduhing tama ang iyong Firebase Configuration
-  const firebaseConfig = {
-    apiKey: "YOUR_FIREBASE_API_KEY",
-    authDomain: "digitera-levi-shop.firebaseapp.com",
-    projectId: "digitera-levi-shop",
-    storageBucket: "digitera-levi-shop.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-
-  // Initialize Firebase (i-check kung hindi pa na-initialize)
+  // Initialize Firebase Firestore gamit ang umiiral na app instance
   if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
   }
   const db = firebase.firestore();
 
-  // 2. Function para I-fetch at I-render ang Orders Dashboard
+  // Function para I-fetch at I-render ang Orders Dashboard
   function loadOrdersDashboard() {
     const tableBody = document.getElementById('ordersTableBody');
     const totalRevenueEl = document.getElementById('totalRevenue');
@@ -1001,16 +989,14 @@ RULES:
 
     if (!tableBody) return;
 
-    // Maglagay ng Loading state
-    tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:20px;">🔄 Loading latest orders...</td></tr>';
+    tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">🔄 Loading latest orders...</td></tr>';
 
-    // Kunin ang mga orders mula sa Firestore (Naka-order by latest date)
     db.collection('orders')
       .orderBy('createdAt', 'desc')
       .get()
       .then((snapshot) => {
         if (snapshot.empty) {
-          tableBody.innerHTML = '<tr><td colspan="6" class="no-orders">👎 No orders yet!</td></tr>';
+          tableBody.innerHTML = '<tr><td colspan="5" class="no-orders">👎 No orders yet!</td></tr>';
           if (totalRevenueEl) totalRevenueEl.innerText = '₱0.00';
           if (totalOrdersEl) totalOrdersEl.innerText = '0';
           if (uniqueCustomersEl) uniqueCustomersEl.innerText = '0';
@@ -1031,7 +1017,6 @@ RULES:
           const items = data.items || 'Digital Product';
           const status = data.status || 'Paid';
           
-          // Format ng Petsa
           let dateStr = 'Recent';
           if (data.createdAt && data.createdAt.toDate) {
             dateStr = data.createdAt.toDate().toLocaleDateString('en-PH', {
@@ -1041,12 +1026,10 @@ RULES:
             });
           }
 
-          // Compute Stats
           totalRevenue += amount;
           totalOrders += 1;
           if (email !== 'N/A') customerEmails.add(email);
 
-          // Build Table Rows
           html += `
             <tr>
               <td>${dateStr}</td>
@@ -1058,10 +1041,8 @@ RULES:
           `;
         });
 
-        // I-update ang Table HTML
         tableBody.innerHTML = html;
 
-        // I-update ang Stats Metrics Cards
         if (totalRevenueEl) totalRevenueEl.innerText = `₱${totalRevenue.toFixed(2)}`;
         if (totalOrdersEl) totalOrdersEl.innerText = totalOrders;
         if (uniqueCustomersEl) uniqueCustomersEl.innerText = customerEmails.size;
@@ -1072,7 +1053,7 @@ RULES:
       })
       .catch((error) => {
         console.error("Error fetching orders:", error);
-        tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:red; padding:20px;">❌ Failed to load orders: ${error.message}</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red; padding:20px;">❌ Failed to load orders: ${error.message}</td></tr>`;
       });
   }
 </script>
