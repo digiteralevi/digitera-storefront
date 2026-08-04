@@ -3,941 +3,233 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Digitera Levi - Digital Products Store & Dashboard</title>
+  <title>Digitera Storefront</title>
+
+  <!-- Firebase Compatibility SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
   <style>
-    :root {
-      --bg-dark: #0d0c1d;
-      --card-bg: #161426;
-      --card-border: #2e2940;
-      --text-main: #f0eeff;
-      --text-muted: #9b96b8;
-      --gold-main: #f5c842;
-      --gold-grad: linear-gradient(135deg, #f0c860 0%, #c9a84c 40%, #e8b84b 70%, #a07830 100%);
-      --purple-accent: #6c5ce7;
-      --purple-glow: rgba(108, 92, 231, 0.35);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-      line-height: 1.6;
-      overflow-x: hidden;
-      padding-bottom: 80px;
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    header {
-      padding: 40px 0 20px;
-      text-align: center;
-      border-bottom: 1px solid var(--card-border);
-      background: radial-gradient(circle at top, rgba(108,92,231,0.15) 0%, transparent 70%);
-    }
-
-    .brand-title {
-      font-size: 2.5rem;
-      font-weight: 800;
-      background: var(--gold-grad);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 8px;
-    }
-
-    .brand-subtitle {
-      color: var(--text-muted);
-      font-size: 1.05rem;
-      max-width: 600px;
-      margin: 0 auto 15px;
-    }
-
-    /* DASHBOARD MINI METRICS BAR */
-    .dashboard-bar {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 20px;
-      flex-wrap: wrap;
-    }
-
-    .metric-badge {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .metric-badge strong {
-      color: var(--gold-main);
-    }
-
-    .live-dot {
-      width: 8px;
-      height: 8px;
-      background-color: #4ade80;
-      border-radius: 50%;
-      box-shadow: 0 0 8px #4ade80;
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(1.2); }
-    }
-
-    .section-title {
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin: 40px 0 24px;
-      text-align: center;
-    }
-
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-      gap: 24px;
-      margin-bottom: 60px;
-    }
-
-    .product-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-    }
-
-    .product-card:hover {
-      transform: translateY(-5px);
-      border-color: var(--purple-accent);
-      box-shadow: 0 10px 30px var(--purple-glow);
-    }
-
-    .card-img-wrap {
-      width: 100%;
-      height: 200px;
-      background-color: #100e1a;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card-img-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease;
-    }
-
-    .product-card:hover .card-img-wrap img {
-      transform: scale(1.05);
-    }
-
-    .badge-tag {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: var(--gold-grad);
-      color: #1a1200;
-      font-weight: 800;
-      font-size: 0.7rem;
-      padding: 4px 10px;
-      border-radius: 20px;
-      text-transform: uppercase;
-    }
-
-    .card-body {
-      padding: 18px;
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-    }
-
-    .product-name {
-      font-size: 1.1rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--text-main);
-    }
-
-    .product-desc {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-      flex-grow: 1;
-    }
-
-    .price-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: auto;
-      padding-top: 12px;
-      border-top: 1px solid var(--card-border);
-    }
-
-    .product-price {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--gold-main);
-    }
-
-    .buy-btn {
-      background: var(--gold-grad);
-      color: #1a1200;
-      font-weight: 800;
-      font-size: 0.85rem;
-      padding: 8px 16px;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .testimonial-section {
-      padding: 40px 0;
-      overflow: hidden;
-      background: #0f0d1a;
-      border-top: 1px solid var(--card-border);
-      border-bottom: 1px solid var(--card-border);
-    }
-
-    .marquee-container {
-      display: flex;
-      width: 100%;
-      overflow: hidden;
-    }
-
-    .marquee-track {
-      display: flex;
-      gap: 20px;
-      animation: marquee 35s linear infinite;
-      white-space: nowrap;
-    }
-
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    .testimonial-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      padding: 16px 20px;
-      border-radius: 12px;
-      min-width: 300px;
-    }
-
-    .review-text {
-      font-size: 0.88rem;
-      color: var(--text-main);
-      white-space: normal;
-      margin-top: 6px;
-    }
-
-    .reviewer-info {
-      margin-top: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .reviewer-name {
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--gold-main);
-    }
-
-    .reviewer-tag {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .social-proof-container {
-      position: fixed;
-      bottom: 24px;
-      left: 24px;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      padding: 12px 18px;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-      z-index: 9999;
-      transform: translateY(120px);
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .social-proof-container.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    .social-proof-content {
-      font-size: 0.82rem;
-    }
-
-    .buyer-text strong { color: var(--gold-main); }
-    .product-text strong { color: var(--text-main); }
-    .time-ago {
-      display: block;
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 40px 0;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-    }
-
-    /* CHAT WIDGET STYLES */
-    #dgt-fab-wrap {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      z-index: 99990;
-    }
-
-    #dgt-fab {
-      background: var(--gold-grad);
-      color: #1a1200;
-      border: none;
-      cursor: pointer;
-      font-size: .85rem;
-      font-weight: 800;
-      padding: 12px 20px;
-      border-radius: 50px;
-      box-shadow: 0 4px 18px rgba(245,200,66,.45);
-      transition: all .25s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    #dgt-fab:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(245,200,66,.6);
-    }
-
-    #dgt-window {
-      position: fixed;
-      bottom: 90px;
-      right: 24px;
-      width: 370px;
-      max-width: calc(100vw - 32px);
-      height: 540px;
-      max-height: calc(100vh - 120px);
-      background: var(--card-bg);
-      border: 1.5px solid var(--card-border);
-      border-radius: 18px;
-      box-shadow: 0 12px 48px rgba(0,0,0,.6);
-      display: flex;
-      flex-direction: column;
-      z-index: 99989;
-      transform: scale(.9) translateY(20px);
-      opacity: 0;
-      pointer-events: none;
-      transition: all .25s ease;
-      overflow: hidden;
-    }
-
-    #dgt-window.open {
-      transform: scale(1) translateY(0);
-      opacity: 1;
-      pointer-events: all;
-      border-color: var(--purple-accent);
-    }
-
-    #dgt-hdr {
-      padding: 14px 16px;
-      background: linear-gradient(135deg, #1e1a3a, #15121f);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border-bottom: 1px solid var(--card-border);
-    }
-
-    #dgt-hdr-av {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--gold-grad);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-    }
-
-    #dgt-hdr-info h4 {
-      font-size: .88rem;
-      font-weight: 700;
-      color: var(--text-main);
-    }
-
-    #dgt-hdr-info p {
-      font-size: .7rem;
-      color: #4ade80;
-    }
-
-    #dgt-shop-btn {
-      margin-left: auto;
-      background: var(--gold-grad);
-      color: #1a1200;
-      font-size: .68rem;
-      font-weight: 800;
-      padding: 5px 10px;
-      border-radius: 20px;
-      text-decoration: none;
-    }
-
-    #dgt-close {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 1.1rem;
-      cursor: pointer;
-      padding: 4px 6px;
-    }
-
-    #dgt-msgs {
-      flex: 1;
-      overflow-y: auto;
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      background: var(--bg-dark);
-    }
-
-    .dgt-msg {
-      display: flex;
-      gap: 8px;
-      align-items: flex-end;
-      max-width: 88%;
-    }
-
-    .dgt-msg.user {
-      align-self: flex-end;
-      flex-direction: row-reverse;
-    }
-
-    .dgt-av {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: .75rem;
-      flex-shrink: 0;
-    }
-
-    .dgt-bot-av { background: linear-gradient(135deg, #6c5ce7, #1e1a3a); }
-    .dgt-user-av { background: var(--gold-grad); }
-
-    .dgt-bubble-msg {
-      padding: 10px 13px;
-      border-radius: 14px;
-      font-size: .84rem;
-      line-height: 1.5;
-    }
-
-    .dgt-msg.bot .dgt-bubble-msg {
-      background: #221e31;
-      color: var(--text-main);
-      border-bottom-left-radius: 4px;
-      border: 1px solid var(--card-border);
-    }
-
-    .dgt-msg.user .dgt-bubble-msg {
-      background: var(--purple-accent);
-      color: #fff;
-      border-bottom-right-radius: 4px;
-    }
-
-    .dgt-typing {
-      display: flex;
-      gap: 4px;
-      padding: 10px 13px;
-      background: #221e31;
-      border-radius: 14px;
-      border-bottom-left-radius: 4px;
-      border: 1px solid var(--card-border);
-    }
-
-    .dgt-dot {
-      width: 6px;
-      height: 6px;
-      background: #9b8ef8;
-      border-radius: 50%;
-      animation: dgtBounce 1.2s infinite;
-    }
-    .dgt-dot:nth-child(2) { animation-delay: .2s; }
-    .dgt-dot:nth-child(3) { animation-delay: .4s; }
-
-    @keyframes dgtBounce {
-      0%, 60%, 100% { transform: translateY(0); }
-      30% { transform: translateY(-5px); }
-    }
-
-    #dgt-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      padding: 8px 12px;
-      background: var(--bg-dark);
-      border-top: 1px solid var(--card-border);
-    }
-
-    .dgt-chip {
-      background: #221e31;
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      font-size: .72rem;
-      padding: 5px 11px;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: all .15s;
-    }
-
-    .dgt-chip:hover {
-      background: var(--gold-grad);
-      color: #1a1200;
-      font-weight: 700;
-      border-color: transparent;
-    }
-
-    #dgt-foot {
-      padding: 10px 12px;
-      border-top: 1px solid var(--card-border);
-      display: flex;
-      gap: 8px;
-      background: var(--card-bg);
-    }
-
-    #dgt-input {
-      flex: 1;
-      background: #15121f;
-      border: 1.5px solid var(--card-border);
-      border-radius: 8px;
-      color: var(--text-main);
-      padding: 9px 12px;
-      font-size: .84rem;
-      outline: none;
-      resize: none;
-    }
-
-    #dgt-input:focus { border-color: var(--purple-accent); }
-
-    #dgt-send {
-      background: var(--gold-grad);
-      color: #1a1200;
-      border: none;
-      border-radius: 8px;
-      padding: 9px 14px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    @media (max-width: 480px) {
-      .social-proof-container {
-        left: 12px;
-        right: 12px;
-        bottom: 80px;
-      }
-      #dgt-window {
-        right: 12px;
-        bottom: 80px;
-        width: calc(100vw - 24px);
-      }
-    }
+    /* basic reset at styles para sa layout at modal */
+    body { font-family: sans-serif; margin: 0; padding: 0; background: #f4f0f9; }
+    footer { padding: 20px; text-align: center; background: #fff; margin-top: 40px; }
+    .footer-links a { margin: 0 10px; cursor: pointer; color: #6b21a8; text-decoration: none; }
+    
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
+    .modal-content { background: white; padding: 20px; border-radius: 12px; width: 90%; max-width: 800px; position: relative; max-height: 85vh; overflow-y: auto; }
+    .close-btn { position: absolute; right: 15px; top: 15px; cursor: pointer; font-size: 20px; }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+    .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+    .status-badge.completed { background: #dcfce7; color: #15803d; }
   </style>
 </head>
 <body>
 
-  <!-- HEADER & DASHBOARD BAR -->
-  <header>
-    <div class="container">
-      <h1 class="brand-title">DIGITERA LEVI STORE</h1>
-      <p class="brand-subtitle">High-Quality Digital Products, Canva Templates, & AI Business Solutions</p>
-      
-      <!-- REAL-TIME DASHBOARD BAR (WITH SALES & VIEWERS METRICS) -->
-      <div class="dashboard-bar">
-        <div class="metric-badge">
-          <div class="live-dot"></div>
-          <span><strong id="live-viewer-count">47</strong> shoppers viewing</span>
-        </div>
-        <div class="metric-badge">
-          <span>💰 Total Sales Today: <strong id="sales-metric-count">₱14,850</strong></span>
-        </div>
-        <div class="metric-badge">
-          <span>📦 Active Catalog: <strong id="total-product-count">18</strong> items</span>
-        </div>
-        <div class="metric-badge">
-          <span>⚡ Status: <strong>Instant Auto-Delivery</strong></span>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- PRODUCTS GRID -->
-  <main class="container">
-    <h2 class="section-title">Digital Products Catalog</h2>
-    <div class="product-grid" id="product-grid"></div>
+  <main style="padding: 20px; text-align: center;">
+    <h1>Welcome to Digitera Storefront</h1>
+    <button id="secretAdminBtn" style="display:none; margin: 10px auto;" onclick="openModal('ordersModal')">View Orders Dashboard</button>
   </main>
 
-  <!-- TESTIMONIALS MARQUEE -->
-  <section class="testimonial-section">
-    <div class="marquee-container">
-      <div class="marquee-track" id="marquee-track"></div>
-    </div>
-  </section>
+  <!-- ORDERS DASHBOARD MODAL -->
+  <div id="ordersModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('ordersModal')">&times;</span>
+      <h2>📊 Orders Dashboard</h2>
+      
+      <div style="display: flex; gap: 10px; justify-content: space-around; margin-bottom: 20px; background: #faf5ff; padding: 15px; border-radius: 8px;">
+        <div>
+          <small>Total Revenue</small>
+          <h3 id="totalRevenue">₱0.00</h3>
+        </div>
+        <div>
+          <small>Total Orders</small>
+          <h3 id="totalOrders">0</h3>
+        </div>
+        <div>
+          <small>Unique Customers</small>
+          <h3 id="uniqueCustomers">0</h3>
+        </div>
+        <div>
+          <small>Avg Order Value</small>
+          <h3 id="avgOrderValue">₱0.00</h3>
+        </div>
+      </div>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="container">
-      <p>&copy; Digitera Levi. All rights reserved.</p>
+      <h3>📋 Recent Orders</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Customer</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="ordersTableBody">
+          <tr>
+            <td colspan="5" style="text-align:center; padding:20px;">🔄 Loading latest orders...</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  </div>
+
+  <footer>
+    <div class="footer-links">
+      <a onclick="showPage('about',event)">About Us</a>
+      <a onclick="showPage('faqs',event)">FAQs</a>
+      <a onclick="showPage('contact',event)">Contact</a>
+    </div>
+    <p>© 2026 Digitera Levi Shop. All rights reserved.</p>
   </footer>
 
-  <!-- CHAT WIDGET DOM -->
-  <div id="dgt-fab-wrap">
-    <button id="dgt-fab" onclick="dgtToggle()">
-      <span id="dgt-fab-icon">💬</span>
-      <span id="dgt-fab-text">Ask Digitera</span>
-    </button>
-  </div>
-
-  <div id="dgt-window">
-    <div id="dgt-hdr">
-      <div id="dgt-hdr-av">🤖</div>
-      <div id="dgt-hdr-info">
-        <h4 id="dgt-bot-name">Digitera AI</h4>
-        <p>Online • Ready to help</p>
-      </div>
-      <a id="dgt-shop-btn" href="https://digiteralevi.github.io/digitera-storefront/" target="_blank">🛍️ Shop</a>
-      <button id="dgt-close" onclick="dgtToggle()">✕</button>
-    </div>
-    <div id="dgt-msgs"></div>
-    <div id="dgt-chips">
-      <span class="dgt-chip" onclick="dgtChipSend(this)">💰 Products</span>
-      <span class="dgt-chip" onclick="dgtChipSend(this)">🤖 How it works</span>
-      <span class="dgt-chip" onclick="dgtChipSend(this)">📷 Show samples</span>
-      <span class="dgt-chip" onclick="dgtChipSend(this)">❓ FAQ</span>
-    </div>
-    <div id="dgt-foot">
-      <textarea id="dgt-input" rows="1" placeholder="Ask me anything..." onkeydown="dgtKey(event)"></textarea>
-      <button id="dgt-send" onclick="dgtSend()">➤</button>
-    </div>
-  </div>
-
-  <!-- SCRIPT: CATALOG, DASHBOARD & SOCIAL PROOF ENGINE -->
+  <!-- 1. FIRST SCRIPT: PAGE & ROUTING CONTROLS -->
   <script>
-    const productsData = [
-      { id: 1, name: "Business Automation Suite (FunnelCraft + AI Employee)", price: "₱2,995", tag: "BEST SELLER", desc: "Complete business automation solution with AI integration.", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&q=80" },
-      { id: 2, name: "FunnelCraft", price: "₱2,497", tag: "POPULAR", desc: "High-converting sales funnel architecture & templates.", img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=500&q=80" },
-      { id: 3, name: "VIP ROI Framework & Workbook", price: "₱997", tag: "FEATURED", desc: "Strategic framework to maximize return on digital investments.", img: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500&q=80" },
-      { id: 4, name: "KidzCreator System", price: "₱997", tag: "NEW", desc: "Turnkey system for educational and kids content creators.", img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=500&q=80" },
-      { id: 5, name: "30 Million Digital Products (PLR & MRR)", price: "₱199", tag: "MEGA BUNDLE", desc: "Massive vault of digital products with resell rights.", img: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&q=80" },
-      { id: 6, name: "100K Reels Bundle", price: "₱249", tag: "VIRAL", desc: "High-engagement short video assets for social growth.", img: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=500&q=80" },
-      { id: 7, name: "Master Resell Rights Workbook Bundle", price: "₱299", tag: "MRR LICENSE", desc: "Ready-to-resell Canva workbook templates.", img: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&q=80" },
-      { id: 8, name: "Aesthetic Workbook (Pink) + MRR", price: "₱100", tag: "TEMPLATES", desc: "Aesthetic pink-themed editable Canva workbook.", img: "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?w=500&q=80" },
-      { id: 9, name: "Free PLR Digital Products", price: "₱1", tag: "STARTER", desc: "Starter pack to launch your online store instantly.", img: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?w=500&q=80" },
-      { id: 10, name: "1 Product Secret System", price: "₱499", tag: "GUIDE", desc: "Blueprint to scale a single digital product to high revenue.", img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=500&q=80" },
-      { id: 11, name: "Ready-to-Sell Online Business Guide", price: "₱399", tag: "HOT", desc: "Step-by-step guide to setup and execute your online shop.", img: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=500&q=80" },
-      { id: 12, name: "Canva Social Media Master Vault", price: "₱299", tag: "CANVA", desc: "1000+ customizable post and story designs for brands.", img: "https://images.unsplash.com/photo-1626785774573-4b799315345d?w=500&q=80" },
-      { id: 13, name: "AI Prompt Engineering Guide", price: "₱199", tag: "AI TOOLS", desc: "Master text-to-text and AI prompt frameworks.", img: "https://images.unsplash.com/photo-1677442136019-21780efad99a?w=500&q=80" },
-      { id: 14, name: "Faceless Content Growth Kit", price: "₱349", tag: "VIRAL", desc: "Grow social media channels without showing your face.", img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80" },
-      { id: 15, name: "Digital Product Pricing & Sales Funnel Guide", price: "₱250", tag: "STRATEGY", desc: "Learn optimal pricing strategies for high conversions.", img: "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=500&q=80" },
-      { id: 16, name: "E-Commerce Automation Workflow Pack", price: "₱599", tag: "AUTOMATION", desc: "Pre-built messaging and email marketing workflows.", img: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=500&q=80" },
-      { id: 17, name: "Creator Notion Life & Business Dashboard", price: "₱299", tag: "ORGANIZER", desc: "All-in-one Notion template for digital creators.", img: "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?w=500&q=80" },
-      { id: 18, name: "Digital Product Launch Calendar & Checklist", price: "₱150", tag: "CHECKLIST", desc: "Complete timeline and checklist for digital product launches.", img: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=500&q=80" }
-    ];
-
-    const buyerNames = ["Maria S.", "John D.", "Princess K.", "Arnel P.", "Lianne M.", "Dave T.", "Sofia R."];
-    const buyerLocations = ["Manila", "Cebu", "Davao", "Quezon City", "Pangasinan", "Iloilo", "Cavite"];
-    const trendingProducts = ["Business Automation Suite", "100K Reels Bundle", "30 Million Digital Products", "1 Product Secret System"];
-
-    const reviews = [
-      { name: "Jessica T.", text: "Ang ganda ng Canva templates! Resold them in 2 days!", tag: "Verified Buyer" },
-      { name: "Mark V.", text: "The Business Automation Suite saved me hours of work daily.", tag: "Verified Buyer" },
-      { name: "Kathleen R.", text: "Super affordable ng PLR bundle! Worth every peso.", tag: "Verified Buyer" },
-      { name: "Rico S.", text: "High quality reels bundle. My Instagram engagement went up!", tag: "Verified Buyer" }
-    ];
-
-    let totalSalesValue = 14850;
-
-    function initDashboardMetrics() {
-      const productCountEl = document.getElementById('total-product-count');
-      if (productCountEl) {
-        productCountEl.textContent = productsData.length;
-      }
-
-      const salesMetricEl = document.getElementById('sales-metric-count');
-      if (salesMetricEl) {
-        salesMetricEl.textContent = `₱${totalSalesValue.toLocaleString()}`;
-      }
-    }
-
-    function renderProducts() {
-      const grid = document.getElementById('product-grid');
-      if (!grid) return;
-      grid.innerHTML = productsData.map(p => `
-        <div class="product-card">
-          <div class="card-img-wrap">
-            <span class="badge-tag">${p.tag}</span>
-            <img src="${p.img}" alt="${p.name}" loading="lazy">
-          </div>
-          <div class="card-body">
-            <h3 class="product-name">${p.name}</h3>
-            <p class="product-desc">${p.desc}</p>
-            <div class="price-row">
-              <span class="product-price">${p.price}</span>
-              <a href="https://digiteralevi.github.io/digitera-storefront/" target="_blank" class="buy-btn">Buy Now</a>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function createSocialProofPopupHTML() {
-      if (document.getElementById('social-proof-pop')) return;
-      const pop = document.createElement('div');
-      pop.id = 'social-proof-pop';
-      pop.className = 'social-proof-container';
-      pop.innerHTML = `
-        <div class="social-proof-content">
-          <p class="buyer-text">🛍️ <strong id="buyer-name"></strong> from <span id="buyer-location"></span></p>
-          <p class="product-text">just purchased <strong id="bought-product"></strong></p>
-          <span class="time-ago" id="buy-time"></span>
-        </div>`;
-      document.body.appendChild(pop);
-    }
-
-    function showSocialProof() {
-      const c = document.getElementById('social-proof-pop');
-      if (!c) return;
-      document.getElementById('buyer-name').textContent = buyerNames[Math.floor(Math.random() * buyerNames.length)];
-      document.getElementById('buyer-location').textContent = buyerLocations[Math.floor(Math.random() * buyerLocations.length)];
-      document.getElementById('bought-product').textContent = trendingProducts[Math.floor(Math.random() * trendingProducts.length)];
-      const t = Math.floor(Math.random() * 4) + 1;
-      document.getElementById('buy-time').textContent = `${t} minute${t > 1 ? 's' : ''} ago`;
-      
-      // Dynamic Sales Incrementation on Social Proof trigger
-      totalSalesValue += Math.floor(Math.random() * 300) + 100;
-      const salesMetricEl = document.getElementById('sales-metric-count');
-      if (salesMetricEl) {
-        salesMetricEl.textContent = `₱${totalSalesValue.toLocaleString()}`;
-      }
-
-      c.classList.add('show');
-      setTimeout(() => c.classList.remove('show'), 5000);
-    }
-
-    function updateLiveViewers() {
-      const el = document.getElementById('live-viewer-count');
-      if (!el) return;
-      let v = parseInt(el.textContent) || 47;
-      v += Math.floor(Math.random() * 7) - 3;
-      if (v < 30) v = 34;
-      if (v > 85) v = 78;
-      el.textContent = v;
-    }
-
-    window.addEventListener('load', () => {
-      initDashboardMetrics();
-      renderProducts();
-      
-      const track = document.getElementById('marquee-track');
-      if (track) {
-        const dr = [...reviews, ...reviews, ...reviews];
-        track.innerHTML = dr.map(r => `
-          <div class="testimonial-card">
-            <div>
-              <div class="stars">⭐⭐⭐⭐⭐</div>
-              <p class="review-text">"${r.text}"</p>
-            </div>
-            <div class="reviewer-info">
-              <p class="reviewer-name">${r.name}</p>
-              <p class="reviewer-tag">${r.tag}</p>
-            </div>
-          </div>
-        `).join('');
-      }
-
-      createSocialProofPopupHTML();
-      setTimeout(() => {
-        showSocialProof();
-        setInterval(showSocialProof, 18000);
-      }, 4000);
-
-      setInterval(updateLiveViewers, 5000);
-    });
-  </script>
-
-  <!-- SCRIPT: DIGITERA AI CHATBOT ENGINE WITH SAFE FALLBACK -->
-  <script>
-  (function() {
-    const DGT_CONFIG = {
-      botName: 'Digitera AI',
-      apiEndpoint: 'https://openrouter.ai/api/v1/chat/completions',
-      systemPrompt: `You are Digitera, a friendly AI sales assistant for Digitera Levi Shop — a premium digital products store.
-RULES: Keep replies short (2-3 sentences max). Always be helpful and friendly.`
-    };
-
-    let dgtOpen = false, dgtTyping = false, dgtHistory = [];
-
     function dgtInit() {
-      const botNameEl = document.getElementById('dgt-bot-name');
-      if (botNameEl) botNameEl.textContent = DGT_CONFIG.botName;
-      dgtHistory = [{ role: 'system', content: DGT_CONFIG.systemPrompt }];
-      dgtAddBot(`Hi there! 👋 I'm **${DGT_CONFIG.botName}**, your AI shopping assistant at Digitera Levi Shop. How can I help you today? 😊`);
-    }
-
-    window.dgtToggle = function() {
-      dgtOpen = !dgtOpen;
-      document.getElementById('dgt-window').classList.toggle('open', dgtOpen);
-      document.getElementById('dgt-fab-icon').textContent = dgtOpen ? '✕' : '💬';
-      document.getElementById('dgt-fab-text').textContent = dgtOpen ? 'Close' : 'Ask Digitera';
-      if (dgtOpen) {
-        setTimeout(() => {
-          document.getElementById('dgt-input').focus();
-          dgtScrollMsgs();
-        }, 300);
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('mode') === 'admin') {
+        const adminBtn = document.getElementById('secretAdminBtn');
+        if (adminBtn) adminBtn.style.display = 'block';
       }
-    };
-
-    function dgtAddBot(text) {
-      const msgs = document.getElementById('dgt-msgs');
-      if (!msgs) return;
-      const div = document.createElement('div');
-      div.className = 'dgt-msg bot';
-      const html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
-      div.innerHTML = `<div class="dgt-av dgt-bot-av">🤖</div><div class="dgt-bubble-msg">${html}</div>`;
-      msgs.appendChild(div);
-      dgtScrollMsgs();
     }
 
-    function dgtAddUser(text) {
-      const msgs = document.getElementById('dgt-msgs');
-      if (!msgs) return;
-      const div = document.createElement('div');
-      div.className = 'dgt-msg user';
-      div.innerHTML = `<div class="dgt-av dgt-user-av">👤</div><div class="dgt-bubble-msg">${text.replace(/</g, '&lt;')}</div>`;
-      msgs.appendChild(div);
-      dgtScrollMsgs();
-    }
-
-    function dgtShowTyping() {
-      const msgs = document.getElementById('dgt-msgs');
-      if (!msgs) return;
-      const div = document.createElement('div');
-      div.className = 'dgt-msg bot';
-      div.id = 'dgt-typing';
-      div.innerHTML = `<div class="dgt-av dgt-bot-av">🤖</div><div class="dgt-typing"><div class="dgt-dot"></div><div class="dgt-dot"></div><div class="dgt-dot"></div></div>`;
-      msgs.appendChild(div);
-      dgtScrollMsgs();
-    }
-
-    function dgtRemoveTyping() {
-      const t = document.getElementById('dgt-typing');
-      if (t) t.remove();
-    }
-
-    function dgtScrollMsgs() {
-      const m = document.getElementById('dgt-msgs');
-      if (m) setTimeout(() => m.scrollTop = m.scrollHeight, 50);
-    }
-
-    window.dgtKey = function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        dgtSend();
-      }
-    };
-
-    window.dgtChipSend = function(el) {
-      dgtSendText(el.textContent.trim());
-    };
-
-    window.dgtSend = function() {
-      const input = document.getElementById('dgt-input');
-      const text = input.value.trim();
-      if (!text || dgtTyping) return;
-      input.value = '';
-      dgtSendText(text);
-    };
-
-    async function dgtSendText(text) {
-      dgtAddUser(text);
-      dgtHistory.push({ role: 'user', content: text });
-      dgtTyping = true;
-      const sendBtn = document.getElementById('dgt-send');
-      if (sendBtn) sendBtn.disabled = true;
-      dgtShowTyping();
-
-      if (!dgtOpen) dgtToggle();
-
-      try {
-        const r = await fetch(DGT_CONFIG.apiEndpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            model: 'openrouter/auto',
-            max_tokens: 400,
-            messages: dgtHistory
-          })
-        });
-
-        const d = await r.json();
-        if (d.error) throw new Error(d.error.message);
-
-        const reply = d.choices?.[0]?.message?.content || 'May maipaglilingkod pa ba ako sa iyong digital product search?';
-        dgtHistory.push({ role: 'assistant', content: reply });
-        dgtRemoveTyping();
-        dgtAddBot(reply);
-      } catch (e) {
-        dgtRemoveTyping();
-        // SAFE FALLBACK ASSISTANT RESPONSE
-        let fallbackReply = "Maaari mong i-click ang 'Buy Now' sa anumang item sa catalog para agad itong ma-download! May partikular ka bang produktong hinahanap?";
-        if (text.toLowerCase().includes("product") || text.toLowerCase().includes("mga item")) {
-          fallbackReply = "Mayroon kaming 18 digital products kasama ang Business Automation Suite, Canva Vault, at 100K Reels Bundle!";
-        }
-        dgtAddBot(fallbackReply);
-      }
-
-      dgtTyping = false;
-      if (sendBtn) sendBtn.disabled = false;
-      const inputEl = document.getElementById('dgt-input');
-      if (inputEl) inputEl.focus();
-    }
-
-    if (document.readyState === 'loading') {
+    if (document.readyState === "loading") {
       document.addEventListener('DOMContentLoaded', dgtInit);
     } else {
       dgtInit();
     }
-  })();
+
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.style.display = 'flex';
+        if (id === 'ordersModal') {
+          loadOrdersDashboard();
+        }
+      }
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) modal.style.display = 'none';
+    }
+
+    function showPage(page, event) {
+      if (event) event.preventDefault();
+      if (page === 'home') return;
+      openModal(page + 'Modal');
+    }
+
+    function closePageModal(id) {
+      closeModal(id);
+    }
+
+    function toggleCart(e) {
+      if (e) e.preventDefault();
+      const cart = document.getElementById('cartModal');
+      if (cart) cart.classList.toggle('open');
+    }
   </script>
+
+  <!-- 2. SECOND SCRIPT: FIREBASE CONFIG & DATA FETCHING -->
+  <script>
+    // CREDENTIALS DIRECT FROM YOUR FIREBASE CONSOLE
+    const firebaseConfig = {
+      apiKey: "AIzaSyDFQcwCJxIkTX0CCz8kaF7Sp2_hZNE1dIs",
+      authDomain: "digitera-levi-shop.firebaseapp.com",
+      projectId: "digitera-levi-shop",
+      storageBucket: "digitera-levi-shop.appspot.com",
+      messagingSenderId: "63166329156",
+      appId: "1:63166329156:web:0b797f9438a98c84e46711"
+    };
+
+    // INITIALIZE FIREBASE & FIRESTORE
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+
+    // LOAD ORDERS DASHBOARD DATA
+    function loadOrdersDashboard() {
+      const tableBody = document.getElementById('ordersTableBody');
+      const totalRevenueEl = document.getElementById('totalRevenue');
+      const totalOrdersEl = document.getElementById('totalOrders');
+      const uniqueCustomersEl = document.getElementById('uniqueCustomers');
+      const avgOrderValueEl = document.getElementById('avgOrderValue');
+
+      if (!tableBody) return;
+
+      tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">🔄 Loading latest orders...</td></tr>';
+
+      db.collection('orders')
+        .orderBy('createdAt', 'desc')
+        .get()
+        .then((snapshot) => {
+          if (snapshot.empty) {
+            tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">👎 No orders found.</td></tr>';
+            if (totalRevenueEl) totalRevenueEl.innerText = '₱0.00';
+            if (totalOrdersEl) totalOrdersEl.innerText = '0';
+            if (uniqueCustomersEl) uniqueCustomersEl.innerText = '0';
+            if (avgOrderValueEl) avgOrderValueEl.innerText = '₱0.00';
+            return;
+          }
+
+          let html = '';
+          let totalRevenue = 0;
+          let totalOrders = 0;
+          let customerEmails = new Set();
+
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            const amount = Number(data.total || data.amount || 0);
+            const customerName = data.customer || 'Customer';
+            const email = data.email || 'N/A';
+            const items = data.items || 'Digital Product';
+            const status = data.status || 'Paid';
+            
+            let dateStr = 'Recent';
+            if (data.createdAt && data.createdAt.toDate) {
+              dateStr = data.createdAt.toDate().toLocaleDateString('en-PH', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+              });
+            }
+
+            totalRevenue += amount;
+            totalOrders += 1;
+            if (email !== 'N/A') customerEmails.add(email);
+
+            html += `
+              <tr>
+                <td>${dateStr}</td>
+                <td><strong>${customerName}</strong><br><small style="color:#888;">${email}</small></td>
+                <td>${items}</td>
+                <td><strong>₱${amount.toFixed(2)}</strong></td>
+                <td><span class="status-badge completed">${status}</span></td>
+              </tr>
+            `;
+          });
+
+          tableBody.innerHTML = html;
+
+          if (totalRevenueEl) totalRevenueEl.innerText = `₱${totalRevenue.toFixed(2)}`;
+          if (totalOrdersEl) totalOrdersEl.innerText = totalOrders;
+          if (uniqueCustomersEl) uniqueCustomersEl.innerText = customerEmails.size;
+          if (avgOrderValueEl) {
+            const avg = totalOrders > 0 ? (totalRevenue / totalOrders) : 0;
+            avgOrderValueEl.innerText = `₱${avg.toFixed(2)}`;
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching orders:", error);
+          tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:red; padding:20px;">❌ Failed to load orders: ${error.message}</td></tr>`;
+        });
+    }
+  </script>
+
 </body>
 </html>
