@@ -879,12 +879,17 @@
     </div>
 </div>
 
+<!-- ITO YUNG PAPALITAN NA AI CHAT WIDGET SCRIPT -->
+<!-- Hanapin mo ang buong <script>(function(){ ... })();</script> block sa dulo ng file mo -->
+<!-- na may DGT_CONFIG sa loob, at palitan ng buong content na ito -->
+
 <script>
 (function(){
     const DGT_CONFIG={
         shopUrl:'https://digiteralevi.github.io/digitera-storefront/',
         botName:'Digitera',
-        openRouterKey:'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',
+        // WALA NANG API KEY DITO - tumatawag na lang sa sariling backend proxy
+        chatEndpoint:'https://digitera-shop-backend.vercel.app/api/chat',
         systemPrompt:`You are Digitera, a friendly and professional AI sales assistant for Digitera Levi Shop — a premium digital products store.
 
 ABOUT THE SHOP: Digitera Levi Shop offers high-quality digital products including Canva templates, AI business tools, PLR/MRR products, course workbooks, reels bundles, and more.
@@ -961,9 +966,14 @@ RULES:
         dgtTyping=true;document.getElementById('dgt-send').disabled=true;dgtShowTyping();
         if(!dgtOpen)dgtToggle();
         try{
-            const r=await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+DGT_CONFIG.openRouterKey,'HTTP-Referer':window.location.href,'X-Title':'Digitera Levi Shop'},body:JSON.stringify({model:'openrouter/auto',max_tokens:500,messages:dgtHistory})});
+            // Tumatawag na sa sariling backend proxy sa halip na direkta sa OpenRouter
+            const r=await fetch(DGT_CONFIG.chatEndpoint,{
+                method:'POST',
+                headers:{'Content-Type':'application/json'},
+                body:JSON.stringify({messages:dgtHistory})
+            });
             const d=await r.json();
-            if(d.error)throw new Error(d.error.message);
+            if(d.error)throw new Error(d.error);
             const reply=d.choices?.[0]?.message?.content||'Sorry, something went wrong. Please try again!';
             dgtHistory.push({role:'assistant',content:reply});
             dgtRemoveTyping();dgtAddBot(reply);
@@ -974,6 +984,5 @@ RULES:
     if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',dgtInit);}else{dgtInit();}
 })();
 </script>
-
 </body>
 </html>
